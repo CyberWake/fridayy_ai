@@ -8,9 +8,12 @@ import 'package:fridayy_one/ui/widgets/rounded_rectangular_button.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class OtpVerification extends StatelessWidget {
-  const OtpVerification(
-      {Key? key, required this.isFromLogin, this.signupInfo, this.phoneNumber})
-      : super(key: key);
+  const OtpVerification({
+    Key? key,
+    required this.isFromLogin,
+    this.signupInfo,
+    this.phoneNumber,
+  }) : super(key: key);
   final bool isFromLogin;
   final SignupDetails? signupInfo;
   final String? phoneNumber;

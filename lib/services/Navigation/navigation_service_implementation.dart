@@ -30,8 +30,11 @@ class NavigationServiceImpl extends NavigationService {
   }
 
   @override
-  Future<dynamic> removeAllAndPush(String routeName, String tillRoute,
-      {dynamic arguments}) {
+  Future<dynamic> removeAllAndPush(
+    String routeName,
+    String tillRoute, {
+    dynamic arguments,
+  }) {
     return navigatorKey.currentState!.pushNamedAndRemoveUntil(
       routeName,
       ModalRoute.withName(tillRoute),
@@ -52,16 +55,17 @@ class NavigationServiceImpl extends NavigationService {
   }
 
   @override
-  void showSnackBar(String message,
-      {Duration duration = const Duration(seconds: 2)}) {
-    ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        duration: duration,
-        content: Text(message),
-      ),
-    );
-  }
+  void showSnackBar(
+    String message, {
+    Duration duration = const Duration(seconds: 2),
+  }) =>
+      ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          duration: duration,
+          content: Text(message),
+        ),
+      );
 
   @override
   void pop() {
