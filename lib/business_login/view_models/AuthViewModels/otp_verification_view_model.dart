@@ -16,7 +16,8 @@ class OtpVerificationViewModel extends BaseModel {
     if (formKey.currentState!.validate() &&
         otpController.text.isNotEmpty &&
         otpController.text.length == 4) {
-      navigationService.showSnackBar('In progress');
+      navigationService.removeAllAndPush(
+          Routes.homeScreen, Routes.splashScreen);
     } else {
       navigationService.showSnackBar('Enter the otp to continue');
     }

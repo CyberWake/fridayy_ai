@@ -38,7 +38,7 @@ class OnBoardingScreen extends StatelessWidget {
                   ),
                   child: SizedBox(
                     width: sizeConfig.getPropWidth(58),
-                    height: sizeConfig.getPropHeight(58),
+                    height: sizeConfig.getPropWidth(58),
                     child: FloatingActionButton(
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -47,8 +47,9 @@ class OnBoardingScreen extends StatelessWidget {
                       onPressed: () {
                         if (model.controller.page! <= 1.0) {
                           model.controller.nextPage(
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.decelerate,);
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.decelerate,
+                          );
                         } else {
                           navigationService.pushReplacementScreen('/auth');
                         }

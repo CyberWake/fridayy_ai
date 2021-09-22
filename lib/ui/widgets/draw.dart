@@ -12,7 +12,7 @@ class Draw extends StatelessWidget {
     return CustomPaint(
       size: Size(
         sizeConfig.getPropWidth(squareSize),
-        sizeConfig.getPropHeight(
+        sizeConfig.getPropWidth(
           squareSize,
         ),
       ),
