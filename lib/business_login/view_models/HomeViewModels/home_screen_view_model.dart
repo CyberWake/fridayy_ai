@@ -1,12 +1,23 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:fridayy_one/business_login/models/coupon_data.dart';
 import 'package:fridayy_one/business_login/models/pie_chart_data.dart';
+import 'package:fridayy_one/business_login/utils/fridayy_svg.dart';
 import 'package:fridayy_one/business_login/utils/routing_constants.dart';
 import 'package:fridayy_one/business_login/view_models/base_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 
 class HomeScreenViewModel extends BaseModel {
+  final PageController pageController = PageController(initialPage: 0);
+  final List<String> tabs = [
+    FridayySvg.homeIcon,
+    FridayySvg.offerIcon,
+    FridayySvg.activityIcon,
+    FridayySvg.chartIcon,
+    FridayySvg.profileIcon,
+  ];
+
   List<CouponData> couponData = [
     CouponData(
       couponBody: '',
@@ -62,6 +73,26 @@ class HomeScreenViewModel extends BaseModel {
       const Color(0xFFFFB731),
     ),
   ];
+
+  final double totalOffers = 2000;
+  final double activeOffers = 1745;
+  final double expiredOffers = 255;
+  int currentTabIndex = 0;
+
+  void init() {
+    pageController.addListener(() {
+      currentTabIndex = pageController.page!.round();
+      notifyListeners();
+    });
+  }
+
+  void tabChanged(int newTabIndex) {
+    currentTabIndex = newTabIndex;
+    pageController.animateToPage(currentTabIndex,
+        duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
+    notifyListeners();
+  }
+
   void gotoNotifications() {
     navigationService.pushScreen(Routes.toBeMade, arguments: 'Notifications');
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_login/utils/custom_painters/google_logo.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fridayy_one/business_login/utils/fridayy_svg.dart';
 import 'package:fridayy_one/services/service_locator.dart';
-import 'package:fridayy_one/ui/widgets/draw.dart';
 
 class ContinueWith extends StatelessWidget {
   const ContinueWith({
@@ -50,9 +50,8 @@ class ContinueWith extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Draw(
-                    painter: GoogleLogo(),
-                    squareSize: 30,
+                  SvgPicture.string(
+                    FridayySvg.googleIcon,
                   ),
                   Text(
                     isLogin ? 'Sign in with Google' : 'Sign up with Google',

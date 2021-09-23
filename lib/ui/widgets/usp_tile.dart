@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_login/utils/custom_painters/usp_arrow_icon.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fridayy_one/business_login/utils/fridayy_svg.dart';
 import 'package:fridayy_one/services/service_locator.dart';
-import 'package:fridayy_one/ui/widgets/draw.dart';
 
 class USPTile extends StatelessWidget {
   const USPTile({Key? key, required this.uspName, required this.onTap})
@@ -11,7 +11,10 @@ class USPTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      margin: EdgeInsets.only(
+        top: sizeConfig.getPropHeight(20),
+      ),
       height: sizeConfig.getPropHeight(25),
       width: sizeConfig.getPropWidth(411),
       child: Row(
@@ -32,10 +35,8 @@ class USPTile extends StatelessWidget {
             padding: EdgeInsets.only(right: sizeConfig.getPropWidth(45)),
             child: InkWell(
               onTap: onTap,
-              child: Draw(
-                squareSize:
-                    24, //You can Replace [WIDTH] with your desired width for Custom Paint and height will be calculated automatically
-                painter: ArrowIcon(),
+              child: SvgPicture.string(
+                FridayySvg.arrowIcon,
               ),
             ),
           )

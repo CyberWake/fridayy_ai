@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:fridayy_one/business_login/utils/fridayy_svg.dart';
 import 'package:fridayy_one/services/service_locator.dart';
-import 'package:fridayy_one/ui/widgets/offers_ticket.dart';
 
 class Offer extends StatelessWidget {
   const Offer({
@@ -20,13 +21,14 @@ class Offer extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: SizedBox(
-        height: sizeConfig.getPropHeight(height),
+        height: sizeConfig.getPropWidth(height),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            OfferTicket(
-              isExpiredTicket: isExpiredOffer,
-              size: height,
+            SvgPicture.string(
+              isExpiredOffer
+                  ? FridayySvg.expiredTicketIcon
+                  : FridayySvg.activeTicketIcon,
             ),
             SizedBox(
               width: sizeConfig.getPropWidth(15),
@@ -44,6 +46,7 @@ class Offer extends StatelessWidget {
               style:
                   Theme.of(context).textTheme.headline4!.copyWith(fontSize: 12),
               maxLines: 2,
+              textAlign: TextAlign.left,
             ),
             SizedBox(
               width: sizeConfig.getPropWidth(15),
