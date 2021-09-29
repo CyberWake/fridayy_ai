@@ -17,7 +17,7 @@ class ExpenseChips extends StatelessWidget {
           return Chip(
             labelPadding: EdgeInsets.zero,
             label: Text(
-              "${data[index].y.toInt().toString()}% ${data[index].x}",
+              "${data[index].y.round().toString()}% ${data[index].x}",
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!

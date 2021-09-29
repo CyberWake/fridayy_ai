@@ -3,7 +3,10 @@ import 'package:fridayy_one/business_login/view_models/AuthViewModels/auth_view_
 import 'package:fridayy_one/business_login/view_models/AuthViewModels/login_view_model.dart';
 import 'package:fridayy_one/business_login/view_models/AuthViewModels/otp_verification_view_model.dart';
 import 'package:fridayy_one/business_login/view_models/AuthViewModels/signup_view_model.dart';
+import 'package:fridayy_one/business_login/view_models/HomeViewModels/home_screen_holder_view_model.dart';
 import 'package:fridayy_one/business_login/view_models/HomeViewModels/home_screen_view_model.dart';
+import 'package:fridayy_one/business_login/view_models/HomeViewModels/offer_screen_view_model.dart';
+import 'package:fridayy_one/business_login/view_models/HomeViewModels/spending_screen_view_model.dart';
 import 'package:fridayy_one/business_login/view_models/splash_screen_view_model.dart';
 import 'package:fridayy_one/services/Navigation/navigation_service_implementation.dart';
 import 'package:fridayy_one/services/SizeConfig/size_config_implementation.dart';
@@ -23,5 +26,8 @@ void setupServiceLocator() {
   serviceLocator.registerFactory(() => LoginScreenViewModel());
   serviceLocator.registerFactory(() => SignupScreenViewModel());
   serviceLocator.registerFactory(() => OtpVerificationViewModel());
+  serviceLocator.registerFactory(() => HomeScreenHolderViewModel());
   serviceLocator.registerFactory(() => HomeScreenViewModel());
+  serviceLocator.registerFactory(() => OfferScreenViewModel());
+  serviceLocator.registerFactory(() => SpendingScreenViewModel());
 }

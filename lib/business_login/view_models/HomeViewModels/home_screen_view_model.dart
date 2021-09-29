@@ -1,23 +1,12 @@
 import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:fridayy_one/business_login/models/coupon_data.dart';
 import 'package:fridayy_one/business_login/models/pie_chart_data.dart';
-import 'package:fridayy_one/business_login/utils/fridayy_svg.dart';
 import 'package:fridayy_one/business_login/utils/routing_constants.dart';
 import 'package:fridayy_one/business_login/view_models/base_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 
 class HomeScreenViewModel extends BaseModel {
-  final PageController pageController = PageController(initialPage: 0);
-  final List<String> tabs = [
-    FridayySvg.homeIcon,
-    FridayySvg.offerIcon,
-    FridayySvg.activityIcon,
-    FridayySvg.chartIcon,
-    FridayySvg.profileIcon,
-  ];
-
   List<CouponData> couponData = [
     CouponData(
       couponBody: '',
@@ -58,52 +47,40 @@ class HomeScreenViewModel extends BaseModel {
 
   final List<DoughnutChartData> data = [
     DoughnutChartData(
-      'Food&Drinks',
-      78,
-      const Color(0xFFF86F34),
+      'Utilities',
+      42.9,
+      const Color(0xFF75CDD3),
+    ),
+    DoughnutChartData(
+      'Payments',
+      30.7,
+      const Color(0xFF0A8677),
     ),
     DoughnutChartData(
       'Travel',
-      16,
-      const Color(0xFF005CEE),
+      18.4,
+      const Color(0xFFFFB731),
     ),
     DoughnutChartData(
-      'Utilities',
-      6,
-      const Color(0xFFFFB731),
+      'Medical',
+      4.9,
+      const Color(0xFF2128BD),
+    ),
+    DoughnutChartData(
+      'Food & Drinks',
+      3.1,
+      const Color(0xFFF86F34),
+    ),
+    DoughnutChartData(
+      'Unknown',
+      0.9,
+      const Color(0xFFC61C1C),
     ),
   ];
 
   final double totalOffers = 2000;
   final double activeOffers = 1745;
   final double expiredOffers = 255;
-  int currentTabIndex = 0;
-
-  void init() {
-    pageController.addListener(() {
-      currentTabIndex = pageController.page!.round();
-      notifyListeners();
-    });
-  }
-
-  void tabChanged(int newTabIndex) {
-    currentTabIndex = newTabIndex;
-    pageController.animateToPage(currentTabIndex,
-        duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
-    notifyListeners();
-  }
-
-  void gotoNotifications() {
-    navigationService.pushScreen(Routes.toBeMade, arguments: 'Notifications');
-  }
-
-  void gotoProfile() {
-    navigationService.pushScreen(Routes.toBeMade, arguments: 'Profile');
-  }
-
-  void gotoOffers() {
-    navigationService.pushScreen(Routes.toBeMade, arguments: 'Offers');
-  }
 
   void gotoActiveOffers() {
     navigationService.pushScreen(Routes.toBeMade, arguments: 'Active Offers');
@@ -111,19 +88,5 @@ class HomeScreenViewModel extends BaseModel {
 
   void gotoExpiredOffers() {
     navigationService.pushScreen(Routes.toBeMade, arguments: 'Expired Offers');
-  }
-
-  void gotoSpendingBehaviour() {
-    navigationService.pushScreen(
-      Routes.toBeMade,
-      arguments: 'Spending Behaviour',
-    );
-  }
-
-  void gotoFinanceAnalytics() {
-    navigationService.pushScreen(
-      Routes.toBeMade,
-      arguments: 'Finance Analytics',
-    );
   }
 }

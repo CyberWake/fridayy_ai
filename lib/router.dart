@@ -7,7 +7,7 @@ import 'package:fridayy_one/ui/views/AuthPages/auth_view.dart';
 import 'package:fridayy_one/ui/views/AuthPages/login_view.dart';
 import 'package:fridayy_one/ui/views/AuthPages/otp_verification_view.dart';
 import 'package:fridayy_one/ui/views/AuthPages/signup_view.dart';
-import 'package:fridayy_one/ui/views/HomePages/home_screen_view.dart';
+import 'package:fridayy_one/ui/views/HomePages/home_screen_holder_view.dart';
 import 'package:fridayy_one/ui/views/onboarding_view.dart';
 import 'package:fridayy_one/ui/views/splash_screen_view.dart';
 
@@ -64,7 +64,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       }
     case Routes.homeScreen:
       return MaterialPageRoute(
-        builder: (context) => const HomeScreen(
+        builder: (context) => const HomeScreenHolder(
           key: Key('HomeScreenView'),
         ),
       );

@@ -34,19 +34,20 @@ class CouponCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: [
           Container(
-              height: sizeConfig.getPropHeight(size),
-              width: sizeConfig.getPropWidth(size),
-              padding: EdgeInsets.all(sizeConfig.getPropWidth(1)),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: getCouponBorderColor(coupon.couponExpiry),
-                  width: 2,
-                ),
+            height: sizeConfig.getPropHeight(size),
+            width: sizeConfig.getPropWidth(size),
+            padding: EdgeInsets.all(sizeConfig.getPropWidth(1)),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: getCouponBorderColor(coupon.couponExpiry),
+                width: 2,
               ),
-              child: const CircleAvatar(
-                backgroundImage: NetworkImage('https://i.pravatar.cc/300'),
-              )),
+            ),
+            child: const CircleAvatar(
+              backgroundImage: NetworkImage('https://i.pravatar.cc/300'),
+            ),
+          ),
           Text(
             coupon.company,
             style: Theme.of(context).textTheme.caption!.copyWith(fontSize: 11),

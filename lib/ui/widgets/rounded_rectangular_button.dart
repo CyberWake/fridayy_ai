@@ -5,12 +5,14 @@ class CustomRoundRectButton extends StatelessWidget {
   const CustomRoundRectButton({
     Key? key,
     required this.child,
+    this.size,
     this.onTap,
     this.borderColor = const Color(0xFF2128BD),
     this.fillColor = const Color(0xFF2128BD),
   }) : super(key: key);
   final void Function()? onTap;
   final Widget child;
+  final Size? size;
   final Color borderColor;
   final Color fillColor;
 
@@ -23,8 +25,8 @@ class CustomRoundRectButton extends StatelessWidget {
         onTap: onTap ?? () {},
         borderRadius: BorderRadius.circular(sizeConfig.getPropWidth(8)),
         child: Container(
-          width: sizeConfig.getPropWidth(343),
-          height: sizeConfig.getPropHeight(50),
+          width: sizeConfig.getPropWidth(size?.width??343),
+          height: sizeConfig.getPropHeight(size?.height??50),
           alignment: Alignment.center,
           decoration: BoxDecoration(
             border: Border.all(color: borderColor),
