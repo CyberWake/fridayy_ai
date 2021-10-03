@@ -1,17 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_login/models/pie_chart_data.dart';
+import 'package:fridayy_one/business_login/models/user_overview_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/widgets/doughnut_chart.dart';
 import 'package:fridayy_one/ui/widgets/expense_chips.dart';
 
 class SpendingBehaviourCard extends StatelessWidget {
-  const SpendingBehaviourCard({
+  SpendingBehaviourCard({
     Key? key,
     this.onTap,
-    required this.chartData,
+    required this.spendingData,
   }) : super(key: key);
+  final Spending spendingData;
   final void Function()? onTap;
-  final List<DoughnutChartData> chartData;
+
+  final List<String> months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+  ];
+
+  String getMonth() {
+    if (spendingData.month.isEmpty) {
+      return '';
+    }
+    return months[int.parse(
+          spendingData.month.substring(
+            2,
+          ),
+        ) -
+        1];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,13 +67,13 @@ class SpendingBehaviourCard extends StatelessWidget {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      const Text('September'),
-                      const Text('Rs. 540.00')
+                      Text(getMonth()),
+                      Text('${spendingData.currency}. ${spendingData.amount}')
                     ],
                   ),
                   DoughnutChart(
                     size: 79,
-                    data: chartData,
+                    data: spendingData.distribution,
                     onTap: onTap,
                   ),
                 ],
@@ -57,7 +84,7 @@ class SpendingBehaviourCard extends StatelessWidget {
             ),
             const Spacer(),
             ExpenseChips(
-              data: chartData,
+              data: spendingData.distribution,
             )
           ],
         ),

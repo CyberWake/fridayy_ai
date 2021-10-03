@@ -4,6 +4,7 @@ import 'package:fridayy_one/business_login/view_models/HomeViewModels/home_scree
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/views/HomePages/home_screen_view.dart';
 import 'package:fridayy_one/ui/views/HomePages/offer_screen_view.dart';
+import 'package:fridayy_one/ui/views/HomePages/profile_screen_view.dart';
 import 'package:fridayy_one/ui/views/HomePages/spending_screen_view.dart';
 import 'package:fridayy_one/ui/views/base_view.dart';
 
@@ -16,25 +17,37 @@ class HomeScreenHolder extends StatelessWidget {
       onModelReady: (model) => model.init(),
       builder: (context, model, child) {
         return Scaffold(
-          body: PageView.builder(
+          body: PageView(
             controller: model.pageController,
-            itemCount: model.tabs.length,
-            itemBuilder: (context, index) {
-              switch (index) {
-                case 0:
-                  return HomeScreen(homeModel: model);
-                case 1:
-                  return OfferScreen(
-                    homeModel: model,
-                  );
-                case 2:
-                  return SpendingScreen(
-                    homeModel: model,
-                  );
-                default:
-                  return Container();
-              }
-            },
+            children: [
+              HomeScreen(homeModel: model),
+              OfferScreen(
+                homeModel: model,
+              ),
+              SpendingScreen(
+                homeModel: model,
+              ),
+              // Container(),
+              ProfileScreenView(
+                homeModel: model,
+              )
+            ],
+            // itemBuilder: (context, index) {
+            //   switch (index) {
+            //     case 0:
+            //       return HomeScreen(homeModel: model);
+            //     case 1:
+            //       return OfferScreen(
+            //         homeModel: model,
+            //       );
+            //     case 2:
+            //       return SpendingScreen(
+            //         homeModel: model,
+            //       );
+            //     default:
+            //       return Container();
+            //   }
+            // },
           ),
           bottomNavigationBar: Container(
             color: Colors.white,

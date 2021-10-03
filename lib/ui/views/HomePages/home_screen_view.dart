@@ -17,131 +17,161 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseView<HomeScreenViewModel>(
-      builder: (context,model,child){
-      return Scaffold(
-        appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white,
-          centerTitle: false,
-          automaticallyImplyLeading: false,
-          title: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: sizeConfig.getPropHeight(21),
-                child: Text(
-                  'Hello',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline4!
-                      .copyWith(fontSize: 14),
+      onModelReady: (model) => model.init(),
+      builder: (context, model, child) {
+        return Scaffold(
+          appBar: AppBar(
+            elevation: 0.0,
+            backgroundColor: Colors.white,
+            centerTitle: false,
+            automaticallyImplyLeading: false,
+            title: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: sizeConfig.getPropHeight(21),
+                  child: Text(
+                    'Hello',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline4!
+                        .copyWith(fontSize: 14),
+                  ),
+                ),
+                SizedBox(
+                  height: sizeConfig.getPropHeight(32),
+                  child: Text(
+                    model.userOverView.user.userName,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(fontSize: 20),
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              Padding(
+                padding: EdgeInsets.only(
+                  right: sizeConfig.getPropWidth(27),
+                ),
+                child: InkWell(
+                  onTap: homeModel.gotoNotifications,
+                  child: SvgPicture.string(
+                    FridayySvg.notificationIcon,
+                  ),
                 ),
               ),
-              SizedBox(
-                height: sizeConfig.getPropHeight(32),
-                child: Text(
-                  'Alexandera Bill',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText1!
-                      .copyWith(fontSize: 20),
+              Padding(
+                padding: EdgeInsets.only(
+                  right: sizeConfig.getPropWidth(16),
+                ),
+                child: InkWell(
+                  onTap: homeModel.gotoProfile,
+                  child: const CircleAvatar(
+                    backgroundImage: NetworkImage('https://i.pravatar.cc/300'),
+                  ),
                 ),
               ),
             ],
           ),
-          actions: [
-            Padding(
-              padding: EdgeInsets.only(
-                right: sizeConfig.getPropWidth(27),
-              ),
-              child: InkWell(
-                onTap: homeModel.gotoNotifications,
-                child: SvgPicture.string(
-                  FridayySvg.notificationIcon,
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                right: sizeConfig.getPropWidth(16),
-              ),
-              child: InkWell(
-                onTap: homeModel.gotoProfile,
-                child: const CircleAvatar(
-                  backgroundImage:
-                  NetworkImage('https://i.pravatar.cc/300'),
-                ),
-              ),
-            ),
-          ],
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Column(
-                children: [
-                  USPTile(
-                    uspName: 'Offers',
-                    onTap: homeModel.gotoOffers,
-                  ),
-                  SizedBox(
-                    height: sizeConfig.getPropHeight(22.5),
-                  ),
-                ],
-              ),
-              Stack(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(
-                      top: sizeConfig.getPropHeight(85),
-                      bottom: 0,
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                Column(
+                  children: [
+                    USPTile(
+                      uspName: 'Offers',
+                      onTap: homeModel.gotoOffers,
                     ),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFE9E9E9),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(
-                          sizeConfig.getPropWidth(16),),
-                        topRight: Radius.circular(
-                          sizeConfig.getPropWidth(16),),
+                    SizedBox(
+                      height: sizeConfig.getPropHeight(22.5),
+                    ),
+                  ],
+                ),
+                Stack(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(
+                        top: sizeConfig.getPropHeight(85),
+                        bottom: 0,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFE9E9E9),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(
+                            sizeConfig.getPropWidth(16),
+                          ),
+                          topRight: Radius.circular(
+                            sizeConfig.getPropWidth(16),
+                          ),
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          RecommendedOffers(
+                            brandData: homeModel.brandData,
+                            offers: model.isBusy
+                                ? []
+                                : model.userOverView.offer.notifiedOffers,
+                          ),
+                          USPTile(
+                            uspName: 'Spending Behaviour',
+                            onTap: homeModel.gotoSpendingBehaviour,
+                          ),
+                          SpendingBehaviourCard(
+                            spendingData: model.userOverView.spending,
+                            onTap: homeModel.gotoSpendingBehaviour,
+                          ),
+                          USPTile(
+                            uspName: 'Finance Analytics',
+                            onTap: homeModel.gotoFinanceAnalytics,
+                          ),
+                          Container(
+                            height: sizeConfig.getPropHeight(190),
+                            width: sizeConfig.getPropWidth(379),
+                            margin: EdgeInsets.only(
+                              top: sizeConfig.getPropHeight(22.5),
+                            ),
+                            padding:
+                                EdgeInsets.all(sizeConfig.getPropWidth(20)),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(
+                                sizeConfig.getPropWidth(16),
+                              ),
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Wow ${model.userOverView.user.userName}\nyour spending score is better than ${model.userOverView.financial.percentile}% of users',
+                              style: Theme.of(context).textTheme.bodyText2,
+                            ),
+                          ),
+                          SizedBox(
+                            height: sizeConfig.getPropHeight(22.5),
+                          ),
+                        ],
                       ),
                     ),
-                    child: Column(
-                      children: [
-                        RecommendedOffers(
-                          couponData: model.couponData,),
-                        USPTile(
-                          uspName: 'Spending Behaviour',
-                          onTap: homeModel.gotoSpendingBehaviour,
-                        ),
-                        SpendingBehaviourCard(
-                          chartData: model.data,
-                          onTap: homeModel.gotoSpendingBehaviour,
-                        ),
-                        USPTile(
-                          uspName: 'Finance Analytics',
-                          onTap: homeModel.gotoFinanceAnalytics,
-                        ),
-                        SizedBox(
-                          height: sizeConfig.getPropHeight(100),
-                        ),
-                      ],
+                    OfferCard(
+                      totalOffers:
+                          model.userOverView.offer.totalOffers.toDouble(),
+                      activeOffers:
+                          model.userOverView.offer.activeOffers.toDouble(),
+                      inActiveOffers:
+                          model.userOverView.offer.offersExpiring.toDouble(),
+                      onTap: homeModel.gotoOffers,
+                      onActiveTap: model.gotoActiveOffers,
+                      onExpiredTap: model.gotoExpiredOffers,
                     ),
-                  ),
-                  OfferCard(
-                    totalOffers: model.totalOffers,
-                    activeOffers: model.activeOffers,
-                    inActiveOffers: model.expiredOffers,
-                    onTap: homeModel.gotoOffers,
-                    onActiveTap: model.gotoActiveOffers,
-                    onExpiredTap: model.gotoExpiredOffers,
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
-      );
-    },);
+        );
+      },
+    );
   }
 }

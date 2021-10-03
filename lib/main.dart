@@ -1,13 +1,21 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:fridayy_one/business_login/utils/routing_constants.dart';
 import 'package:fridayy_one/business_login/utils/theme.dart';
 import 'package:fridayy_one/router.dart' as router;
 import 'package:fridayy_one/services/service_locator.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart' as path;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final Directory dir = await path.getApplicationDocumentsDirectory();
+  Hive.init(dir.path);
   setupServiceLocator();
-  runApp(const MyApp());
+  runApp(
+    const MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {

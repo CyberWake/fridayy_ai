@@ -1,93 +1,82 @@
-import 'dart:ui';
-
-import 'package:fridayy_one/business_login/models/brand_data.dart';
-import 'package:fridayy_one/business_login/models/pie_chart_data.dart';
-import 'package:fridayy_one/business_login/utils/fridayy_svg.dart';
+import 'package:fridayy_one/business_login/models/spending_brands_model.dart';
+import 'package:fridayy_one/business_login/models/spending_category_model.dart';
+import 'package:fridayy_one/business_login/models/spending_transaction_model.dart';
+import 'package:fridayy_one/business_login/models/user_overview_model.dart';
+import 'package:fridayy_one/business_login/utils/api_constants.dart';
+import 'package:fridayy_one/business_login/utils/enums.dart';
 import 'package:fridayy_one/business_login/view_models/base_view_model.dart';
+import 'package:fridayy_one/services/service_locator.dart';
 
 class SpendingScreenViewModel extends BaseModel {
   final String title = "Spending Analysis";
-  final List<DoughnutChartData> categoryData = [
-    DoughnutChartData(
-      'Utilities',
-      42.9,
-      const Color(0xFF75CDD3),
-      icon: FridayySvg.utilitiesIcon,
-      spendAmount: '33366.66',
-      spendTimes: 20,
-    ),
-    DoughnutChartData(
-      'Payments',
-      30.7,
-      const Color(0xFF0A8677),
-      icon: FridayySvg.foodIcon,
-      spendAmount: '23877.77',
-      spendTimes: 15,
-    ),
-    DoughnutChartData(
-      'Travel',
-      18.4,
-      const Color(0xFFFFB731),
-      icon: FridayySvg.travelIcon,
-      spendAmount: '14311.11',
-      spendTimes: 10,
-    ),
-    DoughnutChartData(
-      'Medical',
-      4.9,
-      const Color(0xFF2128BD),
-      icon: FridayySvg.medicineIcon,
-      spendAmount: '3811.11',
-      spendTimes: 5,
-    ),
-    DoughnutChartData(
-      'Food & Drinks',
-      3.1,
-      const Color(0xFFF86F34),
-      icon: FridayySvg.foodIcon,
-      spendAmount: '2411.11',
-      spendTimes: 4,
-    ),
-    DoughnutChartData(
-      'Unknown',
-      0.9,
-      const Color(0xFFC61C1C),
-      icon: FridayySvg.foodIcon,
-      spendAmount: '700',
-      spendTimes: 2,
-    ),
+  late SpendingTransactionModel data;
+  final List<SpendingCategoryModel> spendCategoryData = [];
+  final List<SpendingBrandModel> spendBrandData = [];
+
+  final List<Distribution> categoryData = [
+    Distribution(categoryId: "FAD", percentage: 3.1),
+    Distribution(categoryId: "MDCL", percentage: 4.9),
+    Distribution(categoryId: "UTL", percentage: 42.9),
+    Distribution(categoryId: "TRVL", percentage: 18.4),
+    Distribution(categoryId: "LUX", percentage: 0.0),
+    Distribution(categoryId: "FIN", percentage: 30.7),
+    Distribution(categoryId: "OTH", percentage: 0.9),
+    Distribution(categoryId: "EAD", percentage: 0.0),
   ];
 
-  final List<BrandData> brandData = [
-    BrandData(
-      brandCategory: 'Food & Drinks',
-      brandName: 'Zomato',
-      brandSpendTimes: '7',
-    ),
-    BrandData(
-      brandCategory: 'Food & Drinks',
-      brandName: 'Swiggy',
-      brandSpendTimes: '7',
-    ),
-    BrandData(
-      brandCategory: 'Travel',
-      brandName: 'Uber',
-      brandSpendTimes: '7',
-    ),
-    BrandData(
-      brandCategory: 'Medical',
-      brandName: 'Apollo',
-      brandSpendTimes: '7',
-    ),
-    BrandData(
-      brandCategory: 'Payment',
-      brandName: 'Airtel',
-      brandSpendTimes: '7',
-    ),
-    BrandData(
-      brandCategory: 'Unknown',
-      brandName: 'Myntra',
-      brandSpendTimes: '7',
-    ),
+  final List<List> dataCategory = [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
   ];
+
+  init() async {
+    setState(ViewState.busy);
+    await getTransactionData();
+    await getCategoryData();
+    await getBrandData();
+    setState(ViewState.idle);
+  }
+
+  Future getTransactionData() async {
+    final resultSpendingTransactions = await apiService
+        .getRequest("${ApiConstants.spendingTransactions}/2109");
+    if (resultSpendingTransactions != null) {
+      print(resultSpendingTransactions);
+      data = SpendingTransactionModel.fromJson(
+        resultSpendingTransactions as Map<String, dynamic>,
+      );
+    } else {
+      data = SpendingTransactionModel(amount: 0.0, count: 0, spends: []);
+    }
+  }
+
+  Future getCategoryData() async {
+    final result = await apiService.getRequest(
+      "${ApiConstants.spendingCategory}/?date=2109",
+    );
+    if (result != null) {
+      (result['result'] as List).forEach((element) {
+        spendCategoryData.add(
+          SpendingCategoryModel.fromJson(element as Map<String, dynamic>),
+        );
+      });
+    }
+  }
+
+  Future getBrandData() async {
+    final result =
+        await apiService.getRequest('${ApiConstants.spendingBrand}?date=2109');
+    if (result != null) {
+      (result['result'] as List).forEach((element) {
+        spendBrandData
+            .add(SpendingBrandModel.fromJson(element as Map<String, dynamic>));
+      });
+    }
+  }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_login/models/signup_detail.dart';
 import 'package:fridayy_one/business_login/view_models/AuthViewModels/otp_verification_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/views/base_view.dart';
@@ -11,16 +10,17 @@ class OtpVerification extends StatelessWidget {
   const OtpVerification({
     Key? key,
     required this.isFromLogin,
-    this.signupInfo,
-    this.phoneNumber,
+    required this.phoneNumber,
+    required this.otpId,
   }) : super(key: key);
   final bool isFromLogin;
-  final SignupDetails? signupInfo;
-  final String? phoneNumber;
+  final String otpId;
+  final String phoneNumber;
 
   @override
   Widget build(BuildContext context) {
     return BaseView<OtpVerificationViewModel>(
+      onModelReady: (model) => model.init(otpId, phoneNumber),
       builder: (context, model, child) {
         return WillPopScope(
           onWillPop: () async {
@@ -55,7 +55,7 @@ class OtpVerification extends StatelessWidget {
                         child: TextFormField(
                           enabled: false,
                           keyboardType: TextInputType.phone,
-                          initialValue: signupInfo?.phoneNumber ?? phoneNumber,
+                          initialValue: phoneNumber,
                           style: TextStyle(
                             color: Colors.black,
                             letterSpacing: sizeConfig.getPropWidth(2),
@@ -139,7 +139,9 @@ class OtpVerification extends StatelessWidget {
                       ),
                       Center(
                         child: CustomRoundRectButton(
-                          onTap: model.verify,
+                          onTap: isFromLogin
+                              ? model.verifyLogin
+                              : model.verifyRegister,
                           child: Text(
                             isFromLogin ? 'Sign In' : 'Sign Up',
                             style: Theme.of(context)

@@ -114,7 +114,7 @@ class OfferCard extends StatelessWidget {
               children: [
                 Offer(
                   onTap: onActiveTap,
-                  offerCount: 1745,
+                  offerCount: activeOffers.round(),
                   isExpiredOffer: false,
                   height: 32,
                 ),
@@ -123,7 +123,7 @@ class OfferCard extends StatelessWidget {
                 ),
                 Offer(
                   onTap: onExpiredTap,
-                  offerCount: 255,
+                  offerCount: inActiveOffers.round(),
                   isExpiredOffer: true,
                   height: 32,
                 ),

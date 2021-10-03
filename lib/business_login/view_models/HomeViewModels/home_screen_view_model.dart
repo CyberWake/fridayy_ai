@@ -1,48 +1,36 @@
 import 'dart:ui';
 
-import 'package:fridayy_one/business_login/models/coupon_data.dart';
+import 'package:flutter/material.dart';
 import 'package:fridayy_one/business_login/models/pie_chart_data.dart';
+import 'package:fridayy_one/business_login/models/user_overview_model.dart';
+import 'package:fridayy_one/business_login/utils/api_constants.dart';
+import 'package:fridayy_one/business_login/utils/enums.dart';
 import 'package:fridayy_one/business_login/utils/routing_constants.dart';
 import 'package:fridayy_one/business_login/view_models/base_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 
 class HomeScreenViewModel extends BaseModel {
-  List<CouponData> couponData = [
-    CouponData(
-      couponBody: '',
-      couponExpiry: DateTime(2021, 09, 23, 21, 00, 00),
-      couponCode: 'A1B2C3',
-      couponImage: '',
-      company: 'Zomato',
+  UserOverView userOverView = UserOverView(
+    user: User(userName: ''),
+    offer: Offer(
+      notifiedOffers: [],
+      offersExpiring: 0,
+      totalOffers: 0,
+      activeOffers: 0,
     ),
-    CouponData(
-      couponBody: '',
-      couponExpiry: DateTime(2021, 09, 23, 12, 00, 00),
-      couponCode: 'A1B2C3',
-      couponImage: '',
-      company: 'Swiggy',
-    ),
-    CouponData(
-      couponBody: '',
-      couponExpiry: DateTime(2021, 09, 23, 8, 00, 00),
-      couponCode: 'A1B2C3',
-      couponImage: '',
-      company: 'OLA',
-    ),
-    CouponData(
-      couponBody: '',
-      couponExpiry: DateTime(2021, 09, 23, 00, 00, 00),
-      couponCode: 'A1B2C3',
-      couponImage: '',
-      company: 'UBER',
-    ),
-    CouponData(
-      couponBody: '',
-      couponExpiry: DateTime(2021, 09, 22, 23, 00, 00),
-      couponCode: 'A1B2C3',
-      couponImage: '',
-      company: 'Paytm',
-    ),
+    spending: Spending(month: '', currency: '', amount: 0, distribution: []),
+    financial: Financial(percentile: 0),
+  );
+
+  final List<Distribution> datanew = [
+    Distribution(categoryId: "FAD", percentage: 3.1),
+    Distribution(categoryId: "MDCL", percentage: 4.9),
+    Distribution(categoryId: "UTL", percentage: 42.9),
+    Distribution(categoryId: "TRVL", percentage: 18.4),
+    Distribution(categoryId: "LUX", percentage: 0.0),
+    Distribution(categoryId: "FIN", percentage: 30.7),
+    Distribution(categoryId: "OTH", percentage: 0.9),
+    Distribution(categoryId: "EAD", percentage: 0.0),
   ];
 
   final List<DoughnutChartData> data = [
@@ -81,6 +69,15 @@ class HomeScreenViewModel extends BaseModel {
   final double totalOffers = 2000;
   final double activeOffers = 1745;
   final double expiredOffers = 255;
+
+  init() async {
+    setState(ViewState.busy);
+    final result = await apiService.getRequest(ApiConstants.userOverview);
+    if (result != null) {
+      userOverView = UserOverView.fromJson(result as Map<String, dynamic>);
+      notifyListeners();
+    }
+  }
 
   void gotoActiveOffers() {
     navigationService.pushScreen(Routes.toBeMade, arguments: 'Active Offers');

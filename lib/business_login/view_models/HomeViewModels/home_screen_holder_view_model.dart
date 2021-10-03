@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
+import 'package:fridayy_one/business_login/utils/enums.dart';
 import 'package:fridayy_one/business_login/utils/fridayy_svg.dart';
 import 'package:fridayy_one/business_login/utils/routing_constants.dart';
 import 'package:fridayy_one/business_login/view_models/base_view_model.dart';
@@ -10,24 +13,31 @@ class HomeScreenHolderViewModel extends BaseModel {
     FridayySvg.homeIcon,
     FridayySvg.offerIcon,
     FridayySvg.activityIcon,
-    FridayySvg.chartIcon,
+    // FridayySvg.chartIcon,
     FridayySvg.profileIcon,
   ];
   final List<String> pageTitle = [
     "Home",
     "Offers",
     "Spending Analysis",
-    "InDev",
+    // "InDev",
     "Profile"
   ];
 
+  List brandData = [];
   int currentTabIndex = 0;
 
-  void init() {
+  init() async {
     pageController.addListener(() {
       currentTabIndex = pageController.page!.round();
       notifyListeners();
     });
+    setState(ViewState.busy);
+    final String data = await DefaultAssetBundle.of(
+      navigationService.navigatorKey.currentContext!,
+    ).loadString("assets/brand_data.json");
+    brandData = jsonDecode(data) as List;
+    setState(ViewState.idle);
   }
 
   void tabChanged(int newTabIndex) {

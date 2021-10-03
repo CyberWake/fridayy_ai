@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_login/models/signup_detail.dart';
+import 'package:fridayy_one/business_login/models/user_overview_model.dart';
 import 'package:fridayy_one/business_login/utils/routing_constants.dart';
 import 'package:fridayy_one/main.dart';
 import 'package:fridayy_one/ui/views/AuthPages/auth_view.dart';
@@ -8,6 +8,7 @@ import 'package:fridayy_one/ui/views/AuthPages/login_view.dart';
 import 'package:fridayy_one/ui/views/AuthPages/otp_verification_view.dart';
 import 'package:fridayy_one/ui/views/AuthPages/signup_view.dart';
 import 'package:fridayy_one/ui/views/HomePages/home_screen_holder_view.dart';
+import 'package:fridayy_one/ui/views/brand_offers_screen_view.dart';
 import 'package:fridayy_one/ui/views/onboarding_view.dart';
 import 'package:fridayy_one/ui/views/splash_screen_view.dart';
 
@@ -21,7 +22,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return PageRouteBuilder(
         pageBuilder: (context, animation, anotherAnimation) =>
             const OnBoardingScreen(key: Key('OnBoarding')),
-        transitionDuration: const Duration(milliseconds: 1000),
+        transitionDuration: const Duration(milliseconds: 750),
         transitionsBuilder: (context, animation, anotherAnimation, child) {
           animation = CurvedAnimation(curve: Curves.easeOut, parent: animation);
           return ScaleTransition(
@@ -45,20 +46,32 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case Routes.otpInputScreen:
       final Map<String, dynamic> inputData =
           settings.arguments! as Map<String, dynamic>;
-      if (inputData.containsKey('signupDetails')) {
+      if (inputData.containsKey('signupDetails') &&
+          inputData.containsKey('otpId')) {
         return CupertinoPageRoute(
           builder: (context) => OtpVerification(
             key: const Key('SignupOtpVerification'),
             isFromLogin: false,
-            signupInfo: inputData['signupDetails'] as SignupDetails,
+            phoneNumber: inputData['signupDetails'] as String,
+            otpId: inputData['otpId'] as String,
           ),
         );
-      } else {
+      } else if (inputData.containsKey('loginDetails') &&
+          inputData.containsKey('otpId')) {
         return CupertinoPageRoute(
           builder: (context) => OtpVerification(
             key: const Key('LoginOtpVerification'),
             isFromLogin: true,
             phoneNumber: inputData['loginDetails'] as String,
+            otpId: inputData['otpId'] as String,
+          ),
+        );
+      } else {
+        final String page = settings.arguments! as String;
+        return MaterialPageRoute(
+          builder: (context) => MyHomePage(
+            key: const Key('ToBeMade'),
+            title: page,
           ),
         );
       }
@@ -66,6 +79,16 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (context) => const HomeScreenHolder(
           key: Key('HomeScreenView'),
+        ),
+      );
+    case Routes.brandOffers:
+      final Map<String, dynamic> inputData =
+          settings.arguments! as Map<String, dynamic>;
+      return CupertinoPageRoute(
+        builder: (context) => BrandOffersView(
+          key: const Key('BrandOffersView'),
+          offers: inputData["offers"] as List<Offers>,
+          brandData: inputData["brandData"] as List,
         ),
       );
     case Routes.toBeMade:

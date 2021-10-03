@@ -29,19 +29,19 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     ringDarkOuter = AnimationController(
-      duration: const Duration(milliseconds: 3000),
+      duration: const Duration(milliseconds: 2000),
       vsync: this,
     )..forward();
     ringLightOuter = AnimationController(
-      duration: const Duration(milliseconds: 3000),
+      duration: const Duration(milliseconds: 2000),
       vsync: this,
     )..forward();
     ringDarkInner = AnimationController(
-      duration: const Duration(milliseconds: 3000),
+      duration: const Duration(milliseconds: 2000),
       vsync: this,
     )..forward();
     ringLightInner = AnimationController(
-      duration: const Duration(milliseconds: 3000),
+      duration: const Duration(milliseconds: 2000),
       vsync: this,
     )..forward();
     ringLightInner.addListener(() {
@@ -58,10 +58,12 @@ class _SplashScreenState extends State<SplashScreen>
             setState(() {
               isForward.value = false;
             });
-            colorExpand.reverse().whenComplete(
-                  () => navigationService
-                      .pushReplacementScreen(Routes.onBoardingScreen),
-                );
+            colorExpand.reverse().whenComplete(() async {
+              final key = await localDatabaseService.fetchAuthKey();
+              navigationService.pushReplacementScreen(
+                key != "null" ? Routes.homeScreen : Routes.onBoardingScreen,
+              );
+            });
           }
         }
       });
