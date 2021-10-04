@@ -10,9 +10,16 @@ class ApiConstants {
 
   //homepage endpoint
   static const String userOverview = '/user/overview';
+
+  //category endpoint
   static const String categoryOffers = '/user/offers/category';
   static const String offerDetails = '/user/offer';
+
+  //spending endpoint
   static const String spendingTransactions = '/user/spendings/period';
   static const String spendingCategory = '/user/spendings/category';
   static const String spendingBrand = '/user/spendings/brand';
+
+  //sms endpoint
+  static const String processMessages = '/user/process/messages';
 }

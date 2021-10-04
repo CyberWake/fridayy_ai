@@ -19,6 +19,7 @@ class ApiServiceImpl extends ApiService {
     bool isAuth = false,
   }) async {
     try {
+      print('Auth Token ${localDatabaseService.userAuthKey}');
       final result = await http.post(
         Uri.parse(ApiConstants.baseUrl + apiName),
         body: jsonEncode(postData),
@@ -38,6 +39,7 @@ class ApiServiceImpl extends ApiService {
         return null;
       }
     } on Exception catch (e) {
+      print(e);
       navigationService.showSnackBar(e.toString());
       return null;
     }
@@ -48,8 +50,7 @@ class ApiServiceImpl extends ApiService {
     try {
       final Map<String, String> headerAuth = {
         'Content-Type': 'application/json',
-        'x-friday-key':
-            "cbfed2c4-d6a4-4d32-9994-f63f2f7e2f67", //localDatabaseService.userAuthKey,
+        'x-friday-key': localDatabaseService.userAuthKey,
       };
       final result = await http.get(
         Uri.parse(ApiConstants.baseUrl + apiName),

@@ -1,3 +1,4 @@
+import 'package:fridayy_one/business_login/models/message_model.dart';
 import 'package:fridayy_one/services/LocalDatabase/localdatabase_service.dart';
 import 'package:hive/hive.dart';
 
@@ -21,5 +22,21 @@ class LocalDatabaseServiceImpl extends LocalDatabaseService {
     final userBox = await Hive.openBox('userKey');
     userBox.put('key', authKey);
     userAuthKey = authKey;
+  }
+
+  @override
+  void saveMessage(Message message) {
+    final messagesBox = Hive.box<Message>('messages');
+    messagesBox.put(message.id, message);
+  }
+
+  @override
+  bool messageAlreadySaved(Message message) {
+    final messagesBox = Hive.box<Message>("messages");
+    final data = messagesBox.get(message.id);
+    if (data != null) {
+      return true;
+    }
+    return false;
   }
 }

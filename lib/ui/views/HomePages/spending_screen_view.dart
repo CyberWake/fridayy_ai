@@ -8,20 +8,164 @@ import 'package:fridayy_one/business_login/view_models/HomeViewModels/spending_s
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/views/base_view.dart';
 import 'package:fridayy_one/ui/widgets/doughnut_chart.dart';
+import 'package:fridayy_one/ui/widgets/rounded_rectangular_button.dart';
 
-class SpendingScreen extends StatelessWidget {
+class SpendingScreen extends StatefulWidget {
   const SpendingScreen({Key? key, required this.homeModel}) : super(key: key);
   final HomeScreenHolderViewModel homeModel;
+
+  @override
+  State<SpendingScreen> createState() => _SpendingScreenState();
+}
+
+class _SpendingScreenState extends State<SpendingScreen>
+    with AutomaticKeepAliveClientMixin {
+  Widget buildFilter(SpendingScreenViewModel model) {
+    return StatefulBuilder(
+      builder: (context, update) {
+        return Container(
+          constraints: BoxConstraints(
+            minWidth: sizeConfig.getPropWidth(379),
+            minHeight: sizeConfig.getPropHeight(233),
+          ),
+          padding: EdgeInsets.fromLTRB(
+            sizeConfig.getPropWidth(28),
+            sizeConfig.getPropHeight(21.82),
+            sizeConfig.getPropWidth(28),
+            0,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(sizeConfig.getPropWidth(16)),
+              topRight: Radius.circular(sizeConfig.getPropWidth(16)),
+            ),
+            color: Colors.white,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Select',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline5!
+                    .copyWith(fontSize: 20, color: Colors.black),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'For',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline5!
+                        .copyWith(fontSize: 16, color: Colors.black),
+                  ),
+                  Container(
+                    width: sizeConfig.getPropWidth(130),
+                    height: sizeConfig.getPropHeight(40),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: sizeConfig.getPropWidth(8),
+                    ),
+                    alignment: Alignment.centerLeft,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF212121).withOpacity(0.08),
+                      borderRadius:
+                          BorderRadius.circular(sizeConfig.getPropWidth(8)),
+                    ),
+                    child: DropdownButton<String>(
+                      isExpanded: true,
+                      borderRadius:
+                          BorderRadius.circular(sizeConfig.getPropWidth(16)),
+                      underline: const SizedBox(),
+                      icon: const Icon(Icons.keyboard_arrow_down_rounded),
+                      value: model.months[model.month - 1],
+                      items: model.months.map((String value) {
+                        return DropdownMenuItem<String>(
+                          alignment: Alignment.centerLeft,
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        update(() {
+                          model.month = model.months.indexOf('$value') + 1;
+                        });
+                      },
+                    ),
+                  ),
+                  Container(
+                    width: sizeConfig.getPropWidth(90),
+                    height: sizeConfig.getPropHeight(40),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: sizeConfig.getPropWidth(8),
+                    ),
+                    alignment: Alignment.centerLeft,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF212121).withOpacity(0.08),
+                      borderRadius:
+                          BorderRadius.circular(sizeConfig.getPropWidth(8)),
+                    ),
+                    child: DropdownButton<String>(
+                      isExpanded: true,
+                      borderRadius:
+                          BorderRadius.circular(sizeConfig.getPropWidth(16)),
+                      underline: const SizedBox(),
+                      icon: const Icon(Icons.keyboard_arrow_down_rounded),
+                      value: model.year,
+                      items: model.years.map((String value) {
+                        return DropdownMenuItem<String>(
+                          alignment: Alignment.center,
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        update(() {
+                          model.year = value ?? DateTime.now().year.toString();
+                          print(model.year);
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                margin: EdgeInsets.only(
+                  top: sizeConfig.getPropHeight(17),
+                ),
+                child: CustomRoundRectButton(
+                  onTap: () {
+                    navigationService.pop();
+                    model.setDate();
+                  },
+                  fillColor: Colors.white,
+                  child: Text(
+                    'Apply Filter',
+                    style: Theme.of(context).textTheme.bodyText2,
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   Widget getOfferImage(
     BuildContext context, {
     required String name,
   }) {
-    for (int i = 0; i < homeModel.brandData.length; i++) {
-      if (homeModel.brandData[i]['brandName'].toString() == name) {
+    for (int i = 0; i < widget.homeModel.brandData.length; i++) {
+      if (widget.homeModel.brandData[i]['brandName'].toString() == name) {
         return Image.memory(
           base64.decode(
-            homeModel.brandData[i]['brandImg'].toString().split(',').last,
+            widget.homeModel.brandData[i]['brandImg']
+                .toString()
+                .split(',')
+                .last,
           ),
           scale: 1.5,
         );
@@ -31,29 +175,36 @@ class SpendingScreen extends StatelessWidget {
   }
 
   Widget buildSpending(SpendingScreenViewModel model) {
-    return Container(
-      height: sizeConfig.getPropHeight(510),
-      margin: EdgeInsets.symmetric(
-        horizontal: sizeConfig.getPropWidth(16),
-        vertical: sizeConfig.getPropHeight(16),
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(
-          sizeConfig.getPropWidth(16),
+    return RefreshIndicator(
+      onRefresh: model.getTransactionData,
+      child: Container(
+        height: sizeConfig.getPropHeight(510),
+        margin: EdgeInsets.symmetric(
+          horizontal: sizeConfig.getPropWidth(16),
+          vertical: sizeConfig.getPropHeight(16),
         ),
-        border: Border.all(color: const Color(0xFFE7ECEE)),
-      ),
-      child: model.isBusy
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : ListView.separated(
-              itemCount: model.data.count,
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                final spend = model.data.spends[index];
-                return ListTile(
-                  leading: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(
+            sizeConfig.getPropWidth(16),
+          ),
+          border: Border.all(color: const Color(0xFFE7ECEE)),
+        ),
+        child: model.isBusy
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : ListView.separated(
+                itemCount: model.data.count == 0 ? 1 : model.data.count,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  if (model.data.count == 0) {
+                    return const Center(
+                      child: Text('No data found'),
+                    );
+                  }
+                  final spend = model.data.spends[index];
+                  return ListTile(
+                    leading: Container(
                       width: sizeConfig.getPropHeight(44),
                       height: sizeConfig.getPropHeight(44),
                       alignment: Alignment.center,
@@ -63,39 +214,41 @@ class SpendingScreen extends StatelessWidget {
                         ),
                         color: const Color(0xFFF9F9F9),
                       ),
-                      child: getOfferImage(context, name: spend.brandName)),
-                  title: Text(
-                    spend.brandName,
-                    style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                          fontSize: 16,
-                          color: Colors.black,
-                        ),
-                  ),
-                  subtitle: Text(
-                    spend.date,
-                    style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                          fontSize: 14,
-                          color: const Color(0xFF717E95),
-                        ),
-                  ),
-                  trailing: Text(
-                    "Rs. ${spend.amount}",
-                    style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                          fontSize: 16,
-                          color: const Color(0xFF19B832),
-                        ),
-                  ),
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: sizeConfig.getPropWidth(20),
-                  ),
-                  child: const Divider(),
-                );
-              },
-            ),
+                      child: getOfferImage(context, name: spend.brandName),
+                    ),
+                    title: Text(
+                      spend.brandName,
+                      style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                    ),
+                    subtitle: Text(
+                      spend.date,
+                      style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                            fontSize: 14,
+                            color: const Color(0xFF717E95),
+                          ),
+                    ),
+                    trailing: Text(
+                      "Rs. ${spend.amount}",
+                      style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                            fontSize: 16,
+                            color: const Color(0xFF19B832),
+                          ),
+                    ),
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: sizeConfig.getPropWidth(20),
+                    ),
+                    child: const Divider(),
+                  );
+                },
+              ),
+      ),
     );
   }
 
@@ -186,148 +339,169 @@ class SpendingScreen extends StatelessWidget {
   }
 
   Widget buildCategory(BuildContext context, SpendingScreenViewModel model) {
-    return SizedBox(
-      height: sizeConfig.getPropHeight(510),
-      child: Column(
-        children: [
-          SizedBox(
-            height: sizeConfig.getPropHeight(161),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Expanded(
-                  child: DoughnutChart(
-                    size: 161,
-                    data: model.categoryData,
-                    onTap: () {},
+    return RefreshIndicator(
+      onRefresh: model.getCategoryData,
+      child: SizedBox(
+        height: sizeConfig.getPropHeight(510),
+        child: Column(
+          children: [
+            SizedBox(
+              height: sizeConfig.getPropHeight(161),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: DoughnutChart(
+                      size: 161,
+                      data: model.categoryData,
+                      onTap: () {},
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: List.generate(model.categoryData.length, (index) {
-                      return Row(
-                        children: [
-                          Container(
-                            height: sizeConfig.getPropHeight(13),
-                            width: sizeConfig.getPropHeight(13),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: getColor(
-                                model.categoryData[index].categoryId,
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children:
+                          List.generate(model.categoryData.length, (index) {
+                        return Row(
+                          children: [
+                            Container(
+                              height: sizeConfig.getPropHeight(13),
+                              width: sizeConfig.getPropHeight(13),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: getColor(
+                                  model.categoryData[index].categoryId,
+                                ),
                               ),
                             ),
-                          ),
-                          Text(
-                            '  ${getName(model.categoryData[index].categoryId)} ${model.categoryData[index].percentage}%',
-                            style:
-                                Theme.of(context).textTheme.bodyText2!.copyWith(
-                                      fontSize: 12,
-                                      color: Colors.black,
-                                    ),
-                          )
-                        ],
-                      );
-                    }),
+                            Text(
+                              '  ${getName(model.categoryData[index].categoryId)} ${model.categoryData[index].percentage}%',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2!
+                                  .copyWith(
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
+                            )
+                          ],
+                        );
+                      }),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.symmetric(
+                  horizontal: sizeConfig.getPropWidth(16),
+                  vertical: sizeConfig.getPropHeight(16),
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                    sizeConfig.getPropWidth(16),
                   ),
-                )
-              ],
-            ),
-          ),
-          Expanded(
-            child: Container(
-              margin: EdgeInsets.symmetric(
-                horizontal: sizeConfig.getPropWidth(16),
-                vertical: sizeConfig.getPropHeight(16),
-              ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(
-                  sizeConfig.getPropWidth(16),
+                  border: Border.all(
+                    color: const Color(0xFFE7ECEE),
+                  ),
                 ),
-                border: Border.all(
-                  color: const Color(0xFFE7ECEE),
-                ),
-              ),
-              child: ListView.separated(
-                itemCount: model.spendCategoryData.length,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  final category = model.spendCategoryData[index];
-                  return ListTile(
-                    leading: Container(
-                      width: sizeConfig.getPropHeight(44),
-                      height: sizeConfig.getPropHeight(44),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          sizeConfig.getPropWidth(8),
+                child: ListView.separated(
+                  itemCount: model.spendCategoryData.isEmpty
+                      ? 1
+                      : model.spendCategoryData.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    if (model.spendCategoryData.isEmpty) {
+                      return const Center(
+                        child: Text('No data found'),
+                      );
+                    }
+                    final category = model.spendCategoryData[index];
+                    return ListTile(
+                      leading: Container(
+                        width: sizeConfig.getPropHeight(44),
+                        height: sizeConfig.getPropHeight(44),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            sizeConfig.getPropWidth(8),
+                          ),
+                          color: const Color(0xFFF9F9F9),
                         ),
-                        color: const Color(0xFFF9F9F9),
+                        child: SvgPicture.string(
+                          getCategoryIcon(category.categoryId),
+                        ),
                       ),
-                      child: SvgPicture.string(
-                        getCategoryIcon(category.categoryId),
+                      title: Text(
+                        getCategoryName(category.categoryId),
+                        style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                              fontSize: 16,
+                              color: const Color(0xFF717E95),
+                            ),
                       ),
-                    ),
-                    title: Text(
-                      getCategoryName(category.categoryId),
-                      style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                            fontSize: 16,
-                            color: const Color(0xFF717E95),
-                          ),
-                    ),
-                    subtitle: Text(
-                      '₹ ${category.amount}',
-                      style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                            fontSize: 14,
-                            color: const Color(0xFF000000),
-                          ),
-                    ),
-                    trailing: Text(
-                      '${category.count} Spends',
-                      style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                            fontSize: 16,
-                            color: Colors.black,
-                          ),
-                    ),
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: sizeConfig.getPropWidth(20),
-                    ),
-                    child: const Divider(),
-                  );
-                },
+                      subtitle: Text(
+                        '₹ ${category.amount}',
+                        style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                              fontSize: 14,
+                              color: const Color(0xFF000000),
+                            ),
+                      ),
+                      trailing: Text(
+                        '${category.count} Spends',
+                        style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: sizeConfig.getPropWidth(20),
+                      ),
+                      child: const Divider(),
+                    );
+                  },
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget buildBrand(BuildContext context, SpendingScreenViewModel model) {
-    return Container(
-      height: sizeConfig.getPropHeight(510),
-      margin: EdgeInsets.symmetric(
-        horizontal: sizeConfig.getPropWidth(16),
-        vertical: sizeConfig.getPropHeight(16),
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(
-          sizeConfig.getPropWidth(16),
+    return RefreshIndicator(
+      onRefresh: model.getBrandData,
+      child: Container(
+        height: sizeConfig.getPropHeight(510),
+        margin: EdgeInsets.symmetric(
+          horizontal: sizeConfig.getPropWidth(16),
+          vertical: sizeConfig.getPropHeight(16),
         ),
-        border: Border.all(color: const Color(0xFFE7ECEE)),
-      ),
-      child: ListView.separated(
-        itemCount: model.spendBrandData.length,
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
-          final brand = model.spendBrandData[index];
-          return ListTile(
-            leading: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(
+            sizeConfig.getPropWidth(16),
+          ),
+          border: Border.all(color: const Color(0xFFE7ECEE)),
+        ),
+        child: ListView.separated(
+          itemCount:
+              model.spendBrandData.isEmpty ? 1 : model.spendBrandData.length,
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            if (model.spendBrandData.isEmpty) {
+              return const Center(
+                child: Text('No data found'),
+              );
+            }
+            final brand = model.spendBrandData[index];
+            return ListTile(
+              leading: Container(
                 width: sizeConfig.getPropHeight(44),
                 height: sizeConfig.getPropHeight(44),
                 alignment: Alignment.center,
@@ -340,44 +514,47 @@ class SpendingScreen extends StatelessWidget {
                 child: getOfferImage(
                   context,
                   name: brand.brandName,
-                )),
-            title: Text(
-              brand.brandName,
-              style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                    fontSize: 16,
-                    color: Colors.black,
-                  ),
-            ),
-            subtitle: Text(
-              getCategoryName(brand.spends[0].categoryId!),
-              style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                    fontSize: 14,
-                    color: const Color(0xFF717E95),
-                  ),
-            ),
-            trailing: Text(
-              "${brand.count} Spends",
-              style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                    fontSize: 16,
-                    color: const Color(0xFF000000),
-                  ),
-            ),
-          );
-        },
-        separatorBuilder: (BuildContext context, int index) {
-          return Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: sizeConfig.getPropWidth(20),
-            ),
-            child: const Divider(),
-          );
-        },
+                ),
+              ),
+              title: Text(
+                brand.brandName,
+                style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                      fontSize: 16,
+                      color: Colors.black,
+                    ),
+              ),
+              subtitle: Text(
+                getCategoryName(brand.spends[0].categoryId!),
+                style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                      fontSize: 14,
+                      color: const Color(0xFF717E95),
+                    ),
+              ),
+              trailing: Text(
+                "${brand.count} Spends",
+                style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                      fontSize: 16,
+                      color: const Color(0xFF000000),
+                    ),
+              ),
+            );
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: sizeConfig.getPropWidth(20),
+              ),
+              child: const Divider(),
+            );
+          },
+        ),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return BaseView<SpendingScreenViewModel>(
       onModelReady: (model) => model.init(),
       builder: (context, model, child) {
@@ -402,7 +579,7 @@ class SpendingScreen extends StatelessWidget {
                     right: sizeConfig.getPropWidth(27),
                   ),
                   child: InkWell(
-                    onTap: homeModel.gotoNotifications,
+                    onTap: widget.homeModel.gotoNotifications,
                     child: SvgPicture.string(
                       FridayySvg.notificationIcon,
                     ),
@@ -425,7 +602,8 @@ class SpendingScreen extends StatelessWidget {
                     automaticallyImplyLeading: false,
                     backgroundColor: const Color(0xFFF9F9F9),
                     title: Text(
-                      "September",
+                      model
+                          .months[int.parse(model.dateFilter.substring(2)) - 1],
                       style: Theme.of(context)
                           .textTheme
                           .bodyText2!
@@ -433,7 +611,8 @@ class SpendingScreen extends StatelessWidget {
                     ),
                     actions: [
                       InkWell(
-                        onTap: () {},
+                        onTap: () =>
+                            model.changeDateTimeFilter(buildFilter(model)),
                         child: SvgPicture.string(
                           FridayySvg.calenderIcon,
                         ),
@@ -472,263 +651,11 @@ class SpendingScreen extends StatelessWidget {
               ],
             ),
           ),
-          // child: NestedScrollView(
-          //   headerSliverBuilder: (context, value) {
-          //     return [
-          //       SliverAppBar(
-          //         leadingWidth: sizeConfig.getPropWidth(50),
-          //         leading: SizedBox(
-          //           width: sizeConfig.getPropWidth(50),
-          //         ),
-          //         pinned: true,
-          //         titleSpacing: 0.0,
-          //         automaticallyImplyLeading: false,
-          //         backgroundColor: const Color(0xFFF9F9F9),
-          //         title: Text(
-          //           "September",
-          //           style: Theme.of(context)
-          //               .textTheme
-          //               .bodyText2!
-          //               .copyWith(fontSize: 20, color: Colors.black),
-          //         ),
-          //         actions: [
-          //           InkWell(
-          //             onTap: () {},
-          //             child: SvgPicture.string(
-          //               FridayySvg.calenderIcon,
-          //             ),
-          //           ),
-          //           SizedBox(
-          //             width: sizeConfig.getPropWidth(47),
-          //           )
-          //         ],
-          //         bottom: TabBar(
-          //           labelColor: const Color(0xFF2128BD),
-          //           unselectedLabelColor: const Color(0xFF000000),
-          //           indicatorColor: const Color(0xFF2128BD),
-          //           indicatorWeight: 1.0,
-          //           labelStyle: Theme.of(context)
-          //               .textTheme
-          //               .bodyText2!
-          //               .copyWith(fontSize: 16),
-          //           tabs: [
-          //             const Tab(text: "Spending"),
-          //             const Tab(text: "Categories"),
-          //             const Tab(text: "Brands"),
-          //           ],
-          //         ),
-          //       ),
-          //     ];
-          //   },
-          //   body: Column(
-          //     children: [
-          //       TabBarView(
-          //         physics: const NeverScrollableScrollPhysics(),
-          //         children: [
-          //           Container(
-          //             height: sizeConfig.getPropHeight(510),
-          //             margin: EdgeInsets.symmetric(
-          //               horizontal: sizeConfig.getPropWidth(16),
-          //               vertical: sizeConfig.getPropHeight(16),
-          //             ),
-          //             decoration: BoxDecoration(
-          //                 borderRadius: BorderRadius.circular(
-          //                   sizeConfig.getPropWidth(16),
-          //                 ),
-          //                 border: Border.all(color: const Color(0xFFE7ECEE))),
-          //             child: ListView.separated(
-          //               itemCount: 10,
-          //               shrinkWrap: true,
-          //               itemBuilder: (context, index) {
-          //                 return ListTile(
-          //                   leading: Container(
-          //                     width: sizeConfig.getPropHeight(44),
-          //                     height: sizeConfig.getPropHeight(44),
-          //                     alignment: Alignment.center,
-          //                     decoration: BoxDecoration(
-          //                       borderRadius: BorderRadius.circular(
-          //                         sizeConfig.getPropWidth(8),
-          //                       ),
-          //                       color: const Color(0xFFF9F9F9),
-          //                     ),
-          //                     child: Text(
-          //                       "S",
-          //                       style: Theme.of(context)
-          //                           .textTheme
-          //                           .bodyText2!
-          //                           .copyWith(fontSize: 20),
-          //                     ),
-          //                   ),
-          //                   title: Text(
-          //                     'Settlement',
-          //                     style: Theme.of(context)
-          //                         .textTheme
-          //                         .bodyText2!
-          //                         .copyWith(fontSize: 16, color: Colors.black),
-          //                   ),
-          //                   subtitle: Text(
-          //                     '12 Mar 2021',
-          //                     style:
-          //                         Theme.of(context).textTheme.bodyText2!.copyWith(
-          //                               fontSize: 14,
-          //                               color: const Color(0xFF717E95),
-          //                             ),
-          //                   ),
-          //                   trailing: Text(
-          //                     "+31,123",
-          //                     style:
-          //                         Theme.of(context).textTheme.bodyText2!.copyWith(
-          //                               fontSize: 16,
-          //                               color: const Color(0xFF19B832),
-          //                             ),
-          //                   ),
-          //                 );
-          //               },
-          //               separatorBuilder: (BuildContext context, int index) {
-          //                 return Padding(
-          //                   padding: EdgeInsets.symmetric(
-          //                       horizontal: sizeConfig.getPropWidth(20)),
-          //                   child: const Divider(),
-          //                 );
-          //               },
-          //             ),
-          //           ),
-          //           SizedBox(
-          //             height: sizeConfig.getPropHeight(510),
-          //             child: Column(
-          //               children: [
-          //                 SizedBox(
-          //                   height: sizeConfig.getPropHeight(161),
-          //                   width: sizeConfig.getPropWidth(325),
-          //                   child: Row(
-          //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //                     children: [
-          //                       Expanded(
-          //                         child: DoughnutChart(
-          //                           size: 161,
-          //                           data: model.data,
-          //                           onTap: () {},
-          //                         ),
-          //                       ),
-          //                       Expanded(
-          //                         child: Column(
-          //                           mainAxisAlignment: MainAxisAlignment.center,
-          //                           children:
-          //                               List.generate(model.data.length, (index) {
-          //                             return SizedBox(
-          //                               width: sizeConfig.getPropWidth(127),
-          //                               child: Row(
-          //                                 children: [
-          //                                   Container(
-          //                                     height:
-          //                                         sizeConfig.getPropHeight(13),
-          //                                     width: sizeConfig.getPropHeight(13),
-          //                                     decoration: BoxDecoration(
-          //                                       shape: BoxShape.circle,
-          //                                       color: model.data[index].color,
-          //                                     ),
-          //                                   ),
-          //                                   Text(
-          //                                     '${model.data[index].x} ${model.data[index].y}%',
-          //                                     style: Theme.of(context)
-          //                                         .textTheme
-          //                                         .bodyText2!
-          //                                         .copyWith(
-          //                                             fontSize: 12,
-          //                                             color: Colors.black),
-          //                                   )
-          //                                 ],
-          //                               ),
-          //                             );
-          //                           }),
-          //                         ),
-          //                       )
-          //                     ],
-          //                   ),
-          //                 ),
-          //                 Expanded(
-          //                   child: Container(
-          //                     margin: EdgeInsets.symmetric(
-          //                       horizontal: sizeConfig.getPropWidth(16),
-          //                       vertical: sizeConfig.getPropHeight(16),
-          //                     ),
-          //                     decoration: BoxDecoration(
-          //                         borderRadius: BorderRadius.circular(
-          //                           sizeConfig.getPropWidth(16),
-          //                         ),
-          //                         border:
-          //                             Border.all(color: const Color(0xFFE7ECEE))),
-          //                     child: ListView.separated(
-          //                       itemCount: model.data.length,
-          //                       shrinkWrap: true,
-          //                       itemBuilder: (context, index) {
-          //                         return ListTile(
-          //                           leading: Container(
-          //                             width: sizeConfig.getPropHeight(44),
-          //                             height: sizeConfig.getPropHeight(44),
-          //                             alignment: Alignment.center,
-          //                             decoration: BoxDecoration(
-          //                               borderRadius: BorderRadius.circular(
-          //                                 sizeConfig.getPropWidth(8),
-          //                               ),
-          //                               color: const Color(0xFFF9F9F9),
-          //                             ),
-          //                             child: SvgPicture.string(
-          //                                 model.data[index].icon!),
-          //                           ),
-          //                           title: Text(
-          //                             model.data[index].x,
-          //                             style: Theme.of(context)
-          //                                 .textTheme
-          //                                 .bodyText2!
-          //                                 .copyWith(
-          //                                     fontSize: 16,
-          //                                     color: const Color(0xFF717E95)),
-          //                           ),
-          //                           subtitle: Text(
-          //                             '₹ ${model.data[index].spendAmount!}',
-          //                             style: Theme.of(context)
-          //                                 .textTheme
-          //                                 .bodyText2!
-          //                                 .copyWith(
-          //                                   fontSize: 14,
-          //                                   color: const Color(0xFF000000),
-          //                                 ),
-          //                           ),
-          //                           trailing: Text(
-          //                             '${model.data[index].spendTimes.toString()} Spends',
-          //                             style: Theme.of(context)
-          //                                 .textTheme
-          //                                 .bodyText2!
-          //                                 .copyWith(
-          //                                   fontSize: 16,
-          //                                   color: Colors.black,
-          //                                 ),
-          //                           ),
-          //                         );
-          //                       },
-          //                       separatorBuilder:
-          //                           (BuildContext context, int index) {
-          //                         return Padding(
-          //                           padding: EdgeInsets.symmetric(
-          //                               horizontal: sizeConfig.getPropWidth(20)),
-          //                           child: const Divider(),
-          //                         );
-          //                       },
-          //                     ),
-          //                   ),
-          //                 ),
-          //               ],
-          //             ),
-          //           ),
-          //           Container()
-          //         ],
-          //       ),
-          //     ],
-          //   ),
-          // ),
         );
       },
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

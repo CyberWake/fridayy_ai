@@ -1,4 +1,4 @@
-import 'package:fridayy_one/business_login/models/spending_transaction_model.dart';
+import 'package:fridayy_one/business_login/models/spend_model.dart';
 
 class SpendingCategoryModel {
   SpendingCategoryModel({
@@ -9,10 +9,10 @@ class SpendingCategoryModel {
   });
 
   factory SpendingCategoryModel.fromJson(Map<String, dynamic> json) {
-    final List<Spends> list = [];
+    final List<Spend> list = [];
     if (json['spends'] != null) {
       json['spends'].forEach((v) {
-        list.add(Spends.fromJson(v as Map<String, dynamic>));
+        list.add(Spend.fromJson(v as Map<String, dynamic>));
       });
     }
     return SpendingCategoryModel(
@@ -26,7 +26,7 @@ class SpendingCategoryModel {
   String categoryId;
   double amount;
   int count;
-  List<Spends> spends;
+  List<Spend> spends;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};

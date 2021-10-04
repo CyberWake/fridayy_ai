@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fridayy_one/business_login/models/message_model.dart';
 import 'package:fridayy_one/business_login/utils/routing_constants.dart';
 import 'package:fridayy_one/business_login/utils/theme.dart';
 import 'package:fridayy_one/router.dart' as router;
@@ -11,7 +12,10 @@ import 'package:path_provider/path_provider.dart' as path;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final Directory dir = await path.getApplicationDocumentsDirectory();
-  Hive.init(dir.path);
+  Hive
+    ..init(dir.path)
+    ..registerAdapter(MessageAdapter());
+  await Hive.openBox<Message>('messages');
   setupServiceLocator();
   runApp(
     const MyApp(),

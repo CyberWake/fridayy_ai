@@ -8,13 +8,9 @@ class OfferCard extends StatelessWidget {
     Key? key,
     this.onTap,
     required this.totalOffers,
-    this.onActiveTap,
-    this.onExpiredTap,
     required this.activeOffers,
     required this.inActiveOffers,
   }) : super(key: key);
-  final void Function()? onActiveTap;
-  final void Function()? onExpiredTap;
   final void Function()? onTap;
   final double totalOffers;
   final double activeOffers;
@@ -113,7 +109,6 @@ class OfferCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Offer(
-                  onTap: onActiveTap,
                   offerCount: activeOffers.round(),
                   isExpiredOffer: false,
                   height: 32,
@@ -122,7 +117,6 @@ class OfferCard extends StatelessWidget {
                   height: sizeConfig.getPropWidth(44),
                 ),
                 Offer(
-                  onTap: onExpiredTap,
                   offerCount: inActiveOffers.round(),
                   isExpiredOffer: true,
                   height: 32,

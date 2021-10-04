@@ -32,22 +32,6 @@ class HomeScreenHolder extends StatelessWidget {
                 homeModel: model,
               )
             ],
-            // itemBuilder: (context, index) {
-            //   switch (index) {
-            //     case 0:
-            //       return HomeScreen(homeModel: model);
-            //     case 1:
-            //       return OfferScreen(
-            //         homeModel: model,
-            //       );
-            //     case 2:
-            //       return SpendingScreen(
-            //         homeModel: model,
-            //       );
-            //     default:
-            //       return Container();
-            //   }
-            // },
           ),
           bottomNavigationBar: Container(
             color: Colors.white,

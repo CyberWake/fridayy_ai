@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:fridayy_one/business_login/utils/enums.dart';
 import 'package:fridayy_one/business_login/utils/fridayy_svg.dart';
-import 'package:fridayy_one/business_login/utils/routing_constants.dart';
 import 'package:fridayy_one/business_login/view_models/base_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 
@@ -51,7 +50,7 @@ class HomeScreenHolderViewModel extends BaseModel {
   }
 
   void gotoNotifications() {
-    navigationService.pushScreen(Routes.toBeMade, arguments: 'Notifications');
+    navigationService.showSnackBar('No new notifications');
   }
 
   void gotoProfile() {
@@ -79,10 +78,6 @@ class HomeScreenHolderViewModel extends BaseModel {
   }
 
   void gotoFinanceAnalytics() {
-    pageController.animateToPage(
-      3,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeIn,
-    );
+    navigationService.showSnackBar('Coming Soon');
   }
 }

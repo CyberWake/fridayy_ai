@@ -100,6 +100,7 @@ class OfferScreenViewModel extends BaseModel {
     );
     if (result != null) {
       (result as List).forEach((element) {
+        print(element);
         offersOfCategory[0].add(
           Offers.fromJsonOffers(element as Map<String, dynamic>),
         );
@@ -203,5 +204,20 @@ class OfferScreenViewModel extends BaseModel {
         "offers": categoryBrands[categoryIndex][brandIndex].offers,
       },
     );
+  }
+
+  Future refreshData() async {
+    offersOfCategory.forEach((element) {
+      element.clear();
+    });
+    categoryBrands.forEach((element) {
+      element.clear();
+    });
+    tabChanged(currentTabIndex);
+  }
+
+  void updateFilter() {
+    navigationService.pop();
+    notifyListeners();
   }
 }

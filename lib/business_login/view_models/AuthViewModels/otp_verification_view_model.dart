@@ -33,10 +33,11 @@ class OtpVerificationViewModel extends BaseModel {
         },
         isAuth: true,
       );
-      print(userXInternalKey);
       if (userXInternalKey != null) {
-        localDatabaseService.saveUserAuth(userXInternalKey['auth']
-            .toString()); //'cbfed2c4-d6a4-4d32-9994-f63f2f7e2f67');//userXInternalKey['auth']
+        print(userXInternalKey['auth']);
+        localDatabaseService.saveUserAuth(
+          userXInternalKey['auth'].toString(),
+        ); //'cbfed2c4-d6a4-4d32-9994-f63f2f7e2f67');//userXInternalKey['auth']
         navigationService.removeAllAndPush(
           Routes.homeScreen,
           Routes.splashScreen,
@@ -62,6 +63,7 @@ class OtpVerificationViewModel extends BaseModel {
       );
       print(userXInternalKey);
       if (userXInternalKey != null) {
+        print(userXInternalKey['auth']);
         localDatabaseService.saveUserAuth(userXInternalKey['auth'].toString());
         navigationService.removeAllAndPush(
           Routes.homeScreen,

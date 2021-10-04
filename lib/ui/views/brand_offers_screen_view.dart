@@ -153,8 +153,11 @@ class BrandOffersView extends StatelessWidget {
                       'Offer Validity',
                       offerDetails.expiryDate ?? "Never Expiring",
                     ),
-                    offerInfo(context, 'Other info',
-                        offerDetails.rewardDescription ?? "NA"),
+                    offerInfo(
+                      context,
+                      'Other info',
+                      offerDetails.rewardDescription ?? "NA",
+                    ),
                   ],
                 ),
               ),
@@ -165,8 +168,10 @@ class BrandOffersView extends StatelessWidget {
                 onTap: () async {
                   navigationService.pop();
                   if (offerDetails.code != null) {
-                    FlutterClipboard.copy(offerDetails.code!).whenComplete(() =>
-                        navigationService.showSnackBar('Coupon Code copied'));
+                    FlutterClipboard.copy(offerDetails.code!).whenComplete(
+                      () =>
+                          navigationService.showSnackBar('Coupon Code copied'),
+                    );
                   } else if (offerDetails.link != null) {
                     await canLaunch(offerDetails.link!)
                         ? await launch(offerDetails.link!)

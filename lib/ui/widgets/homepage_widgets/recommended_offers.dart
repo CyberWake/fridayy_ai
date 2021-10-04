@@ -5,9 +5,11 @@ import 'package:fridayy_one/business_login/models/user_overview_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 
 class RecommendedOffers extends StatelessWidget {
-  const RecommendedOffers(
-      {Key? key, required this.offers, required this.brandData})
-      : super(key: key);
+  const RecommendedOffers({
+    Key? key,
+    required this.offers,
+    required this.brandData,
+  }) : super(key: key);
   final List<NotifiedOffers> offers;
   final List brandData;
   Color getCouponBorderColor(int expiry) {
