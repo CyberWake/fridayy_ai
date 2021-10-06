@@ -10,22 +10,12 @@ import 'package:fridayy_one/ui/widgets/homepage_widgets/recommended_offers.dart'
 import 'package:fridayy_one/ui/widgets/homepage_widgets/spending_behaviour_card.dart';
 import 'package:fridayy_one/ui/widgets/usp_tile.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key, required this.homeModel}) : super(key: key);
   final HomeScreenHolderViewModel homeModel;
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
-
-  @override
   Widget build(BuildContext context) {
-    super.build(context);
     return BaseView<HomeScreenViewModel>(
       onModelReady: (model) => model.init(),
       builder: (context, model, child) {
@@ -52,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen>
                 SizedBox(
                   height: sizeConfig.getPropHeight(32),
                   child: Text(
-                    model.userOverView.user.userName,
+                    homeModel.userOverView.user.userName,
                     style: Theme.of(context)
                         .textTheme
                         .bodyText1!
@@ -67,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen>
                   right: sizeConfig.getPropWidth(27),
                 ),
                 child: InkWell(
-                  onTap: widget.homeModel.gotoNotifications,
+                  onTap: homeModel.gotoNotifications,
                   child: SvgPicture.string(
                     FridayySvg.notificationIcon,
                   ),
@@ -78,12 +68,12 @@ class _HomeScreenState extends State<HomeScreen>
                   right: sizeConfig.getPropWidth(16),
                 ),
                 child: InkWell(
-                  onTap: widget.homeModel.gotoProfile,
+                  onTap: homeModel.gotoProfile,
                   child: CircleAvatar(
                     child: Text(
-                      model.userOverView.user.userName.isEmpty
+                      homeModel.userOverView.user.userName.isEmpty
                           ? "..."
-                          : model.userOverView.user.userName
+                          : homeModel.userOverView.user.userName
                               .substring(0, 1)
                               .toUpperCase(),
                     ),
@@ -101,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen>
                     children: [
                       USPTile(
                         uspName: 'Offers',
-                        onTap: widget.homeModel.gotoOffers,
+                        onTap: homeModel.gotoOffers,
                       ),
                       SizedBox(
                         height: sizeConfig.getPropHeight(22.5),
@@ -129,20 +119,21 @@ class _HomeScreenState extends State<HomeScreen>
                         child: Column(
                           children: [
                             RecommendedOffers(
-                              brandData: widget.homeModel.brandData,
-                              offers: model.userOverView.offer.notifiedOffers,
+                              brandData: homeModel.brandData,
+                              offers:
+                                  homeModel.userOverView.offer.notifiedOffers,
                             ),
                             USPTile(
                               uspName: 'Spending Behaviour',
-                              onTap: widget.homeModel.gotoSpendingBehaviour,
+                              onTap: homeModel.gotoSpendingBehaviour,
                             ),
                             SpendingBehaviourCard(
-                              spendingData: model.userOverView.spending,
-                              onTap: widget.homeModel.gotoSpendingBehaviour,
+                              spendingData: homeModel.userOverView.spending,
+                              onTap: homeModel.gotoSpendingBehaviour,
                             ),
                             USPTile(
                               uspName: 'Finance Analytics',
-                              onTap: widget.homeModel.gotoFinanceAnalytics,
+                              onTap: homeModel.gotoFinanceAnalytics,
                             ),
                             Container(
                               height: sizeConfig.getPropHeight(190),
@@ -160,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen>
                               ),
                               alignment: Alignment.center,
                               child: Text(
-                                'Wow ${model.userOverView.user.userName}\nyour spending score is better than ${model.userOverView.financial.percentile}% of users',
+                                'Wow ${homeModel.userOverView.user.userName}\nyour spending score is better than ${homeModel.userOverView.financial.percentile}% of users',
                                 style: Theme.of(context).textTheme.bodyText2,
                               ),
                             ),
@@ -172,12 +163,13 @@ class _HomeScreenState extends State<HomeScreen>
                       ),
                       OfferCard(
                         totalOffers:
-                            model.userOverView.offer.totalOffers.toDouble(),
-                        activeOffers:
-                            model.userOverView.offer.activeOffers.toDouble(),
-                        inActiveOffers:
-                            model.userOverView.offer.offersExpiring.toDouble(),
-                        onTap: widget.homeModel.gotoOffers,
+                            homeModel.userOverView.offer.totalOffers.toDouble(),
+                        activeOffers: homeModel.userOverView.offer.activeOffers
+                            .toDouble(),
+                        inActiveOffers: homeModel
+                            .userOverView.offer.offersExpiring
+                            .toDouble(),
+                        onTap: homeModel.gotoOffers,
                       ),
                     ],
                   ),

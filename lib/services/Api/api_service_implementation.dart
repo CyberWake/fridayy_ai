@@ -33,7 +33,7 @@ class ApiServiceImpl extends ApiService {
       if (result.statusCode == 200) {
         return jsonDecode(result.body);
       } else {
-        print(jsonDecode(result.body));
+        print(jsonDecode("there${result.body}"));
         navigationService
             .showSnackBar(jsonDecode(result.body)['detail'].toString());
         return null;

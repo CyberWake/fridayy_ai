@@ -11,6 +11,7 @@ import 'package:fridayy_one/ui/views/HomePages/home_screen_holder_view.dart';
 import 'package:fridayy_one/ui/views/brand_offers_screen_view.dart';
 import 'package:fridayy_one/ui/views/onboarding_view.dart';
 import 'package:fridayy_one/ui/views/splash_screen_view.dart';
+import 'package:fridayy_one/ui/views/story_screen_view.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -89,6 +90,16 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           key: const Key('BrandOffersView'),
           offers: inputData["offers"] as List<Offers>,
           brandData: inputData["brandData"] as List,
+        ),
+      );
+    case Routes.storyScreen:
+      final Map<String, dynamic> inputData =
+          settings.arguments! as Map<String, dynamic>;
+      return MaterialPageRoute(
+        builder: (context) => StoryScreenView(
+          key: const Key('StoryScreen'),
+          offers: inputData["offers"] as List<NotifiedOffers>,
+          startIndex: inputData["startIndex"] as int,
         ),
       );
     case Routes.toBeMade:

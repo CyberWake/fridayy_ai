@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fridayy_one/business_login/models/user_overview_model.dart';
+import 'package:fridayy_one/business_login/utils/routing_constants.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 
 class RecommendedOffers extends StatelessWidget {
@@ -55,46 +56,44 @@ class RecommendedOffers extends StatelessWidget {
         shrinkWrap: true,
         itemBuilder: (context, index) {
           final NotifiedOffers offer = offers[index];
-          return Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: sizeConfig.getPropWidth(8),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Container(
-                  height: sizeConfig.getPropHeight(76),
-                  width: sizeConfig.getPropWidth(76),
-                  padding: EdgeInsets.all(sizeConfig.getPropWidth(1)),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                    border: Border.all(
-                      color: getCouponBorderColor(offer.relativeDay),
-                      width: 2,
-                    ),
-                    image: DecorationImage(
-                      image:
-                          getOfferImage(context, name: offer.offers!.brandName),
-                      fit: BoxFit.none,
-                      scale: 6,
+          return InkWell(
+            onTap: () => navigationService.pushScreen(Routes.storyScreen,
+                arguments: {"offers": offers, "startIndex": index}),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: sizeConfig.getPropWidth(8),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Container(
+                    height: sizeConfig.getPropHeight(76),
+                    width: sizeConfig.getPropWidth(76),
+                    padding: EdgeInsets.all(sizeConfig.getPropWidth(1)),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      border: Border.all(
+                        color: getCouponBorderColor(offer.relativeDay),
+                        width: 2,
+                      ),
+                      image: DecorationImage(
+                        image: getOfferImage(context,
+                            name: offer.offers!.brandName),
+                        fit: BoxFit.none,
+                        scale: 6,
+                      ),
                     ),
                   ),
-
-                  // child: CircleAvata r(
-                  //   //backgroundImage: NetworkImage('https://i.pravatar.cc/300'),
-                  //   backgroundImage:
-                  //       getOfferImage(context, name: offer.offers!.brandName),
-                  // ),
-                ),
-                Text(
-                  offer.offers!.brandName,
-                  style: Theme.of(context)
-                      .textTheme
-                      .caption!
-                      .copyWith(fontSize: 11),
-                )
-              ],
+                  Text(
+                    offer.offers!.brandName,
+                    style: Theme.of(context)
+                        .textTheme
+                        .caption!
+                        .copyWith(fontSize: 11),
+                  )
+                ],
+              ),
             ),
           );
         },

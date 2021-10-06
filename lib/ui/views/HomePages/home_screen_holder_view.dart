@@ -17,8 +17,8 @@ class HomeScreenHolder extends StatelessWidget {
       onModelReady: (model) => model.init(),
       builder: (context, model, child) {
         return Scaffold(
-          body: PageView(
-            controller: model.pageController,
+          body: IndexedStack(
+            index: model.currentTabIndex,
             children: [
               HomeScreen(homeModel: model),
               OfferScreen(

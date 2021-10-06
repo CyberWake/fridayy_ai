@@ -100,7 +100,6 @@ class OfferScreenViewModel extends BaseModel {
     );
     if (result != null) {
       (result as List).forEach((element) {
-        print(element);
         offersOfCategory[0].add(
           Offers.fromJsonOffers(element as Map<String, dynamic>),
         );

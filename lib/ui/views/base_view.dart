@@ -14,7 +14,8 @@ class BaseView<T extends ChangeNotifier> extends StatefulWidget {
   _BaseViewState<T> createState() => _BaseViewState<T>();
 }
 
-class _BaseViewState<T extends ChangeNotifier> extends State<BaseView<T>> {
+class _BaseViewState<T extends ChangeNotifier> extends State<BaseView<T>>
+    with AutomaticKeepAliveClientMixin {
   T model = serviceLocator<T>();
 
   @override
@@ -29,6 +30,7 @@ class _BaseViewState<T extends ChangeNotifier> extends State<BaseView<T>> {
   Widget build(
     BuildContext context,
   ) {
+    super.build(context);
     return ChangeNotifierProvider<T>(
       create: (context) => model,
       child: Consumer<T>(
@@ -36,4 +38,8 @@ class _BaseViewState<T extends ChangeNotifier> extends State<BaseView<T>> {
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

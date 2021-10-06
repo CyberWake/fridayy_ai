@@ -10,16 +10,10 @@ import 'package:fridayy_one/ui/views/base_view.dart';
 import 'package:fridayy_one/ui/widgets/doughnut_chart.dart';
 import 'package:fridayy_one/ui/widgets/rounded_rectangular_button.dart';
 
-class SpendingScreen extends StatefulWidget {
+class SpendingScreen extends StatelessWidget {
   const SpendingScreen({Key? key, required this.homeModel}) : super(key: key);
   final HomeScreenHolderViewModel homeModel;
 
-  @override
-  State<SpendingScreen> createState() => _SpendingScreenState();
-}
-
-class _SpendingScreenState extends State<SpendingScreen>
-    with AutomaticKeepAliveClientMixin {
   Widget buildFilter(SpendingScreenViewModel model) {
     return StatefulBuilder(
       builder: (context, update) {
@@ -158,14 +152,11 @@ class _SpendingScreenState extends State<SpendingScreen>
     BuildContext context, {
     required String name,
   }) {
-    for (int i = 0; i < widget.homeModel.brandData.length; i++) {
-      if (widget.homeModel.brandData[i]['brandName'].toString() == name) {
+    for (int i = 0; i < homeModel.brandData.length; i++) {
+      if (homeModel.brandData[i]['brandName'].toString() == name) {
         return Image.memory(
           base64.decode(
-            widget.homeModel.brandData[i]['brandImg']
-                .toString()
-                .split(',')
-                .last,
+            homeModel.brandData[i]['brandImg'].toString().split(',').last,
           ),
           scale: 1.5,
         );
@@ -554,7 +545,6 @@ class _SpendingScreenState extends State<SpendingScreen>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return BaseView<SpendingScreenViewModel>(
       onModelReady: (model) => model.init(),
       builder: (context, model, child) {
@@ -579,7 +569,7 @@ class _SpendingScreenState extends State<SpendingScreen>
                     right: sizeConfig.getPropWidth(27),
                   ),
                   child: InkWell(
-                    onTap: widget.homeModel.gotoNotifications,
+                    onTap: homeModel.gotoNotifications,
                     child: SvgPicture.string(
                       FridayySvg.notificationIcon,
                     ),
@@ -655,7 +645,4 @@ class _SpendingScreenState extends State<SpendingScreen>
       },
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

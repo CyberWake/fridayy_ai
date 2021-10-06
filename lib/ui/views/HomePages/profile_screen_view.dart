@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fridayy_one/business_login/utils/fridayy_svg.dart';
+import 'package:fridayy_one/business_login/utils/routing_constants.dart';
 import 'package:fridayy_one/business_login/view_models/HomeViewModels/home_screen_holder_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/widgets/rounded_rectangular_button.dart';
@@ -39,6 +40,112 @@ class ProfileScreenView extends StatelessWidget {
             fontSize: 14,
             color: const Color(0xFF94A0B4),
           ),
+    );
+  }
+
+  void logout() {
+    showModalBottomSheet(
+      context: navigationService.navigatorKey.currentContext!,
+      constraints: BoxConstraints(
+        maxWidth: sizeConfig.getPropWidth(379),
+        minHeight: sizeConfig.getPropHeight(371),
+      ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        height: sizeConfig.getPropHeight(371),
+        width: sizeConfig.getPropWidth(379),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(sizeConfig.getPropWidth(16)),
+            topRight: Radius.circular(sizeConfig.getPropWidth(16)),
+          ),
+        ),
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.only(top: sizeConfig.getPropHeight(45)),
+              child: Image.asset('assets/images/emoji.png'),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: sizeConfig.getPropHeight(4)),
+              child: Text(
+                'Sad to see you leave',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText2!
+                    .copyWith(color: Colors.black, fontSize: 16),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: sizeConfig.getPropHeight(12)),
+              child: Text(
+                'Confirmation Required!',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline6!
+                    .copyWith(color: Colors.black, fontSize: 20),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: sizeConfig.getPropHeight(8)),
+              child: Text(
+                'Are you sure you want to deactive your account?',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText2!
+                    .copyWith(color: Colors.black, fontSize: 16),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: sizeConfig.getPropHeight(8)),
+              child: Text(
+                'You’ll still be able to reactivate your account within 3 Months.',
+                style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                    color: Colors.black,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w300),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: sizeConfig.getPropHeight(26)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  CustomRoundRectButton(
+                    onTap: () => navigationService.pop(),
+                    size: const Size(170, 50),
+                    borderColor: const Color(0xFF2128BD),
+                    fillColor: const Color(0xFF2128BD),
+                    child: Text(
+                      'No',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText2!
+                          .copyWith(color: Colors.white),
+                    ),
+                  ),
+                  CustomRoundRectButton(
+                    onTap: () {
+                      localDatabaseService.saveUserAuth('');
+                      navigationService.removeAllAndPush(
+                          Routes.authScreen, Routes.splashScreen);
+                    },
+                    size: const Size(170, 50),
+                    fillColor: Colors.white,
+                    borderColor: const Color(0xFF2128BD),
+                    child: Text(
+                      'Yes',
+                      style: Theme.of(context).textTheme.bodyText2,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 
@@ -97,13 +204,21 @@ class ProfileScreenView extends StatelessWidget {
                       ),
                       color: Colors.grey[200],
                     ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      homeModel.isBusy
+                          ? ""
+                          : homeModel.userOverView.user.userName
+                              .substring(0, 1),
+                      style: const TextStyle(fontSize: 42),
+                    ),
                   ),
                   Container(
                     margin: EdgeInsets.only(
                       top: sizeConfig.getPropHeight(24),
                     ),
                     child: Text(
-                      'Alexandra Bill',
+                      homeModel.userOverView.user.userName,
                       style: Theme.of(context).textTheme.bodyText2,
                     ),
                   )
@@ -147,7 +262,7 @@ class ProfileScreenView extends StatelessWidget {
                 top: sizeConfig.getPropHeight(16),
               ),
               child: CustomRoundRectButton(
-                onTap: () {},
+                onTap: logout,
                 fillColor: Colors.white,
                 child: Text(
                   'Deactivate Account',

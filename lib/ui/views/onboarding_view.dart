@@ -47,7 +47,7 @@ class OnBoardingScreen extends StatelessWidget {
                       onPressed: () {
                         if (model.controller.page! <= 1.0) {
                           model.controller.nextPage(
-                            duration: const Duration(milliseconds: 300),
+                            duration: const Duration(milliseconds: 750),
                             curve: Curves.decelerate,
                           );
                         } else {

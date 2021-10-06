@@ -7,18 +7,6 @@ import 'package:fridayy_one/services/service_locator.dart';
 import 'package:sms_advanced/sms_advanced.dart';
 
 class HomeScreenViewModel extends BaseModel {
-  UserOverView userOverView = UserOverView(
-    user: User(userName: ''),
-    offer: Offer(
-      notifiedOffers: [],
-      offersExpiring: 0,
-      totalOffers: 0,
-      activeOffers: 0,
-    ),
-    spending: Spending(month: '', currency: '', amount: 0, distribution: []),
-    financial: Financial(percentile: 0),
-  );
-
   final List<Distribution> datanew = [
     Distribution(categoryId: "FAD", percentage: 3.1),
     Distribution(categoryId: "MDCL", percentage: 4.9),
@@ -37,11 +25,7 @@ class HomeScreenViewModel extends BaseModel {
   Future init() async {
     setState(ViewState.busy);
     await postSms();
-    final result = await apiService.getRequest(ApiConstants.userOverview);
-    if (result != null) {
-      userOverView = UserOverView.fromJson(result as Map<String, dynamic>);
-      notifyListeners();
-    }
+    setState(ViewState.idle);
   }
 
   Future postSms() async {
