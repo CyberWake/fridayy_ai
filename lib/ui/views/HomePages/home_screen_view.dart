@@ -42,7 +42,7 @@ class HomeScreen extends StatelessWidget {
                 SizedBox(
                   height: sizeConfig.getPropHeight(32),
                   child: Text(
-                    homeModel.userOverView.user.userName,
+                    model.userOverView.user.userName,
                     style: Theme.of(context)
                         .textTheme
                         .bodyText1!
@@ -71,9 +71,9 @@ class HomeScreen extends StatelessWidget {
                   onTap: homeModel.gotoProfile,
                   child: CircleAvatar(
                     child: Text(
-                      homeModel.userOverView.user.userName.isEmpty
+                      model.isBusy
                           ? "..."
-                          : homeModel.userOverView.user.userName
+                          : model.userOverView.user.userName
                               .substring(0, 1)
                               .toUpperCase(),
                     ),
@@ -83,7 +83,7 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
           body: RefreshIndicator(
-            onRefresh: model.init,
+            onRefresh: model.postSms,
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -120,15 +120,14 @@ class HomeScreen extends StatelessWidget {
                           children: [
                             RecommendedOffers(
                               brandData: homeModel.brandData,
-                              offers:
-                                  homeModel.userOverView.offer.notifiedOffers,
+                              offers: model.userOverView.offer.notifiedOffers,
                             ),
                             USPTile(
                               uspName: 'Spending Behaviour',
                               onTap: homeModel.gotoSpendingBehaviour,
                             ),
                             SpendingBehaviourCard(
-                              spendingData: homeModel.userOverView.spending,
+                              spendingData: model.userOverView.spending,
                               onTap: homeModel.gotoSpendingBehaviour,
                             ),
                             USPTile(
@@ -151,7 +150,7 @@ class HomeScreen extends StatelessWidget {
                               ),
                               alignment: Alignment.center,
                               child: Text(
-                                'Wow ${homeModel.userOverView.user.userName}\nyour spending score is better than ${homeModel.userOverView.financial.percentile}% of users',
+                                'Wow ${model.userOverView.user.userName}\nyour spending score is better than ${model.userOverView.financial.percentile}% of users',
                                 style: Theme.of(context).textTheme.bodyText2,
                               ),
                             ),
@@ -163,12 +162,11 @@ class HomeScreen extends StatelessWidget {
                       ),
                       OfferCard(
                         totalOffers:
-                            homeModel.userOverView.offer.totalOffers.toDouble(),
-                        activeOffers: homeModel.userOverView.offer.activeOffers
-                            .toDouble(),
-                        inActiveOffers: homeModel
-                            .userOverView.offer.offersExpiring
-                            .toDouble(),
+                            model.userOverView.offer.totalOffers.toDouble(),
+                        activeOffers:
+                            model.userOverView.offer.activeOffers.toDouble(),
+                        inActiveOffers:
+                            model.userOverView.offer.offersExpiring.toDouble(),
                         onTap: homeModel.gotoOffers,
                       ),
                     ],

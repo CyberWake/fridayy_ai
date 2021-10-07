@@ -25,6 +25,12 @@ class LocalDatabaseServiceImpl extends LocalDatabaseService {
   }
 
   @override
+  logoutUser() async {
+    final userBox = await Hive.openBox('userKey');
+    userBox.clear();
+  }
+
+  @override
   void saveMessage(Message message) {
     final messagesBox = Hive.box<Message>('messages');
     messagesBox.put(message.id, message);
@@ -38,5 +44,11 @@ class LocalDatabaseServiceImpl extends LocalDatabaseService {
       return true;
     }
     return false;
+  }
+
+  @override
+  Future<bool> messagesExist() async {
+    final bool exists = await Hive.boxExists('messages');
+    return exists;
   }
 }

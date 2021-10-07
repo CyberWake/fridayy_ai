@@ -11,7 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class StoryScreenView extends StatefulWidget {
   const StoryScreenView(
-      {Key? key, required this.offers, required this.startIndex})
+      {Key? key, required this.offers, required this.startIndex,})
       : super(key: key);
   final List<NotifiedOffers> offers;
   final int startIndex;
@@ -28,7 +28,7 @@ class _StoryScreenViewState extends State<StoryScreenView> {
     super.initState();
     loadAssets();
     indicatorAnimationController = ValueNotifier<IndicatorAnimationCommand>(
-        IndicatorAnimationCommand.resume);
+        IndicatorAnimationCommand.resume,);
   }
 
   loadAssets() async {
@@ -117,11 +117,11 @@ class _StoryScreenViewState extends State<StoryScreenView> {
                           children: [
                             Container(
                               margin: EdgeInsets.only(
-                                  top: sizeConfig.getPropHeight(20)),
+                                  top: sizeConfig.getPropHeight(20),),
                               height: sizeConfig.getPropHeight(49),
                               width: sizeConfig.getPropWidth(113),
                               child: getOfferImage(context,
-                                  name: storyOffer!.brandName),
+                                  name: storyOffer!.brandName,),
                             ),
                             Text(
                               storyOffer.rewardType == 'DISCOUNT'

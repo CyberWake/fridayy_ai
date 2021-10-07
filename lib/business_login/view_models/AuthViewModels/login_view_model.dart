@@ -12,7 +12,7 @@ class LoginScreenViewModel extends BaseModel {
 
   verify() async {
     if (formKey.currentState!.validate()) {
-      var status = await Permission.sms.request();
+      final status = await Permission.sms.request();
       if (status.isGranted) {
         final UserModel user =
             UserModel(mobile: phoneNumber.text, countryCode: "+91");

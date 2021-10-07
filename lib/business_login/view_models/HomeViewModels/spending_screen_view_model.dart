@@ -56,6 +56,7 @@ class SpendingScreenViewModel extends BaseModel {
     for (int i = 2010; i <= DateTime.now().year; i++) {
       years.add(i.toString());
     }
+    getData();
   }
 
   getData() async {
@@ -91,7 +92,6 @@ class SpendingScreenViewModel extends BaseModel {
     double totalAmount = 0;
     spendCategoryData.clear();
     categoryData.clear();
-    print(dateFilter);
     final result = await apiService.getRequest(
       "${ApiConstants.spendingCategory}/?date=$dateFilter",
     );

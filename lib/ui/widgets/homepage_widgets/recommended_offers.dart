@@ -57,8 +57,10 @@ class RecommendedOffers extends StatelessWidget {
         itemBuilder: (context, index) {
           final NotifiedOffers offer = offers[index];
           return InkWell(
-            onTap: () => navigationService.pushScreen(Routes.storyScreen,
-                arguments: {"offers": offers, "startIndex": index}),
+            onTap: () => navigationService.pushScreen(
+              Routes.storyScreen,
+              arguments: {"offers": offers, "startIndex": index},
+            ),
             child: Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: sizeConfig.getPropWidth(8),
@@ -78,8 +80,10 @@ class RecommendedOffers extends StatelessWidget {
                         width: 2,
                       ),
                       image: DecorationImage(
-                        image: getOfferImage(context,
-                            name: offer.offers!.brandName),
+                        image: getOfferImage(
+                          context,
+                          name: offer.offers!.brandName,
+                        ),
                         fit: BoxFit.none,
                         scale: 6,
                       ),

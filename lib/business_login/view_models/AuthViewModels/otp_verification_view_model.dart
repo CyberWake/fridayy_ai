@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:fridayy_one/business_login/utils/api_constants.dart';
 import 'package:fridayy_one/business_login/utils/routing_constants.dart';
 import 'package:fridayy_one/business_login/view_models/base_view_model.dart';
@@ -65,10 +66,39 @@ class OtpVerificationViewModel extends BaseModel {
       if (userXInternalKey != null) {
         print(userXInternalKey['auth']);
         localDatabaseService.saveUserAuth(userXInternalKey['auth'].toString());
-        navigationService.removeAllAndPush(
-          Routes.homeScreen,
-          Routes.splashScreen,
-        );
+        final List<Map<String, dynamic>> data =
+            await messageService.readMessage();
+        if (data.isNotEmpty) {
+          navigationService.pushDialog(
+            Container(
+              margin: EdgeInsets.symmetric(
+                horizontal: sizeConfig.getPropWidth(100),
+                vertical: sizeConfig.getPropHeight(300),
+              ),
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Center(
+                child: CupertinoActivityIndicator(
+                  radius: sizeConfig.getPropWidth(30),
+                ),
+              ),
+            ),
+          );
+          messageService.postSms(data).then((value) {
+            if (value) {
+              navigationService.removeAllAndPush(
+                Routes.homeScreen,
+                Routes.splashScreen,
+              );
+            } else {
+              navigationService.pop();
+            }
+          });
+        } else {
+          navigationService.showSnackBar('No messages to send');
+        }
       }
     } else {
       navigationService.showSnackBar('Enter the otp to continue');

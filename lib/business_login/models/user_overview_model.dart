@@ -212,11 +212,17 @@ class Spending {
   });
 
   factory Spending.fromJson(Map<String, dynamic> json) {
+    final List<Distribution> list = [];
+    if (json['distribution'] != null) {
+      (json['distribution'] as List).forEach((element) {
+        list.add(Distribution.fromJson(element as Map<String, dynamic>));
+      });
+    }
     return Spending(
       month: json['month'] as String,
       currency: json['currency'] as String,
       amount: json['amount'] as int,
-      distribution: [],
+      distribution: list,
     );
   }
 

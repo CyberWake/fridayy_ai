@@ -4,7 +4,7 @@ import 'package:fridayy_one/business_login/utils/enums.dart';
 import 'package:fridayy_one/business_login/view_models/base_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 
-class HomeScreenViewModel extends BaseModel {
+class ProfileScreenViewModel extends BaseModel {
   UserOverView userOverView = UserOverView(
     user: User(userName: ''),
     offer: Offer(
@@ -17,24 +17,12 @@ class HomeScreenViewModel extends BaseModel {
     financial: Financial(percentile: 0),
   );
 
-  Future init() async {
+  init() async {
     setState(ViewState.busy);
     final result = await apiService.getRequest(ApiConstants.userOverview);
     if (result != null) {
       userOverView = UserOverView.fromJson(result as Map<String, dynamic>);
       setState(ViewState.idle);
-    }
-  }
-
-  Future postSms() async {
-    final List<Map<String, dynamic>> data = await messageService.readMessage();
-    if (data.isNotEmpty) {
-      final result = await messageService.postSms(data);
-      if (result) {
-        init();
-      }
-    } else {
-      init();
     }
   }
 }

@@ -4,6 +4,8 @@ abstract class LocalDatabaseService {
   Future<String> fetchAuthKey();
   void fetchUser();
   void saveUserAuth(String authKey);
+  void logoutUser();
   void saveMessage(Message message);
+  Future<bool> messagesExist();
   bool messageAlreadySaved(Message messageId);
 }
