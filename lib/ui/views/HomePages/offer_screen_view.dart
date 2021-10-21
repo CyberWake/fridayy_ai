@@ -8,6 +8,7 @@ import 'package:fridayy_one/business_login/view_models/HomeViewModels/offer_scre
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/views/base_view.dart';
 import 'package:fridayy_one/ui/widgets/rounded_rectangular_button.dart';
+import 'package:fridayy_one/ui/widgets/shimmer_card.dart';
 
 class OfferScreen extends StatelessWidget {
   const OfferScreen({Key? key, required this.homeModel}) : super(key: key);
@@ -168,46 +169,44 @@ class OfferScreen extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(top: sizeConfig.getPropHeight(19)),
-                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.only(
+                  top: sizeConfig.getPropHeight(19),
+                  left: 0.0,
+                ),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisSize: MainAxisSize.max,
                   children: List.generate(
                     3,
-                    (index) => Expanded(
-                      flex: index == 2 ? 1 : 2,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Radio<String>(
-                            fillColor: MaterialStateProperty.all(
-                              const Color(0xFF6200EE),
-                            ),
-                            groupValue: model.filterExpiryType,
-                            value: model.expiringTypes[index],
-                            materialTapTargetSize:
-                                MaterialTapTargetSize.shrinkWrap,
-                            onChanged: (value) {
-                              update(() {
-                                model.filterExpiryType = value ?? "";
-                              });
-                            },
+                    (index) => Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Radio<String>(
+                          fillColor: MaterialStateProperty.all(
+                            const Color(0xFF6200EE),
                           ),
-                          Flexible(
-                            child: Text(
-                              model.expiringTypes[index],
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2!
-                                  .copyWith(
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                  ),
-                            ),
-                          )
-                        ],
-                      ),
+                          groupValue: model.filterExpiryType,
+                          value: model.expiringTypes[index],
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
+                          onChanged: (value) {
+                            update(() {
+                              model.filterExpiryType = value ?? "";
+                            });
+                          },
+                        ),
+                        Flexible(
+                          child: Text(
+                            model.expiringTypes[index],
+                            style:
+                                Theme.of(context).textTheme.bodyText2!.copyWith(
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                    ),
+                          ),
+                        )
+                      ],
                     ),
                   ),
                 ),
@@ -441,7 +440,7 @@ class OfferScreen extends StatelessWidget {
                                   itemCount: model
                                           .categoryBrands[pageIndex].isEmpty
                                       ? model.isBusy
-                                          ? 0
+                                          ? 8
                                           : 1
                                       : model.categoryBrands[pageIndex].length,
                                   padding: EdgeInsets.zero,
@@ -455,7 +454,12 @@ class OfferScreen extends StatelessWidget {
                                     childAspectRatio: 182 / 121,
                                   ),
                                   itemBuilder: (context, index) {
-                                    if (model.categoryBrands[pageIndex]
+                                    if (model.isBusy) {
+                                      return const ShimmerCard(
+                                        size: Size(176.3, 117.2),
+                                        borderRadius: 5,
+                                      );
+                                    } else if (model.categoryBrands[pageIndex]
                                             .isEmpty &&
                                         !model.isBusy) {
                                       return const Center(
@@ -571,13 +575,6 @@ class OfferScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              if (model.isBusy && model.offersOfCategory[0].isNotEmpty)
-                Container(
-                  height: double.infinity,
-                  width: double.infinity,
-                  color: Colors.black.withOpacity(0.2),
-                  child: const Center(child: CircularProgressIndicator()),
-                )
             ],
           ),
         );

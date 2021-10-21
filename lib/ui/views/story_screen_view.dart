@@ -6,13 +6,16 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fridayy_one/business_login/models/user_overview_model.dart';
 import 'package:fridayy_one/business_login/utils/fridayy_svg.dart';
 import 'package:fridayy_one/services/service_locator.dart';
+import 'package:fridayy_one/ui/widgets/display_offer.dart';
 import 'package:story/story_page_view/story_page_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class StoryScreenView extends StatefulWidget {
-  const StoryScreenView(
-      {Key? key, required this.offers, required this.startIndex,})
-      : super(key: key);
+  const StoryScreenView({
+    Key? key,
+    required this.offers,
+    required this.startIndex,
+  }) : super(key: key);
   final List<NotifiedOffers> offers;
   final int startIndex;
 
@@ -21,14 +24,11 @@ class StoryScreenView extends StatefulWidget {
 }
 
 class _StoryScreenViewState extends State<StoryScreenView> {
-  late ValueNotifier<IndicatorAnimationCommand> indicatorAnimationController;
   late List brandData = [];
   @override
   void initState() {
     super.initState();
     loadAssets();
-    indicatorAnimationController = ValueNotifier<IndicatorAnimationCommand>(
-        IndicatorAnimationCommand.resume,);
   }
 
   loadAssets() async {
@@ -37,12 +37,6 @@ class _StoryScreenViewState extends State<StoryScreenView> {
     ).loadString("assets/brand_data.json");
     brandData = jsonDecode(data) as List;
     setState(() {});
-  }
-
-  @override
-  void dispose() {
-    indicatorAnimationController.dispose();
-    super.dispose();
   }
 
   Widget getOfferImage(
@@ -57,29 +51,7 @@ class _StoryScreenViewState extends State<StoryScreenView> {
         );
       }
     }
-    return Image.network('');
-  }
-
-  Widget offerInfo(BuildContext context, String infoName, String value) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          infoName,
-          style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                fontSize: 13,
-                color: const Color(0xFF71828A),
-              ),
-        ),
-        Text(
-          value,
-          style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                fontSize: 13,
-                color: const Color(0xFF71828A),
-              ),
-        ),
-      ],
-    );
+    return Image.network('https://via.placeholder.com/150');
   }
 
   @override
@@ -95,108 +67,8 @@ class _StoryScreenViewState extends State<StoryScreenView> {
                 child: Container(color: Colors.black),
               ),
               Center(
-                child: SizedBox(
-                  height: sizeConfig.getPropHeight(555),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Container(
-                        height: sizeConfig.getPropHeight(192),
-                        width: sizeConfig.getPropWidth(336),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: sizeConfig.getPropWidth(20),
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                            sizeConfig.getPropHeight(8),
-                          ),
-                          color: Colors.white,
-                        ),
-                        child: Column(
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(
-                                  top: sizeConfig.getPropHeight(20),),
-                              height: sizeConfig.getPropHeight(49),
-                              width: sizeConfig.getPropWidth(113),
-                              child: getOfferImage(context,
-                                  name: storyOffer!.brandName,),
-                            ),
-                            Text(
-                              storyOffer.rewardType == 'DISCOUNT'
-                                  ? '${storyOffer.rewardAmount} %OFF'
-                                  : 'Rs. ${storyOffer.rewardAmount}',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .copyWith(
-                                    color: Colors.black,
-                                    fontSize: 20,
-                                  ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                storyOffer.body,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText2!
-                                    .copyWith(
-                                      fontSize: 12,
-                                      color: const Color(0xFF9399A3),
-                                    ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: sizeConfig.getPropHeight(9),
-                      ),
-                      Container(
-                        height: sizeConfig.getPropHeight(192),
-                        width: sizeConfig.getPropWidth(336),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: sizeConfig.getPropWidth(20),
-                          vertical: sizeConfig.getPropHeight(20),
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                            sizeConfig.getPropHeight(8),
-                          ),
-                          color: Colors.white,
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Offer Details',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2!
-                                  .copyWith(fontSize: 14, color: Colors.black),
-                            ),
-                            offerInfo(
-                              context,
-                              'Coupon Code',
-                              storyOffer.code ?? storyOffer.link ?? 'NA',
-                            ),
-                            offerInfo(
-                              context,
-                              'Offer Validity',
-                              storyOffer.expiryDate ?? "Never Expiring",
-                            ),
-                            offerInfo(
-                              context,
-                              'Other info',
-                              storyOffer.rewardDescription ?? "NA",
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                child: DisplayOffer(
+                  offerInfo: storyOffer!,
                 ),
               )
             ],
@@ -259,7 +131,7 @@ class _StoryScreenViewState extends State<StoryScreenView> {
             ],
           );
         },
-        indicatorAnimationController: indicatorAnimationController,
+        //  indicatorAnimationController: indicatorAnimationController,
         initialStoryIndex: (pageIndex) {
           if (pageIndex == 0) {
             return 0;

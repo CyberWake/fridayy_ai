@@ -4,15 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:fridayy_one/business_login/models/user_overview_model.dart';
 import 'package:fridayy_one/business_login/utils/routing_constants.dart';
 import 'package:fridayy_one/services/service_locator.dart';
+import 'package:fridayy_one/ui/widgets/shimmer_card.dart';
 
 class RecommendedOffers extends StatelessWidget {
   const RecommendedOffers({
     Key? key,
     required this.offers,
     required this.brandData,
+    required this.isLoading,
   }) : super(key: key);
   final List<NotifiedOffers> offers;
   final List brandData;
+  final bool isLoading;
+
   Color getCouponBorderColor(int expiry) {
     switch (expiry) {
       case 0:
@@ -52,9 +56,21 @@ class RecommendedOffers extends StatelessWidget {
       height: sizeConfig.getPropHeight(95),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: offers.length,
+        itemCount: isLoading ? 4 : offers.length,
         shrinkWrap: true,
         itemBuilder: (context, index) {
+          if (isLoading) {
+            return Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: sizeConfig.getPropWidth(8),
+              ),
+              child: const ShimmerCard(
+                size: Size(76, 76),
+                borderRadius: 50,
+                isCircle: true,
+              ),
+            );
+          }
           final NotifiedOffers offer = offers[index];
           return InkWell(
             onTap: () => navigationService.pushScreen(

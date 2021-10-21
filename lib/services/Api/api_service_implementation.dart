@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:fridayy_one/business_login/models/pass_call_outcome.dart';
 import 'package:fridayy_one/business_login/utils/api_constants.dart';
+import 'package:fridayy_one/business_login/utils/routing_constants.dart';
 import 'package:fridayy_one/services/Api/api_service.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:http/http.dart' as http;
@@ -13,7 +15,7 @@ class ApiServiceImpl extends ApiService {
   };
 
   @override
-  Future postRequest(
+  Future<CallOutcome<Map<String, dynamic>>> postRequest(
     String apiName,
     Map<String, dynamic> postData, {
     bool isAuth = false,
@@ -31,22 +33,32 @@ class ApiServiceImpl extends ApiService {
               },
       );
       if (result.statusCode == 200) {
-        return jsonDecode(result.body);
+        return CallOutcome<Map<String, dynamic>>(
+          data: jsonDecode(result.body) as Map<String, dynamic>,
+        );
       } else {
-        print(jsonDecode("there${result.body}"));
-        navigationService
-            .showSnackBar(jsonDecode(result.body)['detail'].toString());
-        return null;
+        print(result.body);
+        final String errorMessage =
+            jsonDecode(result.body)['detail'].toString();
+        if (errorMessage.compareTo('Unauthorized') == 0) {
+          navigationService.removeAllAndPush(
+            Routes.authScreen,
+            Routes.splashScreen,
+          );
+        }
+        navigationService.showSnackBar(errorMessage);
+        return CallOutcome<Map<String, dynamic>>(
+          exception: Exception(errorMessage),
+        );
       }
     } on Exception catch (e) {
-      print(e);
-      navigationService.showSnackBar(e.toString());
-      return null;
+      navigationService.showSnackBar('Something went wrong');
+      return CallOutcome<Map<String, dynamic>>(exception: e);
     }
   }
 
   @override
-  Future getRequest(String apiName) async {
+  Future<CallOutcome<dynamic>> getRequest(String apiName) async {
     try {
       final Map<String, String> headerAuth = {
         'Content-Type': 'application/json',
@@ -57,16 +69,26 @@ class ApiServiceImpl extends ApiService {
         headers: headerAuth,
       );
       if (result.statusCode == 200) {
-        return jsonDecode(result.body);
+        return CallOutcome<dynamic>(
+          data: jsonDecode(result.body),
+        );
       } else {
-        print(jsonDecode(result.body));
-        navigationService
-            .showSnackBar(jsonDecode(result.body)['detail'].toString());
-        return null;
+        final String errorMessage =
+            jsonDecode(result.body)['detail'].toString();
+        if (errorMessage.compareTo('Unauthorized') == 0) {
+          navigationService.removeAllAndPush(
+            Routes.authScreen,
+            Routes.splashScreen,
+          );
+        }
+        navigationService.showSnackBar(errorMessage);
+        return CallOutcome<Map<String, dynamic>>(
+          exception: Exception(errorMessage),
+        );
       }
     } on Exception catch (e) {
-      navigationService.showSnackBar(e.toString());
-      return null;
+      navigationService.showSnackBar('Something went wrong');
+      return CallOutcome<Map<String, dynamic>>(exception: e);
     }
   }
 }

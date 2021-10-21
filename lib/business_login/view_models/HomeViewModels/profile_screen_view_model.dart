@@ -6,7 +6,7 @@ import 'package:fridayy_one/services/service_locator.dart';
 
 class ProfileScreenViewModel extends BaseModel {
   UserOverView userOverView = UserOverView(
-    user: User(userName: ''),
+    user: User(userName: ' '),
     offer: Offer(
       notifiedOffers: [],
       offersExpiring: 0,
@@ -20,8 +20,8 @@ class ProfileScreenViewModel extends BaseModel {
   init() async {
     setState(ViewState.busy);
     final result = await apiService.getRequest(ApiConstants.userOverview);
-    if (result != null) {
-      userOverView = UserOverView.fromJson(result as Map<String, dynamic>);
+    if (result.data != null) {
+      userOverView = UserOverView.fromJson(result.data as Map<String, dynamic>);
       setState(ViewState.idle);
     }
   }

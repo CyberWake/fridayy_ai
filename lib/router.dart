@@ -77,9 +77,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         );
       }
     case Routes.homeScreen:
+      final Map<String, dynamic> inputData =
+          settings.arguments! as Map<String, dynamic>;
       return MaterialPageRoute(
-        builder: (context) => const HomeScreenHolder(
-          key: Key('HomeScreenView'),
+        builder: (context) => HomeScreenHolder(
+          key: const Key('HomeScreenView'),
+          autoLogin: inputData['autoLogin'] as bool,
         ),
       );
     case Routes.brandOffers:

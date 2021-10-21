@@ -9,7 +9,8 @@ import 'package:fridayy_one/ui/views/HomePages/spending_screen_view.dart';
 import 'package:fridayy_one/ui/views/base_view.dart';
 
 class HomeScreenHolder extends StatelessWidget {
-  const HomeScreenHolder({Key? key}) : super(key: key);
+  const HomeScreenHolder({Key? key, this.autoLogin = true}) : super(key: key);
+  final bool autoLogin;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class HomeScreenHolder extends StatelessWidget {
           body: IndexedStack(
             index: model.currentTabIndex,
             children: [
-              HomeScreen(homeModel: model),
+              HomeScreen(homeModel: model, isAutoLogin: autoLogin),
               OfferScreen(
                 homeModel: model,
               ),
@@ -42,11 +43,17 @@ class HomeScreenHolder extends StatelessWidget {
                 model.tabs.length,
                 (index) => InkWell(
                   onTap: () => model.tabChanged(index),
-                  child: SvgPicture.string(
-                    model.tabs[index],
-                    color: model.currentTabIndex == index
-                        ? const Color(0xFF2128BD)
-                        : const Color(0xFF000000),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: sizeConfig.getPropHeight(16),
+                      horizontal: sizeConfig.getPropWidth(20),
+                    ),
+                    child: SvgPicture.string(
+                      model.tabs[index],
+                      color: model.currentTabIndex == index
+                          ? const Color(0xFF2128BD)
+                          : const Color(0xFF000000),
+                    ),
                   ),
                 ),
               ),

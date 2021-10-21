@@ -1,3 +1,4 @@
+import 'package:fridayy_one/business_login/models/pass_call_outcome.dart';
 import 'package:fridayy_one/business_login/models/user_overview_model.dart';
 import 'package:fridayy_one/business_login/utils/api_constants.dart';
 import 'package:fridayy_one/business_login/utils/enums.dart';
@@ -6,7 +7,7 @@ import 'package:fridayy_one/services/service_locator.dart';
 
 class HomeScreenViewModel extends BaseModel {
   UserOverView userOverView = UserOverView(
-    user: User(userName: ''),
+    user: User(userName: ' '),
     offer: Offer(
       notifiedOffers: [],
       offersExpiring: 0,
@@ -17,24 +18,37 @@ class HomeScreenViewModel extends BaseModel {
     financial: Financial(percentile: 0),
   );
 
-  Future init() async {
-    setState(ViewState.busy);
+  Future init({required bool isAutoLogin}) async {
+    if (!isAutoLogin) {
+      await postSms();
+    } else {
+      setState(ViewState.busy);
+      await getOverViewExplicitly();
+    }
+  }
+
+  Future getOverViewExplicitly() async {
     final result = await apiService.getRequest(ApiConstants.userOverview);
-    if (result != null) {
-      userOverView = UserOverView.fromJson(result as Map<String, dynamic>);
+    if (result.data != null) {
+      userOverView = UserOverView.fromJson(result.data as Map<String, dynamic>);
       setState(ViewState.idle);
     }
   }
 
   Future postSms() async {
-    final List<Map<String, dynamic>> data = await messageService.readMessage();
-    if (data.isNotEmpty) {
-      final result = await messageService.postSms(data);
-      if (result) {
-        init();
+    setState(ViewState.busy);
+    final CallOutcome<String> messageData = await messageService.readMessage();
+    if (messageData.data != null) {
+      final CallOutcome<bool> result =
+          await messageService.postSms(messageData.data!);
+      if (result.exception == null) {
+        userOverView = messageService.userOverView;
+      } else {
+        getOverViewExplicitly();
       }
+      setState(ViewState.idle);
     } else {
-      init();
+      getOverViewExplicitly();
     }
   }
 }

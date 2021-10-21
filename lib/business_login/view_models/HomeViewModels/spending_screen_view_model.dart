@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fridayy_one/business_login/models/pass_call_outcome.dart';
 import 'package:fridayy_one/business_login/models/spending_brands_model.dart';
 import 'package:fridayy_one/business_login/models/spending_category_model.dart';
 import 'package:fridayy_one/business_login/models/spending_transaction_model.dart';
@@ -75,11 +76,11 @@ class SpendingScreenViewModel extends BaseModel {
   Future getTransactionData() async {
     setState(ViewState.busy);
     data = SpendingTransactionModel(amount: 0, count: 0, spends: []);
-    final resultSpendingTransactions = await apiService
+    final CallOutcome resultSpendingTransactions = await apiService
         .getRequest("${ApiConstants.spendingTransactions}/$dateFilter");
-    if (resultSpendingTransactions != null) {
+    if (resultSpendingTransactions.data != null) {
       data = SpendingTransactionModel.fromJson(
-        resultSpendingTransactions as Map<String, dynamic>,
+        resultSpendingTransactions.data! as Map<String, dynamic>,
       );
     } else {
       data = SpendingTransactionModel(amount: 0.0, count: 0, spends: []);
@@ -92,11 +93,11 @@ class SpendingScreenViewModel extends BaseModel {
     double totalAmount = 0;
     spendCategoryData.clear();
     categoryData.clear();
-    final result = await apiService.getRequest(
+    final CallOutcome result = await apiService.getRequest(
       "${ApiConstants.spendingCategory}/?date=$dateFilter",
     );
-    if (result != null) {
-      (result['result'] as List).forEach((element) {
+    if (result.data != null) {
+      (result.data!['result'] as List).forEach((element) {
         spendCategoryData.add(
           SpendingCategoryModel.fromJson(element as Map<String, dynamic>),
         );
@@ -117,10 +118,10 @@ class SpendingScreenViewModel extends BaseModel {
   Future getBrandData() async {
     setState(ViewState.busy);
     spendBrandData.clear();
-    final result = await apiService
+    final CallOutcome result = await apiService
         .getRequest('${ApiConstants.spendingBrand}?date=$dateFilter');
-    if (result != null) {
-      (result['result'] as List).forEach((element) {
+    if (result.data != null) {
+      (result.data!['result'] as List).forEach((element) {
         spendBrandData
             .add(SpendingBrandModel.fromJson(element as Map<String, dynamic>));
       });

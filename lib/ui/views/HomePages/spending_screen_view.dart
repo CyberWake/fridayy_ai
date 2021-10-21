@@ -9,6 +9,7 @@ import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/views/base_view.dart';
 import 'package:fridayy_one/ui/widgets/doughnut_chart.dart';
 import 'package:fridayy_one/ui/widgets/rounded_rectangular_button.dart';
+import 'package:fridayy_one/ui/widgets/shimmer_card.dart';
 
 class SpendingScreen extends StatelessWidget {
   const SpendingScreen({Key? key, required this.homeModel}) : super(key: key);
@@ -169,7 +170,7 @@ class SpendingScreen extends StatelessWidget {
     return RefreshIndicator(
       onRefresh: model.getTransactionData,
       child: Container(
-        height: sizeConfig.getPropHeight(510),
+        height: sizeConfig.getPropHeight(600),
         margin: EdgeInsets.symmetric(
           horizontal: sizeConfig.getPropWidth(16),
           vertical: sizeConfig.getPropHeight(16),
@@ -180,65 +181,70 @@ class SpendingScreen extends StatelessWidget {
           ),
           border: Border.all(color: const Color(0xFFE7ECEE)),
         ),
-        child: model.isBusy
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : ListView.separated(
-                itemCount: model.data.count == 0 ? 1 : model.data.count,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  if (model.data.count == 0) {
-                    return const Center(
-                      child: Text('No data found'),
-                    );
-                  }
-                  final spend = model.data.spends[index];
-                  return ListTile(
-                    leading: Container(
-                      width: sizeConfig.getPropHeight(44),
-                      height: sizeConfig.getPropHeight(44),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          sizeConfig.getPropWidth(8),
-                        ),
-                        color: const Color(0xFFF9F9F9),
-                      ),
-                      child: getOfferImage(context, name: spend.brandName),
-                    ),
-                    title: Text(
-                      spend.brandName,
-                      style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                            fontSize: 16,
-                            color: Colors.black,
-                          ),
-                    ),
-                    subtitle: Text(
-                      spend.date,
-                      style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                            fontSize: 14,
-                            color: const Color(0xFF717E95),
-                          ),
-                    ),
-                    trailing: Text(
-                      "Rs. ${spend.amount}",
-                      style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                            fontSize: 16,
-                            color: const Color(0xFF19B832),
-                          ),
-                    ),
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: sizeConfig.getPropWidth(20),
-                    ),
-                    child: const Divider(),
-                  );
-                },
+        child: ListView.separated(
+          itemCount: model.isBusy
+              ? 7
+              : model.data.count == 0
+                  ? 1
+                  : model.data.count,
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            if (model.isBusy) {
+              return const ShimmerCard(
+                size: Size(380, 72),
+                borderRadius: 16.0,
+              );
+            } else if (model.data.count == 0) {
+              return const Center(
+                child: Text('No data found'),
+              );
+            }
+            final spend = model.data.spends[index];
+            return ListTile(
+              leading: Container(
+                width: sizeConfig.getPropHeight(44),
+                height: sizeConfig.getPropHeight(44),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                    sizeConfig.getPropWidth(8),
+                  ),
+                  color: const Color(0xFFF9F9F9),
+                ),
+                child: getOfferImage(context, name: spend.brandName),
               ),
+              title: Text(
+                spend.brandName,
+                style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                      fontSize: 16,
+                      color: Colors.black,
+                    ),
+              ),
+              subtitle: Text(
+                spend.date,
+                style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                      fontSize: 14,
+                      color: const Color(0xFF717E95),
+                    ),
+              ),
+              trailing: Text(
+                "Rs. ${spend.amount}",
+                style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                      fontSize: 16,
+                      color: const Color(0xFF19B832),
+                    ),
+              ),
+            );
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: sizeConfig.getPropWidth(20),
+              ),
+              child: const Divider(),
+            );
+          },
+        ),
       ),
     );
   }
@@ -333,56 +339,61 @@ class SpendingScreen extends StatelessWidget {
     return RefreshIndicator(
       onRefresh: model.getCategoryData,
       child: SizedBox(
-        height: sizeConfig.getPropHeight(510),
+        height: sizeConfig.getPropHeight(600),
         child: Column(
           children: [
             SizedBox(
               height: sizeConfig.getPropHeight(161),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                    child: DoughnutChart(
-                      size: 161,
-                      data: model.categoryData,
-                      onTap: () {},
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children:
-                          List.generate(model.categoryData.length, (index) {
-                        return Row(
-                          children: [
-                            Container(
-                              height: sizeConfig.getPropHeight(13),
-                              width: sizeConfig.getPropHeight(13),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: getColor(
-                                  model.categoryData[index].categoryId,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              '  ${getName(model.categoryData[index].categoryId)} ${model.categoryData[index].percentage}%',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2!
-                                  .copyWith(
-                                    fontSize: 12,
-                                    color: Colors.black,
+              child: model.isBusy
+                  ? const ShimmerCard(
+                      size: Size(380, 152),
+                      borderRadius: 16,
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: DoughnutChart(
+                            size: 161,
+                            data: model.categoryData,
+                            onTap: () {},
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: List.generate(model.categoryData.length,
+                                (index) {
+                              return Row(
+                                children: [
+                                  Container(
+                                    height: sizeConfig.getPropHeight(13),
+                                    width: sizeConfig.getPropHeight(13),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: getColor(
+                                        model.categoryData[index].categoryId,
+                                      ),
+                                    ),
                                   ),
-                            )
-                          ],
-                        );
-                      }),
+                                  Text(
+                                    '  ${getName(model.categoryData[index].categoryId)} ${model.categoryData[index].percentage}%',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText2!
+                                        .copyWith(
+                                          fontSize: 12,
+                                          color: Colors.black,
+                                        ),
+                                  )
+                                ],
+                              );
+                            }),
+                          ),
+                        )
+                      ],
                     ),
-                  )
-                ],
-              ),
             ),
             Expanded(
               child: Container(
@@ -399,12 +410,19 @@ class SpendingScreen extends StatelessWidget {
                   ),
                 ),
                 child: ListView.separated(
-                  itemCount: model.spendCategoryData.isEmpty
-                      ? 1
-                      : model.spendCategoryData.length,
+                  itemCount: model.isBusy
+                      ? 8
+                      : model.spendCategoryData.isEmpty
+                          ? 1
+                          : model.spendCategoryData.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    if (model.spendCategoryData.isEmpty) {
+                    if (model.isBusy) {
+                      return const ShimmerCard(
+                        size: Size(380, 72),
+                        borderRadius: 16.0,
+                      );
+                    } else if (model.spendCategoryData.isEmpty) {
                       return const Center(
                         child: Text('No data found'),
                       );
@@ -469,7 +487,7 @@ class SpendingScreen extends StatelessWidget {
     return RefreshIndicator(
       onRefresh: model.getBrandData,
       child: Container(
-        height: sizeConfig.getPropHeight(510),
+        height: sizeConfig.getPropHeight(600),
         margin: EdgeInsets.symmetric(
           horizontal: sizeConfig.getPropWidth(16),
           vertical: sizeConfig.getPropHeight(16),
@@ -481,11 +499,19 @@ class SpendingScreen extends StatelessWidget {
           border: Border.all(color: const Color(0xFFE7ECEE)),
         ),
         child: ListView.separated(
-          itemCount:
-              model.spendBrandData.isEmpty ? 1 : model.spendBrandData.length,
+          itemCount: model.isBusy
+              ? 7
+              : model.spendBrandData.isEmpty
+                  ? 1
+                  : model.spendBrandData.length,
           shrinkWrap: true,
           itemBuilder: (context, index) {
-            if (model.spendBrandData.isEmpty) {
+            if (model.isBusy) {
+              return const ShimmerCard(
+                size: Size(380, 72),
+                borderRadius: 16.0,
+              );
+            } else if (model.spendBrandData.isEmpty) {
               return const Center(
                 child: Text('No data found'),
               );

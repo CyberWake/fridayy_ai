@@ -63,6 +63,9 @@ class _SplashScreenState extends State<SplashScreen>
               print(key);
               navigationService.pushReplacementScreen(
                 key != "null" ? Routes.homeScreen : Routes.onBoardingScreen,
+                arguments: {
+                  'autoLogin': true,
+                },
               );
             });
           }

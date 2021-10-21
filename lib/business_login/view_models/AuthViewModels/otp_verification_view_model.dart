@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fridayy_one/business_login/models/pass_call_outcome.dart';
 import 'package:fridayy_one/business_login/utils/api_constants.dart';
 import 'package:fridayy_one/business_login/utils/routing_constants.dart';
 import 'package:fridayy_one/business_login/view_models/base_view_model.dart';
@@ -25,7 +26,8 @@ class OtpVerificationViewModel extends BaseModel {
     if (formKey.currentState!.validate() &&
         otpController.text.isNotEmpty &&
         otpController.text.length == 4) {
-      final userXInternalKey = await apiService.postRequest(
+      final CallOutcome<Map<String, dynamic>> result =
+          await apiService.postRequest(
         ApiConstants.loginOtpValidate,
         {
           'otpId': otpId,
@@ -34,15 +36,38 @@ class OtpVerificationViewModel extends BaseModel {
         },
         isAuth: true,
       );
-      if (userXInternalKey != null) {
-        print(userXInternalKey['auth']);
+      if (result.data != null) {
         localDatabaseService.saveUserAuth(
-          userXInternalKey['auth'].toString(),
+          result.data!['auth'].toString(),
         ); //'cbfed2c4-d6a4-4d32-9994-f63f2f7e2f67');//userXInternalKey['auth']
-        navigationService.removeAllAndPush(
-          Routes.homeScreen,
-          Routes.splashScreen,
-        );
+        if (result.exception == null) {
+          final Map<String, String> fields = {};
+          fields['key'] =
+              result.data!['s3_details']['fields']['key'].toString();
+          fields['x-amz-algorithm'] = result.data!['s3_details']['fields']
+                  ['x-amz-algorithm']
+              .toString();
+          fields['x-amz-credential'] = result.data!['s3_details']['fields']
+                  ['x-amz-credential']
+              .toString();
+          fields['x-amz-date'] =
+              result.data!['s3_details']['fields']['x-amz-date'].toString();
+          fields['policy'] =
+              result.data!['s3_details']['fields']['policy'].toString();
+          fields['x-amz-signature'] = result.data!['s3_details']['fields']
+                  ['x-amz-signature']
+              .toString();
+          messageService.s3BucketFields = fields;
+          messageService.bucketUrl =
+              result.data!['s3_details']['url'] as String;
+          navigationService.removeAllAndPush(
+            Routes.homeScreen,
+            Routes.splashScreen,
+            arguments: {'autoLogin': false},
+          );
+        } else {
+          navigationService.showSnackBar('No messages to send');
+        }
       }
     } else {
       navigationService.showSnackBar('Enter the otp to continue');
@@ -53,7 +78,8 @@ class OtpVerificationViewModel extends BaseModel {
     if (formKey.currentState!.validate() &&
         otpController.text.isNotEmpty &&
         otpController.text.length == 4) {
-      final userXInternalKey = await apiService.postRequest(
+      final CallOutcome<Map<String, dynamic>> result =
+          await apiService.postRequest(
         ApiConstants.registerOtpValidate,
         {
           'otpId': otpId,
@@ -62,40 +88,18 @@ class OtpVerificationViewModel extends BaseModel {
         },
         isAuth: true,
       );
-      print(userXInternalKey);
-      if (userXInternalKey != null) {
-        print(userXInternalKey['auth']);
-        localDatabaseService.saveUserAuth(userXInternalKey['auth'].toString());
-        final List<Map<String, dynamic>> data =
-            await messageService.readMessage();
-        if (data.isNotEmpty) {
-          navigationService.pushDialog(
-            Container(
-              margin: EdgeInsets.symmetric(
-                horizontal: sizeConfig.getPropWidth(100),
-                vertical: sizeConfig.getPropHeight(300),
-              ),
-              decoration: BoxDecoration(
-                color: Colors.grey,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Center(
-                child: CupertinoActivityIndicator(
-                  radius: sizeConfig.getPropWidth(30),
-                ),
-              ),
-            ),
+      if (result.data != null) {
+        localDatabaseService.saveUserAuth(result.data!['auth'].toString());
+        if (result.exception == null) {
+          messageService.s3BucketFields =
+              result.data!['s3_details']['fields'] as Map<String, String>;
+          messageService.bucketUrl =
+              result.data!['s3_details']['url'] as String;
+          navigationService.removeAllAndPush(
+            Routes.homeScreen,
+            Routes.splashScreen,
+            arguments: {'autoLogin': false},
           );
-          messageService.postSms(data).then((value) {
-            if (value) {
-              navigationService.removeAllAndPush(
-                Routes.homeScreen,
-                Routes.splashScreen,
-              );
-            } else {
-              navigationService.pop();
-            }
-          });
         } else {
           navigationService.showSnackBar('No messages to send');
         }

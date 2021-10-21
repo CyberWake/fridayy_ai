@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fridayy_one/business_login/models/pass_call_outcome.dart';
 import 'package:fridayy_one/business_login/models/user_model.dart';
 import 'package:fridayy_one/business_login/utils/api_constants.dart';
 import 'package:fridayy_one/business_login/utils/routing_constants.dart';
@@ -20,15 +21,15 @@ class SignupScreenViewModel extends BaseModel {
           countryCode: "+91",
           userName: name.text,
         );
-        final otpId = await apiService
+        final CallOutcome<Map<String, dynamic>> result = await apiService
             .postRequest(ApiConstants.register, user.toJson(), isAuth: true);
-        if (otpId != null) {
-          print(otpId);
+        if (result.data != null) {
+          print(result.data);
           navigationService.pushScreen(
             Routes.otpInputScreen,
             arguments: {
               'signupDetails': phoneNumber.text,
-              'otpId': otpId['otpId']
+              'otpId': result.data!['otpId']
             },
           );
         }

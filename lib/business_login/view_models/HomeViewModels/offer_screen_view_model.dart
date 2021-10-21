@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:fridayy_one/business_login/models/category_brands_model.dart';
+import 'package:fridayy_one/business_login/models/pass_call_outcome.dart';
 import 'package:fridayy_one/business_login/models/user_overview_model.dart';
 import 'package:fridayy_one/business_login/utils/api_constants.dart';
 import 'package:fridayy_one/business_login/utils/enums.dart';
@@ -98,8 +99,8 @@ class OfferScreenViewModel extends BaseModel {
     final result = await apiService.getRequest(
       "${ApiConstants.categoryOffers}/${types[0]["id"]}?date=2109",
     );
-    if (result != null) {
-      (result as List).forEach((element) {
+    if (result.data != null) {
+      (result.data as List).forEach((element) {
         offersOfCategory[0].add(
           Offers.fromJsonOffers(element as Map<String, dynamic>),
         );
@@ -140,11 +141,11 @@ class OfferScreenViewModel extends BaseModel {
         .whenComplete(() async {
       if (offersOfCategory[newTabIndex].isEmpty) {
         setState(ViewState.busy);
-        final result = await apiService.getRequest(
+        final CallOutcome result = await apiService.getRequest(
           "${ApiConstants.categoryOffers}/${types[newTabIndex]["id"]}?date=2109",
         );
-        if (result != null) {
-          (result as List).forEach((element) {
+        if (result.data != null) {
+          (result.data! as List).forEach((element) {
             offersOfCategory[newTabIndex].add(
               Offers.fromJsonOffers(element as Map<String, dynamic>),
             );

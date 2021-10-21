@@ -1,14 +1,12 @@
 import 'dart:convert';
 import 'dart:ui';
 
-import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fridayy_one/business_login/models/user_overview_model.dart';
 import 'package:fridayy_one/business_login/utils/fridayy_svg.dart';
 import 'package:fridayy_one/services/service_locator.dart';
-import 'package:fridayy_one/ui/widgets/rounded_rectangular_button.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:fridayy_one/ui/widgets/display_offer.dart';
 
 class BrandOffersView extends StatelessWidget {
   const BrandOffersView({
@@ -67,133 +65,9 @@ class BrandOffersView extends StatelessWidget {
       backgroundColor: Colors.transparent,
       builder: (context) => BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
-        child: SizedBox(
-          height: sizeConfig.getPropHeight(555),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Container(
-                height: sizeConfig.getPropHeight(192),
-                width: sizeConfig.getPropWidth(336),
-                padding: EdgeInsets.symmetric(
-                  horizontal: sizeConfig.getPropWidth(20),
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
-                    sizeConfig.getPropHeight(8),
-                  ),
-                  color: Colors.white,
-                ),
-                child: Column(
-                  children: [
-                    Container(
-                      margin:
-                          EdgeInsets.only(top: sizeConfig.getPropHeight(20)),
-                      height: sizeConfig.getPropHeight(49),
-                      width: sizeConfig.getPropWidth(113),
-                      child:
-                          getOfferImage(context, name: offerDetails.brandName),
-                    ),
-                    Text(
-                      offerDetails.rewardType == 'DISCOUNT'
-                          ? '${offerDetails.rewardAmount} %OFF'
-                          : 'Rs. ${offerDetails.rewardAmount}',
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                            color: Colors.black,
-                            fontSize: 20,
-                          ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        offerDetails.body,
-                        style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                              fontSize: 12,
-                              color: const Color(0xFF9399A3),
-                            ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: sizeConfig.getPropHeight(9),
-              ),
-              Container(
-                height: sizeConfig.getPropHeight(192),
-                width: sizeConfig.getPropWidth(336),
-                padding: EdgeInsets.symmetric(
-                  horizontal: sizeConfig.getPropWidth(20),
-                  vertical: sizeConfig.getPropHeight(20),
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
-                    sizeConfig.getPropHeight(8),
-                  ),
-                  color: Colors.white,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Offer Details',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText2!
-                          .copyWith(fontSize: 14, color: Colors.black),
-                    ),
-                    offerInfo(
-                      context,
-                      'Coupon Code',
-                      offerDetails.code ?? offerDetails.link ?? 'NA',
-                    ),
-                    offerInfo(
-                      context,
-                      'Offer Validity',
-                      offerDetails.expiryDate ?? "Never Expiring",
-                    ),
-                    offerInfo(
-                      context,
-                      'Other info',
-                      offerDetails.rewardDescription ?? "NA",
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: sizeConfig.getPropHeight(17),
-              ),
-              CustomRoundRectButton(
-                onTap: () async {
-                  navigationService.pop();
-                  if (offerDetails.code != null) {
-                    FlutterClipboard.copy(offerDetails.code!).whenComplete(
-                      () =>
-                          navigationService.showSnackBar('Coupon Code copied'),
-                    );
-                  } else if (offerDetails.link != null) {
-                    await canLaunch(offerDetails.link!)
-                        ? await launch(offerDetails.link!)
-                        : navigationService.showSnackBar('Failed to open link');
-                  }
-                },
-                size: const Size(335, 44),
-                fillColor: const Color(0xFF2128BD),
-                child: Text(
-                  'Claim this offer',
-                  style:
-                      Theme.of(navigationService.navigatorKey.currentContext!)
-                          .textTheme
-                          .bodyText2!
-                          .copyWith(color: Colors.white),
-                ),
-              ),
-              SizedBox(
-                height: sizeConfig.getPropHeight(56),
-              ),
-            ],
-          ),
+        child: DisplayOffer(
+          offerInfo: offerDetails,
+          showClaimButton: true,
         ),
       ),
     );
