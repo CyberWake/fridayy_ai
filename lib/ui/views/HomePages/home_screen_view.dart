@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fridayy_one/business_login/utils/fridayy_svg.dart';
-import 'package:fridayy_one/business_login/view_models/HomeViewModels/home_screen_holder_view_model.dart';
-import 'package:fridayy_one/business_login/view_models/HomeViewModels/home_screen_view_model.dart';
+import 'package:fridayy_one/business_logic/utils/fridayy_svg.dart';
+import 'package:fridayy_one/business_logic/view_models/HomeViewModels/home_screen_holder_view_model.dart';
+import 'package:fridayy_one/business_logic/view_models/HomeViewModels/home_screen_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/views/base_view.dart';
 import 'package:fridayy_one/ui/widgets/homepage_widgets/offers_card.dart';
@@ -103,8 +103,6 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
           body: RefreshIndicator(
-            color: Colors.white,
-            backgroundColor: Colors.transparent,
             triggerMode: RefreshIndicatorTriggerMode.anywhere,
             edgeOffset: 0.0,
             strokeWidth: 0.0,
@@ -145,7 +143,8 @@ class HomeScreen extends StatelessWidget {
                           children: [
                             RecommendedOffers(
                               brandData: homeModel.brandData,
-                              offers: model.userOverView.offer.notifiedOffers,
+                              offers:
+                                  model.userOverView.offer.notifiedOffers ?? [],
                               isLoading: model.isBusy,
                             ),
                             USPTile(

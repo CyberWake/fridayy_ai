@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_login/onboarding_screen_view_model.dart';
+import 'package:fridayy_one/business_logic/onboarding_screen_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/views/OnBoardingPages/onboarding_page_one.dart';
 import 'package:fridayy_one/ui/views/OnBoardingPages/onboarding_page_two.dart';

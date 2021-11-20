@@ -3,8 +3,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fridayy_one/business_login/models/user_overview_model.dart';
-import 'package:fridayy_one/business_login/utils/fridayy_svg.dart';
+import 'package:fridayy_one/business_logic/models/user_overview_model.dart';
+import 'package:fridayy_one/business_logic/utils/fridayy_svg.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/widgets/display_offer.dart';
 
@@ -14,7 +14,7 @@ class BrandOffersView extends StatelessWidget {
     required this.offers,
     required this.brandData,
   }) : super(key: key);
-  final List<Offers> offers;
+  final List<NotifiedOffers> offers;
   final List brandData;
 
   Widget getOfferImage(
@@ -54,7 +54,7 @@ class BrandOffersView extends StatelessWidget {
     );
   }
 
-  showCouponDetails(Offers offerDetails) async {
+  showCouponDetails(NotifiedOffers offerDetails) async {
     showModalBottomSheet(
       context: navigationService.navigatorKey.currentContext!,
       constraints: BoxConstraints(
@@ -198,7 +198,7 @@ class BrandOffersView extends StatelessWidget {
                                 children: [
                                   Text(
                                     offers[index].rewardType == 'DISCOUNT'
-                                        ? '${offers[index].rewardAmount} %OFF'
+                                        ? '${offers[index].rewardAmount}% OFF'
                                         : 'Rs. ${offers[index].rewardAmount}',
                                     style: Theme.of(context)
                                         .textTheme
@@ -220,8 +220,11 @@ class BrandOffersView extends StatelessWidget {
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   Text(
-                                    offers[index].expiryDate ??
-                                        'Never Expiring',
+                                    offers[index].expiryDate != null
+                                        ? DateTime.fromMillisecondsSinceEpoch(
+                                            offers[index].expiryDate!,
+                                          ).toString()
+                                        : 'Never Expiring',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyText2!

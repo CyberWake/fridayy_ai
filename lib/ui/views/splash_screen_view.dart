@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_login/utils/custom_painters/fridayy_logo/ring_dark_inner.dart';
-import 'package:fridayy_one/business_login/utils/custom_painters/fridayy_logo/ring_dark_outer.dart';
-import 'package:fridayy_one/business_login/utils/custom_painters/fridayy_logo/ring_light_inner.dart';
-import 'package:fridayy_one/business_login/utils/custom_painters/fridayy_logo/ring_light_outer.dart';
-import 'package:fridayy_one/business_login/utils/routing_constants.dart';
-import 'package:fridayy_one/business_login/view_models/splash_screen_view_model.dart';
+import 'package:fridayy_one/business_logic/utils/custom_painters/fridayy_logo/ring_dark_inner.dart';
+import 'package:fridayy_one/business_logic/utils/custom_painters/fridayy_logo/ring_dark_outer.dart';
+import 'package:fridayy_one/business_logic/utils/custom_painters/fridayy_logo/ring_light_inner.dart';
+import 'package:fridayy_one/business_logic/utils/custom_painters/fridayy_logo/ring_light_outer.dart';
+import 'package:fridayy_one/business_logic/utils/routing_constants.dart';
+import 'package:fridayy_one/business_logic/view_models/splash_screen_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/views/base_view.dart';
 import 'package:fridayy_one/ui/widgets/draw.dart';

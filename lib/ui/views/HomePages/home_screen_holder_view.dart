@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fridayy_one/business_login/view_models/HomeViewModels/home_screen_holder_view_model.dart';
+import 'package:fridayy_one/business_logic/view_models/HomeViewModels/home_screen_holder_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/views/HomePages/home_screen_view.dart';
 import 'package:fridayy_one/ui/views/HomePages/offer_screen_view.dart';
@@ -18,8 +18,9 @@ class HomeScreenHolder extends StatelessWidget {
       onModelReady: (model) => model.init(),
       builder: (context, model, child) {
         return Scaffold(
-          body: IndexedStack(
-            index: model.currentTabIndex,
+          body: PageView(
+            controller: model.controller,
+            onPageChanged: model.newPage,
             children: [
               HomeScreen(homeModel: model, isAutoLogin: autoLogin),
               OfferScreen(

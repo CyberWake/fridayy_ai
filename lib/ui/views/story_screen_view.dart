@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fridayy_one/business_login/models/user_overview_model.dart';
-import 'package:fridayy_one/business_login/utils/fridayy_svg.dart';
+import 'package:fridayy_one/business_logic/models/user_overview_model.dart';
+import 'package:fridayy_one/business_logic/utils/fridayy_svg.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/widgets/display_offer.dart';
 import 'package:story/story_page_view/story_page_view.dart';
@@ -60,7 +60,7 @@ class _StoryScreenViewState extends State<StoryScreenView> {
       body: StoryPageView(
         initialPage: widget.startIndex,
         itemBuilder: (context, pageIndex, storyIndex) {
-          final storyOffer = widget.offers[pageIndex].offers;
+          final storyOffer = widget.offers[pageIndex];
           return Stack(
             children: [
               Positioned.fill(
@@ -68,14 +68,14 @@ class _StoryScreenViewState extends State<StoryScreenView> {
               ),
               Center(
                 child: DisplayOffer(
-                  offerInfo: storyOffer!,
+                  offerInfo: storyOffer,
                 ),
               )
             ],
           );
         },
         gestureItemBuilder: (context, pageIndex, storyIndex) {
-          final storyOffer = widget.offers[pageIndex].offers;
+          final storyOffer = widget.offers[pageIndex];
           return Stack(
             children: [
               Align(
@@ -103,7 +103,7 @@ class _StoryScreenViewState extends State<StoryScreenView> {
                         details.globalPosition.dy;
                     if (!position.isNegative) {
                       navigationService.pop();
-                      if (storyOffer!.code != null) {
+                      if (storyOffer.code != null) {
                         FlutterClipboard.copy(storyOffer.code!).whenComplete(
                           () => navigationService
                               .showSnackBar('Coupon Code copied'),

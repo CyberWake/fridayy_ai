@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_login/models/message_model.dart';
-import 'package:fridayy_one/business_login/utils/routing_constants.dart';
-import 'package:fridayy_one/business_login/utils/theme.dart';
+import 'package:fridayy_one/business_logic/models/message_model.dart';
+import 'package:fridayy_one/business_logic/utils/routing_constants.dart';
+import 'package:fridayy_one/business_logic/utils/theme.dart';
 import 'package:fridayy_one/router.dart' as router;
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:hive/hive.dart';

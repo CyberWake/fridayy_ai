@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_login/view_models/AuthViewModels/otp_verification_view_model.dart';
+import 'package:fridayy_one/business_logic/view_models/AuthViewModels/otp_verification_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/views/base_view.dart';
 import 'package:fridayy_one/ui/widgets/continue_with_google.dart';

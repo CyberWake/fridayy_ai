@@ -1,8 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_login/models/user_overview_model.dart';
-import 'package:fridayy_one/business_login/utils/routing_constants.dart';
+import 'package:fridayy_one/business_logic/models/user_overview_model.dart';
+import 'package:fridayy_one/business_logic/utils/routing_constants.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/widgets/shimmer_card.dart';
 
@@ -30,20 +28,6 @@ class RecommendedOffers extends StatelessWidget {
       default:
         return Colors.green;
     }
-  }
-
-  ImageProvider getOfferImage(
-    BuildContext context, {
-    required String name,
-  }) {
-    for (int i = 0; i < brandData.length; i++) {
-      if (brandData[i]['brandName'].toString() == name) {
-        return MemoryImage(
-          base64.decode(brandData[i]['brandImg'].toString().split(',').last),
-        );
-      }
-    }
-    return const AssetImage('');
   }
 
   @override
@@ -92,13 +76,22 @@ class RecommendedOffers extends StatelessWidget {
                       shape: BoxShape.circle,
                       color: Colors.white,
                       border: Border.all(
-                        color: getCouponBorderColor(offer.relativeDay),
+                        color: getCouponBorderColor(
+                          offer.expiryDate != null
+                              ? DateTime.now()
+                                  .difference(
+                                    DateTime.fromMillisecondsSinceEpoch(
+                                      offer.expiryDate!,
+                                    ),
+                                  )
+                                  .inDays
+                              : -1,
+                        ),
                         width: 2,
                       ),
                       image: DecorationImage(
-                        image: getOfferImage(
-                          context,
-                          name: offer.offers!.brandName,
+                        image: NetworkImage(
+                          'https://friday-images.s3.ap-south-1.amazonaws.com/${offer.brandId}.jpeg',
                         ),
                         fit: BoxFit.none,
                         scale: 6,
@@ -106,7 +99,7 @@ class RecommendedOffers extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    offer.offers!.brandName,
+                    offer.brandName,
                     style: Theme.of(context)
                         .textTheme
                         .caption!

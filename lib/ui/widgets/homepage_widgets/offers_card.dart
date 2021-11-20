@@ -114,7 +114,7 @@ class OfferCard extends StatelessWidget {
                   height: 32,
                 ),
                 SizedBox(
-                  height: sizeConfig.getPropWidth(44),
+                  height: sizeConfig.getPropWidth(40),
                 ),
                 Offer(
                   offerCount: inActiveOffers.round(),

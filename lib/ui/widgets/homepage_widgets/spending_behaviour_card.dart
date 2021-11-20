@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_login/models/user_overview_model.dart';
+import 'package:fridayy_one/business_logic/models/user_overview_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/widgets/doughnut_chart.dart';
 import 'package:fridayy_one/ui/widgets/expense_chips.dart';
@@ -73,7 +73,7 @@ class SpendingBehaviourCard extends StatelessWidget {
                   ),
                   DoughnutChart(
                     size: 79,
-                    data: spendingData.distribution,
+                    data: spendingData.distribution ?? [],
                     onTap: onTap,
                   ),
                 ],
@@ -84,7 +84,7 @@ class SpendingBehaviourCard extends StatelessWidget {
             ),
             const Spacer(),
             ExpenseChips(
-              data: spendingData.distribution,
+              data: spendingData.distribution ?? [],
             )
           ],
         ),

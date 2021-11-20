@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fridayy_one/business_login/utils/fridayy_svg.dart';
-import 'package:fridayy_one/business_login/view_models/HomeViewModels/home_screen_holder_view_model.dart';
-import 'package:fridayy_one/business_login/view_models/HomeViewModels/offer_screen_view_model.dart';
+import 'package:fridayy_one/business_logic/utils/fridayy_svg.dart';
+import 'package:fridayy_one/business_logic/view_models/HomeViewModels/home_screen_holder_view_model.dart';
+import 'package:fridayy_one/business_logic/view_models/HomeViewModels/offer_screen_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/views/base_view.dart';
 import 'package:fridayy_one/ui/widgets/rounded_rectangular_button.dart';

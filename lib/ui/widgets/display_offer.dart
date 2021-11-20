@@ -1,57 +1,19 @@
-import 'dart:convert';
-
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_login/models/user_overview_model.dart';
+import 'package:fridayy_one/business_logic/models/user_overview_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/widgets/offer_info_tile.dart';
 import 'package:fridayy_one/ui/widgets/rounded_rectangular_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class DisplayOffer extends StatefulWidget {
+class DisplayOffer extends StatelessWidget {
   const DisplayOffer({
     Key? key,
     required this.offerInfo,
     this.showClaimButton = false,
   }) : super(key: key);
-  final Offers offerInfo;
+  final NotifiedOffers offerInfo;
   final bool showClaimButton;
-
-  @override
-  State<DisplayOffer> createState() => _DisplayOfferState();
-}
-
-class _DisplayOfferState extends State<DisplayOffer> {
-  late List brandData = [];
-
-  @override
-  void initState() {
-    super.initState();
-    loadAssets();
-  }
-
-  loadAssets() async {
-    final String data = await DefaultAssetBundle.of(
-      navigationService.navigatorKey.currentContext!,
-    ).loadString("assets/brand_data.json");
-    brandData = jsonDecode(data) as List;
-    setState(() {});
-  }
-
-  Widget getOfferImage(
-    BuildContext context, {
-    required String name,
-  }) {
-    for (int i = 0; i < brandData.length; i++) {
-      if (brandData[i]['brandName'].toString() == name) {
-        return Image.memory(
-          base64.decode(brandData[i]['brandImg'].toString().split(',').last),
-          scale: 1,
-        );
-      }
-    }
-    return Image.network('https://via.placeholder.com/150');
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,16 +43,16 @@ class _DisplayOfferState extends State<DisplayOffer> {
                   ),
                   height: sizeConfig.getPropHeight(49),
                   width: sizeConfig.getPropWidth(113),
-                  child: getOfferImage(
-                    context,
-                    name: widget.offerInfo.brandName,
+                  child: Image.network(
+                    'https://friday-images.s3.ap-south-1.amazonaws.com/${offerInfo.brandId}.jpeg',
+                    scale: 1,
                   ),
                 ),
                 Text(
-                  widget.offerInfo.rewardAmount != null
-                      ? widget.offerInfo.rewardType == 'DISCOUNT'
-                          ? '${widget.offerInfo.rewardAmount}% OFF'
-                          : 'Rs. ${widget.offerInfo.rewardAmount}'
+                  offerInfo.rewardAmount != null
+                      ? offerInfo.rewardType == 'DISCOUNT'
+                          ? '${offerInfo.rewardAmount}% OFF'
+                          : 'Rs. ${offerInfo.rewardAmount}'
                       : '',
                   style: Theme.of(context).textTheme.bodyText1!.copyWith(
                         color: Colors.black,
@@ -99,7 +61,7 @@ class _DisplayOfferState extends State<DisplayOffer> {
                 ),
                 Expanded(
                   child: Text(
-                    widget.offerInfo.body,
+                    offerInfo.body,
                     style: Theme.of(context).textTheme.bodyText2!.copyWith(
                           fontSize: 12,
                           color: const Color(0xFF9399A3),
@@ -138,38 +100,38 @@ class _DisplayOfferState extends State<DisplayOffer> {
                 ),
                 OfferInfoTile(
                   infoName: 'Coupon Code',
-                  value: widget.offerInfo.code,
+                  value: offerInfo.code,
                 ),
                 OfferInfoTile(
                   infoName: 'Coupon Link',
-                  value: widget.offerInfo.link,
+                  value: offerInfo.link,
                 ),
                 OfferInfoTile(
                   infoName: 'Offer Validity',
-                  value: widget.offerInfo.expiryDate,
+                  value: offerInfo.expiryDate?.toString(),
                 ),
                 OfferInfoTile(
                   infoName: 'Other Info',
-                  value: widget.offerInfo.rewardDescription,
+                  value: offerInfo.rewardDescription,
                 ),
               ],
             ),
           ),
-          if (widget.showClaimButton)
+          if (showClaimButton)
             SizedBox(
               height: sizeConfig.getPropHeight(17),
             ),
-          if (widget.showClaimButton)
+          if (showClaimButton)
             CustomRoundRectButton(
               onTap: () async {
                 navigationService.pop();
-                if (widget.offerInfo.code != null) {
-                  FlutterClipboard.copy(widget.offerInfo.code!).whenComplete(
+                if (offerInfo.code != null) {
+                  FlutterClipboard.copy(offerInfo.code!).whenComplete(
                     () => navigationService.showSnackBar('Coupon Code copied'),
                   );
-                } else if (widget.offerInfo.link != null) {
-                  await canLaunch(widget.offerInfo.link!)
-                      ? await launch(widget.offerInfo.link!)
+                } else if (offerInfo.link != null) {
+                  await canLaunch(offerInfo.link!)
+                      ? await launch(offerInfo.link!)
                       : navigationService.showSnackBar('Failed to open link');
                 }
               },
@@ -183,7 +145,7 @@ class _DisplayOfferState extends State<DisplayOffer> {
                     .copyWith(color: Colors.white),
               ),
             ),
-          if (widget.showClaimButton)
+          if (showClaimButton)
             SizedBox(
               height: sizeConfig.getPropHeight(56),
             ),

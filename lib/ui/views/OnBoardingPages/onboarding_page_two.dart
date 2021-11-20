@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_login/utils/custom_painters/onboarding_backgrounds/onboarding_background_two.dart';
+import 'package:fridayy_one/business_logic/utils/custom_painters/onboarding_backgrounds/onboarding_background_two.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 
 class OnBoardingPageTwo extends StatefulWidget {
@@ -50,11 +50,12 @@ class _OnBoardingPageTwoState extends State<OnBoardingPageTwo>
         AnimatedBuilder(
           builder: (context, child) {
             return Positioned(
-                top: sizeConfig.getPropHeight(animation.value),
-                left: sizeConfig.getPropWidth(42),
-                height: sizeConfig.getPropHeight(377.3),
-                width: sizeConfig.getPropWidth(360),
-                child: child!,);
+              top: sizeConfig.getPropHeight(animation.value),
+              left: sizeConfig.getPropWidth(42),
+              height: sizeConfig.getPropHeight(377.3),
+              width: sizeConfig.getPropWidth(360),
+              child: child!,
+            );
           },
           animation: animation,
           child: Container(

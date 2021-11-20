@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_login/utils/custom_painters/onboarding_backgrounds/onboarding_bacground_one.dart';
+import 'package:fridayy_one/business_logic/utils/custom_painters/onboarding_backgrounds/onboarding_bacground_one.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 
 class OnBoardingPageOne extends StatefulWidget {

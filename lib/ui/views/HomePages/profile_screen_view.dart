@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fridayy_one/business_login/utils/fridayy_svg.dart';
-import 'package:fridayy_one/business_login/utils/routing_constants.dart';
-import 'package:fridayy_one/business_login/view_models/HomeViewModels/home_screen_holder_view_model.dart';
-import 'package:fridayy_one/business_login/view_models/HomeViewModels/profile_screen_view_model.dart';
+import 'package:fridayy_one/business_logic/utils/fridayy_svg.dart';
+import 'package:fridayy_one/business_logic/view_models/HomeViewModels/home_screen_holder_view_model.dart';
+import 'package:fridayy_one/business_logic/view_models/HomeViewModels/profile_screen_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/views/base_view.dart';
 import 'package:fridayy_one/ui/widgets/rounded_rectangular_button.dart';
+import 'package:fridayy_one/ui/widgets/shimmer_card.dart';
 
 class ProfileScreenView extends StatelessWidget {
   const ProfileScreenView({Key? key, required this.homeModel})
       : super(key: key);
   final HomeScreenHolderViewModel homeModel;
 
-  Widget dataTile(BuildContext context, String fieldName, String fieldValue) {
+  Widget dataTile(
+    BuildContext context,
+    String fieldName,
+    String fieldValue,
+  ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -45,7 +49,7 @@ class ProfileScreenView extends StatelessWidget {
     );
   }
 
-  void logout() {
+  void logout(ProfileScreenViewModel model) {
     showModalBottomSheet(
       context: navigationService.navigatorKey.currentContext!,
       constraints: BoxConstraints(
@@ -130,13 +134,7 @@ class ProfileScreenView extends StatelessWidget {
                     ),
                   ),
                   CustomRoundRectButton(
-                    onTap: () {
-                      localDatabaseService.logoutUser();
-                      navigationService.removeAllAndPush(
-                        Routes.authScreen,
-                        Routes.splashScreen,
-                      );
-                    },
+                    onTap: model.logout,
                     size: const Size(170, 50),
                     fillColor: Colors.white,
                     borderColor: const Color(0xFF2128BD),
@@ -178,7 +176,7 @@ class ProfileScreenView extends StatelessWidget {
                   right: sizeConfig.getPropWidth(27),
                 ),
                 child: InkWell(
-                  onTap: homeModel.gotoNotifications,
+                  onTap: homeModel.gotoEditProfile,
                   child: SvgPicture.string(
                     FridayySvg.editIcon,
                   ),
@@ -217,8 +215,7 @@ class ProfileScreenView extends StatelessWidget {
                         child: Text(
                           model.isBusy
                               ? ""
-                              : model.userOverView.user.userName
-                                  .substring(0, 1),
+                              : model.user.userName.substring(0, 1),
                           style: const TextStyle(fontSize: 42),
                         ),
                       ),
@@ -227,7 +224,7 @@ class ProfileScreenView extends StatelessWidget {
                           top: sizeConfig.getPropHeight(24),
                         ),
                         child: Text(
-                          model.userOverView.user.userName,
+                          model.user.userName,
                           style: Theme.of(context).textTheme.bodyText2,
                         ),
                       )
@@ -253,16 +250,51 @@ class ProfileScreenView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       heading(context, 'Personal Information'),
+                      model.isBusy
+                          ? ShimmerCard(
+                              size: Size(
+                                sizeConfig.getPropWidth(379),
+                                sizeConfig.getPropHeight(50),
+                              ),
+                              borderRadius: 10,
+                            )
+                          : dataTile(
+                              context,
+                              'Phone Number',
+                              model.user.countryCode! + model.user.mobile!,
+                            ),
                       const Divider(),
-                      dataTile(context, 'Phone Number', '+917985434483'),
-                      const Divider(),
-                      dataTile(context, 'E-mail', 'kirana@gmail.com'),
+                      model.isBusy
+                          ? ShimmerCard(
+                              size: Size(
+                                sizeConfig.getPropWidth(379),
+                                sizeConfig.getPropHeight(50),
+                              ),
+                              borderRadius: 10,
+                            )
+                          : dataTile(
+                              context,
+                              'E-mail',
+                              model.user.email ?? 'NA',
+                            ),
                       const Divider(),
                       heading(context, 'App Info'),
                       //const Divider(),
                       //dataTile(context, 'Primary Device', 'Samsung A50'),
                       //const Divider(),
-                      dataTile(context, 'App Version', '2.25.0(152)'),
+                      model.isBusy
+                          ? ShimmerCard(
+                              size: Size(
+                                sizeConfig.getPropWidth(379),
+                                sizeConfig.getPropHeight(50),
+                              ),
+                              borderRadius: 10,
+                            )
+                          : dataTile(
+                              context,
+                              'App Version',
+                              '1.0.0+1',
+                            ),
                     ],
                   ),
                 ),
@@ -271,7 +303,7 @@ class ProfileScreenView extends StatelessWidget {
                     top: sizeConfig.getPropHeight(16),
                   ),
                   child: CustomRoundRectButton(
-                    onTap: logout,
+                    onTap: () => logout(model),
                     fillColor: Colors.white,
                     child: Text(
                       'Deactivate Account',

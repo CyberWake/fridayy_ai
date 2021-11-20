@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_login/models/user_overview_model.dart';
-import 'package:fridayy_one/business_login/utils/routing_constants.dart';
+import 'package:fridayy_one/business_logic/models/user_overview_model.dart';
+import 'package:fridayy_one/business_logic/utils/routing_constants.dart';
 import 'package:fridayy_one/main.dart';
 import 'package:fridayy_one/ui/views/AuthPages/auth_view.dart';
 import 'package:fridayy_one/ui/views/AuthPages/login_view.dart';
@@ -91,7 +91,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return CupertinoPageRoute(
         builder: (context) => BrandOffersView(
           key: const Key('BrandOffersView'),
-          offers: inputData["offers"] as List<Offers>,
+          offers: inputData["offers"] as List<NotifiedOffers>,
           brandData: inputData["brandData"] as List,
         ),
       );
