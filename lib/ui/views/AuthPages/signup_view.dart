@@ -1,13 +1,60 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fridayy_one/business_logic/utils/validators.dart';
 import 'package:fridayy_one/business_logic/view_models/AuthViewModels/signup_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/views/base_view.dart';
 import 'package:fridayy_one/ui/widgets/continue_with_google.dart';
+import 'package:fridayy_one/ui/widgets/custom_gender_selector/custom_gender_selector.dart';
+import 'package:fridayy_one/ui/widgets/custom_text_field_with_title/custom_textfield.dart';
 import 'package:fridayy_one/ui/widgets/rounded_rectangular_button.dart';
 
 class SignupScreen extends StatelessWidget {
   const SignupScreen({Key? key}) : super(key: key);
+
+  Widget _buildCheckBoxWithText(String title, String subTitle, bool value,
+      Function(bool?) update, Function()? onTap) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Checkbox(
+          checkColor: Colors.white,
+          activeColor: const Color(0xFF2128BD),
+          value: value,
+          tristate: true,
+          onChanged: update,
+        ),
+        SizedBox(
+          height: sizeConfig.getPropWidth(8),
+        ),
+        RichText(
+          text: TextSpan(
+            text: title,
+            style: Theme.of(navigationService.navigatorKey.currentContext!)
+                .textTheme
+                .caption!
+                .copyWith(
+                  fontSize: 16,
+                  color: const Color(0xFF666666),
+                ),
+            children: [
+              TextSpan(
+                text: subTitle,
+                style: Theme.of(navigationService.navigatorKey.currentContext!)
+                    .textTheme
+                    .caption!
+                    .copyWith(
+                      fontSize: 16,
+                      decoration: TextDecoration.underline,
+                    ),
+                recognizer: TapGestureRecognizer()..onTap = onTap,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,91 +65,62 @@ class SignupScreen extends StatelessWidget {
             child: Form(
               key: model.formKey,
               child: Padding(
-                padding: EdgeInsets.all(sizeConfig.getPropWidth(15)),
+                padding: EdgeInsets.all(sizeConfig.getPropWidth(35)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: sizeConfig.getPropHeight(142),
+                      height: sizeConfig.getPropHeight(25),
                     ),
                     Text(
-                      "Sign Up",
+                      "Create an account",
                       style: Theme.of(context).textTheme.headline4,
                     ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(
-                        sizeConfig.getPropHeight(34),
-                        sizeConfig.getPropHeight(28),
-                        sizeConfig.getPropHeight(190),
-                        0,
-                      ),
-                      child: TextFormField(
-                        controller: model.phoneNumber,
-                        keyboardType: TextInputType.phone,
-                        style: TextStyle(
-                          color: Colors.black,
-                          letterSpacing: sizeConfig.getPropWidth(2),
-                        ),
-                        validator: (number) =>
-                            Validate.validatePhoneNumber(number),
-                        decoration: InputDecoration(
-                          focusedBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFF2128BD)),
-                          ),
-                          errorBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFFB00020)),
-                          ),
-                          errorStyle:
-                              Theme.of(context).textTheme.caption!.copyWith(
-                                    fontSize: 12,
-                                    color: const Color(0xFFB00020),
-                                  ),
-                          prefixText: '+91 ',
-                          hintText: 'Mobile Number',
-                          label: Text(
-                            'Mobile Number',
-                            style: Theme.of(context).textTheme.caption,
-                          ),
-                        ),
-                      ),
+                    SizedBox(
+                      height: sizeConfig.getPropHeight(30),
                     ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(
-                        sizeConfig.getPropHeight(34),
-                        sizeConfig.getPropHeight(32),
-                        sizeConfig.getPropHeight(190),
-                        0,
-                      ),
-                      child: TextFormField(
-                        controller: model.name,
-                        keyboardType: TextInputType.name,
-                        style: TextStyle(
-                          color: Colors.black,
-                          letterSpacing: sizeConfig.getPropWidth(2),
-                        ),
-                        validator: (name) => Validate.validateName(name),
-                        decoration: InputDecoration(
-                          focusedBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFF2128BD)),
-                          ),
-                          errorBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFFB00020)),
-                          ),
-                          errorStyle:
-                              Theme.of(context).textTheme.caption!.copyWith(
-                                    fontSize: 12,
-                                    color: const Color(0xFFB00020),
-                                  ),
-                          hintText: 'Full Name',
-                          label: Text(
-                            'Name',
-                            style: Theme.of(context).textTheme.caption,
-                          ),
-                        ),
-                      ),
+                    CustomTextFieldWithTitle(
+                      title: "Mobile Number",
+                      controller: model.phoneNumber,
+                      validator: (number) =>
+                          Validate.validatePhoneNumber(number),
+                      prefix: "+91 ",
                     ),
                     SizedBox(
-                      height: sizeConfig.getPropHeight(65),
+                      height: sizeConfig.getPropHeight(10),
+                    ),
+                    CustomTextFieldWithTitle(
+                      title: "Name",
+                      hintText: "Name",
+                      controller: model.name,
+                      validator: (number) => Validate.validateName(number),
+                    ),
+                    SizedBox(
+                      height: sizeConfig.getPropHeight(10),
+                    ),
+                    CustomGenderSelector(
+                      selected: model.userGender,
+                      updateGender: model.switchGender,
+                    ),
+                    SizedBox(
+                      height: sizeConfig.getPropHeight(10),
+                    ),
+                    _buildCheckBoxWithText(
+                      'I agree with ',
+                      'Terms and Conditions',
+                      model.terms,
+                      model.updateTerms,
+                      model.showTerms,
+                    ),
+                    _buildCheckBoxWithText(
+                      'I agree with Fridayy Ai ',
+                      'Privacy Policy',
+                      model.privacy,
+                      model.updatePrivacy,
+                      model.showPrivacy,
+                    ),
+                    SizedBox(
+                      height: sizeConfig.getPropHeight(20),
                     ),
                     Center(
                       child: CustomRoundRectButton(

@@ -56,7 +56,7 @@ class OtpVerificationViewModel extends BaseModel {
           navigationService.showSnackBar('No messages to send');
         }
       }
-    } else {
+    } else if (otpController.text.isEmpty) {
       navigationService.showSnackBar('Enter the otp to continue');
     }
   }
@@ -92,7 +92,7 @@ class OtpVerificationViewModel extends BaseModel {
           navigationService.showSnackBar('No messages to send');
         }
       }
-    } else {
+    } else if (otpController.text.isEmpty) {
       navigationService.showSnackBar('Enter the otp to continue');
     }
   }

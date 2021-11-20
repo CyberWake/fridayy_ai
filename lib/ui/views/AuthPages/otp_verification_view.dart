@@ -1,8 +1,10 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fridayy_one/business_logic/view_models/AuthViewModels/otp_verification_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/views/base_view.dart';
 import 'package:fridayy_one/ui/widgets/continue_with_google.dart';
+import 'package:fridayy_one/ui/widgets/custom_text_field_with_title/custom_textfield.dart';
 import 'package:fridayy_one/ui/widgets/rounded_rectangular_button.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
@@ -30,7 +32,7 @@ class OtpVerification extends StatelessWidget {
           child: Scaffold(
             body: SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.only(left: sizeConfig.getPropWidth(15)),
+                padding: EdgeInsets.all(sizeConfig.getPropWidth(35)),
                 child: Form(
                   key: model.formKey,
                   autovalidateMode: AutovalidateMode.disabled,
@@ -39,103 +41,88 @@ class OtpVerification extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        height: sizeConfig.getPropHeight(142),
+                        height: sizeConfig.getPropHeight(108),
                       ),
                       Text(
-                        isFromLogin ? "Sign In" : "Sign Up",
-                        style: Theme.of(context).textTheme.headline4,
+                        "Enter OTP",
+                        style: Theme.of(context).textTheme.headline6,
                       ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(
-                          sizeConfig.getPropHeight(34),
-                          sizeConfig.getPropHeight(28),
-                          sizeConfig.getPropHeight(190),
-                          0,
-                        ),
-                        child: TextFormField(
-                          enabled: false,
-                          keyboardType: TextInputType.phone,
-                          initialValue: phoneNumber,
-                          style: TextStyle(
-                            color: Colors.black,
-                            letterSpacing: sizeConfig.getPropWidth(2),
-                          ),
-                          decoration: InputDecoration(
-                            focusedBorder: const UnderlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xFF2128BD)),
-                            ),
-                            errorBorder: const UnderlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xFFB00020)),
-                            ),
-                            disabledBorder: const UnderlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xFF2128BD)),
-                            ),
-                            prefixText: '+91 ',
-                            hintText: 'Mobile Number',
-                            label: Text(
-                              'Mobile Number',
-                              style: Theme.of(context).textTheme.caption,
-                            ),
-                          ),
-                        ),
+                      SizedBox(
+                        height: sizeConfig.getPropHeight(30),
                       ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(
-                          sizeConfig.getPropHeight(34),
-                          sizeConfig.getPropHeight(28),
-                          sizeConfig.getPropHeight(190),
-                          0,
-                        ),
-                        child: SizedBox(
-                          width: sizeConfig.getPropWidth(92),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Enter OTP',
-                                style: Theme.of(context).textTheme.caption,
+                      CustomTextFieldWithTitle(
+                        title: "Mobile Number",
+                        initialText: phoneNumber,
+                        validator: (number) {},
+                        prefix: "+91 ",
+                        enabled: false,
+                      ),
+                      SizedBox(
+                        height: sizeConfig.getPropHeight(18),
+                      ),
+                      SizedBox(
+                        width: sizeConfig.getPropWidth(250),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Enter OTP',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .caption!
+                                  .copyWith(fontSize: 16),
+                            ),
+                            PinCodeTextField(
+                              length: 4,
+                              obscureText: false,
+                              animationType: AnimationType.fade,
+                              hapticFeedbackTypes: HapticFeedbackTypes.medium,
+                              pinTheme: PinTheme(
+                                shape: PinCodeFieldShape.box,
+                                borderRadius: BorderRadius.circular(10),
+                                fieldHeight: 50,
+                                fieldWidth: 50,
+                                selectedColor: const Color(0xFF2128BD),
+                                activeColor: const Color(0xFF2128BD),
+                                inactiveColor: const Color(0xFF2128BD),
+                                borderWidth: 1.0,
+                                activeFillColor: Colors.white,
+                                selectedFillColor: Colors.white,
+                                inactiveFillColor: Colors.white,
                               ),
-                              PinCodeTextField(
-                                length: 4,
-                                obscureText: false,
-                                animationType: AnimationType.fade,
-                                hapticFeedbackTypes: HapticFeedbackTypes.medium,
-                                pinTheme: PinTheme(
-                                  shape: PinCodeFieldShape.underline,
-                                  borderRadius: BorderRadius.circular(5),
-                                  fieldHeight: 50,
-                                  fieldWidth: sizeConfig.getPropWidth(17),
-                                  activeFillColor: Colors.white,
-                                  selectedFillColor: Colors.white,
-                                  inactiveFillColor: Colors.white,
+                              animationDuration:
+                                  const Duration(milliseconds: 300),
+                              backgroundColor: Colors.transparent,
+                              boxShadows: [
+                                BoxShadow(
+                                  spreadRadius: 0,
+                                  blurRadius: 20,
+                                  offset: const Offset(4, 10),
+                                  color:
+                                      const Color(0xFF000000).withOpacity(0.1),
                                 ),
-                                animationDuration:
-                                    const Duration(milliseconds: 300),
-                                backgroundColor: Colors.transparent,
-                                enableActiveFill: true,
-                                errorAnimationController:
-                                    model.otpErrorController,
-                                controller: model.otpController,
-                                onCompleted: (v) {
-                                  print("Completed");
-                                },
-                                onChanged: (value) {
-                                  print(value);
-                                },
-                                beforeTextPaste: (text) {
-                                  print("Allowing to paste $text");
-                                  //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
-                                  //but you can show anything you want here, like your pop up saying wrong paste format or etc
-                                  return true;
-                                },
-                                appContext: context,
-                              ),
-                            ],
-                          ),
+                              ],
+                              enableActiveFill: true,
+                              errorAnimationController:
+                                  model.otpErrorController,
+                              controller: model.otpController,
+                              onCompleted: (v) {
+                                print("Completed");
+                              },
+                              onChanged: (value) {},
+                              beforeTextPaste: (text) {
+                                print("Allowing to paste $text");
+                                //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
+                                //but you can show anything you want here, like your pop up saying wrong paste format or etc
+                                return true;
+                              },
+                              appContext: context,
+                            ),
+                          ],
                         ),
                       ),
                       SizedBox(
-                        height: sizeConfig.getPropHeight(65),
+                        height: sizeConfig.getPropHeight(50),
                       ),
                       Center(
                         child: CustomRoundRectButton(

@@ -4,6 +4,7 @@ import 'package:fridayy_one/business_logic/view_models/AuthViewModels/login_view
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/views/base_view.dart';
 import 'package:fridayy_one/ui/widgets/continue_with_google.dart';
+import 'package:fridayy_one/ui/widgets/custom_text_field_with_title/custom_textfield.dart';
 import 'package:fridayy_one/ui/widgets/rounded_rectangular_button.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -18,53 +19,26 @@ class LoginScreen extends StatelessWidget {
             child: Form(
               key: model.formKey,
               child: Padding(
-                padding: EdgeInsets.all(sizeConfig.getPropWidth(15)),
+                padding: EdgeInsets.all(sizeConfig.getPropWidth(35)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: sizeConfig.getPropHeight(142),
+                      height: sizeConfig.getPropHeight(108),
                     ),
                     Text(
-                      "Sign In",
+                      "Welcome back!",
                       style: Theme.of(context).textTheme.headline4,
                     ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(
-                        sizeConfig.getPropHeight(34),
-                        sizeConfig.getPropHeight(128),
-                        sizeConfig.getPropHeight(190),
-                        0,
-                      ),
-                      child: TextFormField(
-                        controller: model.phoneNumber,
-                        keyboardType: TextInputType.phone,
-                        style: TextStyle(
-                          color: Colors.black,
-                          letterSpacing: sizeConfig.getPropWidth(2),
-                        ),
-                        validator: (number) =>
-                            Validate.validatePhoneNumber(number),
-                        decoration: InputDecoration(
-                          focusedBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFF2128BD)),
-                          ),
-                          errorBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFFB00020)),
-                          ),
-                          prefixText: '+91 ',
-                          hintText: 'Mobile Number',
-                          errorStyle:
-                              Theme.of(context).textTheme.caption!.copyWith(
-                                    fontSize: 12,
-                                    color: const Color(0xFFB00020),
-                                  ),
-                          label: Text(
-                            'Mobile Number',
-                            style: Theme.of(context).textTheme.caption,
-                          ),
-                        ),
-                      ),
+                    SizedBox(
+                      height: sizeConfig.getPropHeight(127),
+                    ),
+                    CustomTextFieldWithTitle(
+                      title: "Mobile Number",
+                      controller: model.phoneNumber,
+                      validator: (number) =>
+                          Validate.validatePhoneNumber(number),
+                      prefix: "+91 ",
                     ),
                     SizedBox(
                       height: sizeConfig.getPropHeight(48),

@@ -19,6 +19,7 @@ class LoginScreenViewModel extends BaseModel {
             UserModel(mobile: phoneNumber.text, countryCode: "+91");
         final CallOutcome<Map<String, dynamic>> result = await apiService
             .postRequest(ApiConstants.login, user.toJson(), isAuth: true);
+        print(result.exception);
         if (result.data != null) {
           navigationService.pushScreen(
             Routes.otpInputScreen,
@@ -27,6 +28,10 @@ class LoginScreenViewModel extends BaseModel {
               'otpId': result.data!['otpId']
             },
           );
+        } else if (result.exception.toString() ==
+            "Exception: Mobile No. Not Found") {
+          Future.delayed(const Duration(seconds: 1))
+              .then((value) => gotoSignup());
         }
       } else if (status.isPermanentlyDenied) {
         navigationService.showSnackBar('Enable the permissions from settings');

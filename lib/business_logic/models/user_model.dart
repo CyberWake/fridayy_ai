@@ -3,6 +3,7 @@ class UserModel {
     this.userName,
     this.countryCode,
     this.mobile,
+    this.gender,
     this.googleId,
     this.email,
     this.imageUrl,
@@ -25,6 +26,7 @@ class UserModel {
   String? googleId;
   String? email;
   String? imageUrl;
+  String? gender;
   bool? isActive;
 
   Map<String, dynamic> toJson() {
@@ -32,6 +34,7 @@ class UserModel {
     data['userName'] = this.userName;
     data['countryCode'] = this.countryCode;
     data['mobile'] = this.mobile;
+    data['gender'] = this.gender;
     return data;
   }
 }
