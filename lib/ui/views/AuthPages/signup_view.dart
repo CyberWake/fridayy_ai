@@ -12,8 +12,13 @@ import 'package:fridayy_one/ui/widgets/rounded_rectangular_button.dart';
 class SignupScreen extends StatelessWidget {
   const SignupScreen({Key? key}) : super(key: key);
 
-  Widget _buildCheckBoxWithText(String title, String subTitle, bool value,
-      Function(bool?) update, Function()? onTap) {
+  Widget _buildCheckBoxWithText(
+    String title,
+    String subTitle,
+    bool value,
+    Function(bool?) update,
+    Function()? onTap,
+  ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [

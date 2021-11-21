@@ -5,7 +5,7 @@ import 'package:fridayy_one/business_logic/view_models/HomeViewModels/home_scree
 import 'package:fridayy_one/business_logic/view_models/HomeViewModels/home_screen_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/views/base_view.dart';
-import 'package:fridayy_one/ui/widgets/homepage_widgets/offers_card.dart';
+import 'package:fridayy_one/ui/widgets/homepage_widgets/offer_card.dart';
 import 'package:fridayy_one/ui/widgets/homepage_widgets/recommended_offers.dart';
 import 'package:fridayy_one/ui/widgets/homepage_widgets/spending_behaviour_card.dart';
 import 'package:fridayy_one/ui/widgets/shimmer_card.dart';
@@ -124,88 +124,69 @@ class HomeScreen extends StatelessWidget {
                   ),
                   model.isBusy
                       ? const ShimmerCard(
-                          size: Size(379, 169),
+                          size: Size(379, 365),
                           borderRadius: 16,
                         )
                       : OffersInfoWidgets(
                           offersData: model.userOverView!.offers,
                           onTap: homeModel.gotoOffers,
                         ),
-                  Container(
-                    margin: EdgeInsets.only(
-                      top: sizeConfig.getPropHeight(85),
-                      bottom: 0,
-                    ),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFE9E9E9),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(
-                          sizeConfig.getPropWidth(16),
-                        ),
-                        topRight: Radius.circular(
-                          sizeConfig.getPropWidth(16),
-                        ),
+                  Column(
+                    children: [
+                      StoryListOffers(
+                        offers:
+                            model.userOverView?.offers.recommendedOffers ?? [],
+                        isLoading: model.isBusy,
                       ),
-                    ),
-                    child: Column(
-                      children: [
-                        RecommendedOffers(
-                          brandData: homeModel.brandData,
-                          offers:
-                              model.userOverView?.offers.recommendedOffers ??
-                                  [],
-                          isLoading: model.isBusy,
-                        ),
-                        USPTile(
-                          uspName: 'Spending Behaviour',
-                          onTap: homeModel.gotoSpendingBehaviour,
-                        ),
-                        model.isBusy
-                            ? const ShimmerCard(
-                                size: Size(379, 169),
-                                borderRadius: 16,
-                                marginTop: 22.5,
-                              )
-                            : SpendingBehaviourCard(
-                                spendingData: model.userOverView!.spending,
-                                onTap: homeModel.gotoSpendingBehaviour,
+                      USPTile(
+                        uspName: 'Spending Behaviour',
+                        onTap: homeModel.gotoSpendingBehaviour,
+                      ),
+                      model.isBusy
+                          ? const ShimmerCard(
+                              size: Size(379, 587),
+                              borderRadius: 16,
+                              marginTop: 22.5,
+                            )
+                          : SpendingBehaviourCard(
+                              spendingData: model.userOverView!.spending,
+                              onTap: homeModel.gotoSpendingBehaviour,
+                            ),
+                      USPTile(
+                        uspName: 'Finance Analytics',
+                        onTap: homeModel.gotoFinanceAnalytics,
+                      ),
+                      model.isBusy
+                          ? const ShimmerCard(
+                              size: Size(379, 169),
+                              borderRadius: 16,
+                              marginTop: 22.5,
+                            )
+                          : Container(
+                              height: sizeConfig.getPropHeight(190),
+                              width: sizeConfig.getPropWidth(379),
+                              margin: EdgeInsets.only(
+                                top: sizeConfig.getPropHeight(22.5),
                               ),
-                        USPTile(
-                          uspName: 'Finance Analytics',
-                          onTap: homeModel.gotoFinanceAnalytics,
-                        ),
-                        model.isBusy
-                            ? const ShimmerCard(
-                                size: Size(379, 169),
-                                borderRadius: 16,
-                                marginTop: 22.5,
-                              )
-                            : Container(
-                                height: sizeConfig.getPropHeight(190),
-                                width: sizeConfig.getPropWidth(379),
-                                margin: EdgeInsets.only(
-                                  top: sizeConfig.getPropHeight(22.5),
-                                ),
-                                padding: EdgeInsets.all(
-                                  sizeConfig.getPropWidth(20),
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(
-                                    sizeConfig.getPropWidth(16),
-                                  ),
-                                ),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  'Wow ${model.userOverView!.user.userName}\nyour spending score is better than 98% of users',
-                                  style: Theme.of(context).textTheme.bodyText2,
+                              padding: EdgeInsets.all(
+                                sizeConfig.getPropWidth(20),
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(
+                                  sizeConfig.getPropWidth(16),
                                 ),
                               ),
-                        SizedBox(
-                          height: sizeConfig.getPropHeight(22.5),
-                        ),
-                      ],
-                    ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                'Wow ${model.userOverView!.user.userName}\nyour spending score is better than 98% of users',
+                                style: Theme.of(context).textTheme.bodyText2,
+                              ),
+                            ),
+                      SizedBox(
+                        height: sizeConfig.getPropHeight(22.5),
+                      ),
+                    ],
                   ),
                 ],
               ),

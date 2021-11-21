@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
+import 'package:fridayy_one/ui/widgets/charts/charts.dart';
 import 'package:fridayy_one/ui/widgets/expense_chips.dart';
-import 'package:fridayy_one/ui/widgets/pie_chart_with_varying_radius/pie_chart_with_varying_radius.dart';
 
 class SpendingBehaviourCard extends StatelessWidget {
-  SpendingBehaviourCard({
+  const SpendingBehaviourCard({
     Key? key,
     this.onTap,
     required this.spendingData,
@@ -34,7 +34,7 @@ class SpendingBehaviourCard extends StatelessWidget {
           children: [
             PieChartWithVaryingRadius(
               size: 300,
-              data: spendingData.distribution ?? [],
+              data: spendingData.distribution?.reversed.toList() ?? [],
               onTap: onTap,
             ),
             Positioned(

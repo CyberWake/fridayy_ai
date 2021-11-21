@@ -24,14 +24,15 @@ class BackgroundServiceImpl extends BackgroundService {
   Future<void> initializeService() async {
     await BackgroundFetch.configure(
         BackgroundFetchConfig(
-            minimumFetchInterval: 15,
-            stopOnTerminate: false,
-            enableHeadless: true,
-            requiresBatteryNotLow: false,
-            requiresCharging: false,
-            requiresStorageNotLow: false,
-            requiresDeviceIdle: false,
-            requiredNetworkType: NetworkType.NONE), (String taskId) async {
+          minimumFetchInterval: 15,
+          stopOnTerminate: false,
+          enableHeadless: true,
+          requiresBatteryNotLow: false,
+          requiresCharging: false,
+          requiresStorageNotLow: false,
+          requiresDeviceIdle: false,
+          requiredNetworkType: NetworkType.NONE,
+        ), (String taskId) async {
       // <-- Event handler
       BackgroundFetch.finish(taskId);
     }, (String taskId) async {

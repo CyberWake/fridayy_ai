@@ -45,9 +45,12 @@ class DisplayOffer extends StatelessWidget {
                   ),
                   height: sizeConfig.getPropHeight(49),
                   width: sizeConfig.getPropWidth(113),
-                  child: Image.network(
-                    'https://friday-images.s3.ap-south-1.amazonaws.com/$brandId.jpeg',
-                    scale: 1,
+                  child: Hero(
+                    tag: "${brandId}image",
+                    child: Image.network(
+                      'https://friday-images.s3.ap-south-1.amazonaws.com/$brandId.jpeg',
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
                 Text(

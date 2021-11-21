@@ -31,12 +31,13 @@ class UserOverView {
 }
 
 class User {
-  User(
-      {required this.userName,
-      this.userImg,
-      this.email,
-      this.mobile,
-      this.countryCode});
+  User({
+    required this.userName,
+    this.userImg,
+    this.email,
+    this.mobile,
+    this.countryCode,
+  });
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(

@@ -1,13 +1,12 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fridayy_one/business_logic/utils/extensions.dart';
 import 'package:fridayy_one/business_logic/utils/fridayy_svg.dart';
 import 'package:fridayy_one/business_logic/view_models/HomeViewModels/home_screen_holder_view_model.dart';
 import 'package:fridayy_one/business_logic/view_models/HomeViewModels/spending_screen_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/views/base_view.dart';
-import 'package:fridayy_one/ui/widgets/doughnut_chart.dart';
+import 'package:fridayy_one/ui/widgets/charts/src/doughnut_chart.dart';
 import 'package:fridayy_one/ui/widgets/rounded_rectangular_button.dart';
 import 'package:fridayy_one/ui/widgets/shimmer_card.dart';
 
@@ -149,23 +148,6 @@ class SpendingScreen extends StatelessWidget {
     );
   }
 
-  Widget getOfferImage(
-    BuildContext context, {
-    required String name,
-  }) {
-    for (int i = 0; i < homeModel.brandData.length; i++) {
-      if (homeModel.brandData[i]['brandName'].toString() == name) {
-        return Image.memory(
-          base64.decode(
-            homeModel.brandData[i]['brandImg'].toString().split(',').last,
-          ),
-          scale: 1.5,
-        );
-      }
-    }
-    return Image.asset('');
-  }
-
   Widget buildSpending(SpendingScreenViewModel model) {
     return RefreshIndicator(
       onRefresh: model.getTransactionData,
@@ -214,7 +196,10 @@ class SpendingScreen extends StatelessWidget {
                   ),
                   color: const Color(0xFFF9F9F9),
                 ),
-                child: getOfferImage(context, name: spend.brandName),
+                child: Image.network(
+                  'https://friday-images.s3.ap-south-1.amazonaws.com/${spend.brandId}.jpeg',
+                  fit: BoxFit.contain,
+                ),
               ),
               title: Text(
                 spend.brandName,
@@ -250,92 +235,6 @@ class SpendingScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String? getName(String id) {
-    switch (id) {
-      case 'FAD':
-        return 'Food & Drinks';
-      case 'MDCL':
-        return 'Medical';
-      case 'UTL':
-        return 'Utilities';
-      case 'TRVL':
-        return 'Travel';
-      case 'LUX':
-        return 'Shopping';
-      case 'FIN':
-        return 'Finance';
-      case 'OTH':
-        return 'Others';
-      case 'EAD':
-        return 'Education & Dev';
-    }
-  }
-
-  Color? getColor(String id) {
-    switch (id) {
-      case 'FAD':
-        return const Color(0xFFF86F34);
-      case 'MDCL':
-        return const Color(0xFF2128BD);
-      case 'UTL':
-        return const Color(0xFF75CDD3);
-      case 'TRVL':
-        return const Color(0xFFFFB731);
-      case 'LUX':
-        return const Color(0xFF16331C);
-      case 'FIN':
-        return const Color(0xFF0A8677);
-      case 'OTH':
-        return const Color(0xFFC61C1C);
-      case 'EAD':
-        return const Color(0xFF14EDAA);
-    }
-  }
-
-  String getCategoryIcon(String id) {
-    switch (id) {
-      case 'FAD':
-        return FridayySvg.foodIcon;
-      case 'MDCL':
-        return FridayySvg.medicineIcon;
-      case 'UTL':
-        return FridayySvg.utilitiesIcon;
-      case 'TRVL':
-        return FridayySvg.travelIcon;
-      case 'LUX':
-        return FridayySvg.shoppingIcon;
-      case 'FIN':
-        return FridayySvg.financeIcon;
-      case 'OTH':
-        return FridayySvg.othersIcon;
-      case 'EAD':
-        return FridayySvg.educationIcon;
-    }
-    return "";
-  }
-
-  String getCategoryName(String id) {
-    switch (id) {
-      case 'FAD':
-        return 'Food & Drinks';
-      case 'MDCL':
-        return 'Medical';
-      case 'UTL':
-        return 'Utilities';
-      case 'TRVL':
-        return 'Travel';
-      case 'LUX':
-        return 'Shopping';
-      case 'FIN':
-        return 'Finance';
-      case 'OTH':
-        return 'Others';
-      case 'EAD':
-        return 'Education & Development';
-    }
-    return "";
   }
 
   Widget buildCategory(BuildContext context, SpendingScreenViewModel model) {
@@ -378,13 +277,13 @@ class SpendingScreen extends StatelessWidget {
                                     width: sizeConfig.getPropHeight(13),
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: getColor(
-                                        model.categoryData[index].categoryId,
-                                      ),
+                                      color: model
+                                          .categoryData[index].categoryId
+                                          .getColor(),
                                     ),
                                   ),
                                   Text(
-                                    '  ${getName(model.categoryData[index].categoryId)} ${model.categoryData[index].percentage}%',
+                                    '  ${model.categoryData[index].categoryId.getName()} ${model.categoryData[index].percentage}%',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyText2!
@@ -445,12 +344,10 @@ class SpendingScreen extends StatelessWidget {
                           ),
                           color: const Color(0xFFF9F9F9),
                         ),
-                        child: SvgPicture.string(
-                          getCategoryIcon(category.categoryId),
-                        ),
+                        child: category.categoryId.getSvgIcon(),
                       ),
                       title: Text(
-                        getCategoryName(category.categoryId),
+                        category.categoryId.getName(),
                         style: Theme.of(context).textTheme.bodyText2!.copyWith(
                               fontSize: 16,
                               color: const Color(0xFF717E95),
@@ -537,9 +434,9 @@ class SpendingScreen extends StatelessWidget {
                   ),
                   color: const Color(0xFFF9F9F9),
                 ),
-                child: getOfferImage(
-                  context,
-                  name: brand.brandName,
+                child: Image.network(
+                  'https://friday-images.s3.ap-south-1.amazonaws.com/${brand.brandId}.jpeg',
+                  fit: BoxFit.contain,
                 ),
               ),
               title: Text(
@@ -550,7 +447,7 @@ class SpendingScreen extends StatelessWidget {
                     ),
               ),
               subtitle: Text(
-                getCategoryName(brand.spends[0].categoryId!),
+                brand.spends[0].categoryId!.getName(),
                 style: Theme.of(context).textTheme.bodyText2!.copyWith(
                       fontSize: 14,
                       color: const Color(0xFF717E95),

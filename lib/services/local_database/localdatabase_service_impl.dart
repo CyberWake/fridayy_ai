@@ -83,15 +83,17 @@ class LocalDatabaseServiceImpl extends LocalDatabaseService {
                 ['x-amz-credential'],
       );
       bucketBox.put(
-          'x-amz-date',
-          i == 0
-              ? info['s3_details']['below_3_months']['fields']['x-amz-date']
-              : info['s3_details']['after_3_months']['fields']['x-amz-date']);
+        'x-amz-date',
+        i == 0
+            ? info['s3_details']['below_3_months']['fields']['x-amz-date']
+            : info['s3_details']['after_3_months']['fields']['x-amz-date'],
+      );
       bucketBox.put(
-          'policy',
-          i == 0
-              ? info['s3_details']['below_3_months']['fields']['policy']
-              : info['s3_details']['after_3_months']['fields']['policy']);
+        'policy',
+        i == 0
+            ? info['s3_details']['below_3_months']['fields']['policy']
+            : info['s3_details']['after_3_months']['fields']['policy'],
+      );
       bucketBox.put(
         'x-amz-signature',
         i == 0

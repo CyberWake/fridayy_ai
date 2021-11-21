@@ -72,8 +72,9 @@ class ExpenseChips extends StatelessWidget {
                     width: 10,
                     margin: const EdgeInsets.only(right: 5),
                     decoration: BoxDecoration(
-                        color: getColor(data[index].categoryId),
-                        shape: BoxShape.circle),
+                      color: getColor(data[index].categoryId),
+                      shape: BoxShape.circle,
+                    ),
                   ),
                   Flexible(
                     child: Text(
@@ -91,7 +92,9 @@ class ExpenseChips extends StatelessWidget {
               elevation: 0.0,
               shape: RoundedRectangleBorder(
                 side: BorderSide(
-                    color: getColor(data[index].categoryId), width: 1),
+                  color: getColor(data[index].categoryId),
+                  width: 1,
+                ),
                 borderRadius: BorderRadius.circular(20),
               ),
               shadowColor: Colors.grey[60],

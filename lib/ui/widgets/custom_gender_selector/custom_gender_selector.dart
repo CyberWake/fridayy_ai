@@ -4,9 +4,11 @@ import 'package:fridayy_one/business_logic/utils/extensions.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 
 class CustomGenderSelector extends StatelessWidget {
-  const CustomGenderSelector(
-      {Key? key, required this.selected, required this.updateGender})
-      : super(key: key);
+  const CustomGenderSelector({
+    Key? key,
+    required this.selected,
+    required this.updateGender,
+  }) : super(key: key);
   final Gender? selected;
   final Function(Gender) updateGender;
 

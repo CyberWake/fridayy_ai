@@ -4,9 +4,9 @@ final Map<String, dynamic> staticResult = {
     "user_img": null,
   },
   "offers": {
-    "total_offers": 20,
-    "active_offers": 10,
-    "expiring_soon_offers": 3,
+    "total_offers": 106,
+    "active_offers": 65,
+    "expiring_soon_offers": 30,
     "sorted_categories": [
       {"category_id": "FAD", "count": 30},
       {"category_id": "LUX", "count": 25},
@@ -16,7 +16,11 @@ final Map<String, dynamic> staticResult = {
       {"category_id": "UTL", "count": 7},
       {"category_id": "EAD", "count": 2},
     ],
-    "loved_brand": {"brand_name": "Zomato", "brand_id": "string", "count": 22},
+    "loved_brand": {
+      "brand_name": "Zomato",
+      "brand_id": "8a4b7a04-c6a1-4763-8a85-cdccce65aebd",
+      "count": 22
+    },
     "recommended_offers": [
       {
         "brand_name": "Burger King",

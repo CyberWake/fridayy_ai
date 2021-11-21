@@ -1,6 +1,9 @@
 class NewUserOverView {
-  NewUserOverView(
-      {required this.user, required this.offers, required this.spending});
+  NewUserOverView({
+    required this.user,
+    required this.offers,
+    required this.spending,
+  });
 
   factory NewUserOverView.fromJson(Map<String, dynamic> json) {
     return NewUserOverView(
@@ -297,8 +300,12 @@ class Spending {
 }
 
 class Distribution {
-  Distribution(
-      {required this.categoryId, required this.percentage, this.radius});
+  Distribution({
+    required this.categoryId,
+    required this.percentage,
+    this.count,
+    this.radius,
+  });
 
   factory Distribution.fromJson(Map<String, dynamic> json) {
     return Distribution(
@@ -308,6 +315,7 @@ class Distribution {
   }
   String categoryId;
   double percentage;
+  int? count;
   int? radius;
 
   Map<String, dynamic> toJson() {
