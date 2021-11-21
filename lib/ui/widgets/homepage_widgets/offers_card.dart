@@ -1,26 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/widgets/offer.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
-class OfferCard extends StatelessWidget {
-  const OfferCard({
+class OffersInfoWidgets extends StatelessWidget {
+  const OffersInfoWidgets({
     Key? key,
     this.onTap,
-    required this.totalOffers,
-    required this.activeOffers,
-    required this.inActiveOffers,
+    required this.offersData,
   }) : super(key: key);
   final void Function()? onTap;
-  final double totalOffers;
-  final double activeOffers;
-  final double inActiveOffers;
+  final Offers offersData;
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        height: sizeConfig.getPropHeight(169),
+        height: sizeConfig.getPropHeight(340),
         width: sizeConfig.getPropWidth(379),
         padding: EdgeInsets.only(
           left: sizeConfig.getPropWidth(32.65),
@@ -67,7 +64,7 @@ class OfferCard extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: <Widget>[
                                   Text(
-                                    totalOffers.toInt().toString(),
+                                    "10",
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline4!
@@ -79,7 +76,7 @@ class OfferCard extends StatelessWidget {
                           ],
                           pointers: <GaugePointer>[
                             RangePointer(
-                              value: 240 * (activeOffers / totalOffers),
+                              value: 240 * (10 / 20),
                               width: 10,
                               cornerStyle: CornerStyle.bothFlat,
                               color: const Color(0xFFF67280),
@@ -109,7 +106,7 @@ class OfferCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Offer(
-                  offerCount: activeOffers.round(),
+                  offerCount: 10,
                   isExpiredOffer: false,
                   height: 32,
                 ),
@@ -117,7 +114,7 @@ class OfferCard extends StatelessWidget {
                   height: sizeConfig.getPropWidth(40),
                 ),
                 Offer(
-                  offerCount: inActiveOffers.round(),
+                  offerCount: 10,
                   isExpiredOffer: true,
                   height: 32,
                 ),

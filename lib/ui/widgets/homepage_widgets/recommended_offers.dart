@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_logic/models/user_overview_model.dart';
+import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
 import 'package:fridayy_one/business_logic/utils/routing_constants.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/widgets/shimmer_card.dart';
@@ -11,24 +11,9 @@ class RecommendedOffers extends StatelessWidget {
     required this.brandData,
     required this.isLoading,
   }) : super(key: key);
-  final List<NotifiedOffers> offers;
+  final List<OffersByBrand> offers;
   final List brandData;
   final bool isLoading;
-
-  Color getCouponBorderColor(int expiry) {
-    switch (expiry) {
-      case 0:
-        return Colors.grey;
-      case 1:
-        return Colors.red;
-      case 2:
-        return Colors.orange;
-      case 3:
-        return Colors.yellow;
-      default:
-        return Colors.green;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +40,6 @@ class RecommendedOffers extends StatelessWidget {
               ),
             );
           }
-          final NotifiedOffers offer = offers[index];
           return InkWell(
             onTap: () => navigationService.pushScreen(
               Routes.storyScreen,
@@ -73,25 +57,12 @@ class RecommendedOffers extends StatelessWidget {
                     width: sizeConfig.getPropWidth(76),
                     padding: EdgeInsets.all(sizeConfig.getPropWidth(1)),
                     decoration: BoxDecoration(
-                      shape: BoxShape.circle,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: const Color(0xFF2128BD)),
                       color: Colors.white,
-                      border: Border.all(
-                        color: getCouponBorderColor(
-                          offer.expiryDate != null
-                              ? DateTime.now()
-                                  .difference(
-                                    DateTime.fromMillisecondsSinceEpoch(
-                                      offer.expiryDate!,
-                                    ),
-                                  )
-                                  .inDays
-                              : -1,
-                        ),
-                        width: 2,
-                      ),
                       image: DecorationImage(
                         image: NetworkImage(
-                          'https://friday-images.s3.ap-south-1.amazonaws.com/${offer.brandId}.jpeg',
+                          'https://friday-images.s3.ap-south-1.amazonaws.com/${offers[index].brandId}.jpeg',
                         ),
                         fit: BoxFit.none,
                         scale: 6,
@@ -99,7 +70,7 @@ class RecommendedOffers extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    offer.brandName,
+                    offers[index].brandName,
                     style: Theme.of(context)
                         .textTheme
                         .caption!

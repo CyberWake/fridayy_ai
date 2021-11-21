@@ -1,35 +1,24 @@
 class NewUserOverView {
-  NewUserOverView({this.user, this.offers, this.spending});
+  NewUserOverView(
+      {required this.user, required this.offers, required this.spending});
 
   factory NewUserOverView.fromJson(Map<String, dynamic> json) {
     return NewUserOverView(
-      user: json['user'] != null
-          ? User.fromJson(json['user'] as Map<String, dynamic>)
-          : null,
-      offers: json['offers'] != null
-          ? Offers.fromJson(json['offers'] as Map<String, dynamic>)
-          : null,
-      spending: json['spending'] != null
-          ? Spending.fromJson(json['spending'] as Map<String, dynamic>)
-          : null,
+      user: User.fromJson(json['user'] as Map<String, dynamic>),
+      offers: Offers.fromJson(json['offers'] as Map<String, dynamic>),
+      spending: Spending.fromJson(json['spending'] as Map<String, dynamic>),
     );
   }
 
-  User? user;
-  Offers? offers;
-  Spending? spending;
+  User user;
+  Offers offers;
+  Spending spending;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    if (this.user != null) {
-      data['user'] = this.user?.toJson();
-    }
-    if (this.offers != null) {
-      data['offers'] = this.offers?.toJson();
-    }
-    if (this.spending != null) {
-      data['spending'] = this.spending?.toJson();
-    }
+    data['user'] = this.user.toJson();
+    data['offers'] = this.offers.toJson();
+    data['spending'] = this.spending.toJson();
     return data;
   }
 }
@@ -241,7 +230,7 @@ class OfferInfo {
     return OfferInfo(
       body: json['body'] as String,
       rewardType: json['reward_type'] as String,
-      rewardAmount: json['rewardAmount'] as double,
+      rewardAmount: json['rewardAmount'] as double?,
       termsAndConditionsApply: json['terms_and_conditions_apply'] as bool,
       link: json['link'] as String?,
       code: json['code'] as String?,
@@ -251,7 +240,7 @@ class OfferInfo {
   }
   String body;
   String rewardType;
-  double rewardAmount;
+  double? rewardAmount;
   String? link;
   bool termsAndConditionsApply;
   int? expiryDate;
@@ -308,7 +297,8 @@ class Spending {
 }
 
 class Distribution {
-  Distribution({required this.categoryId, required this.percentage});
+  Distribution(
+      {required this.categoryId, required this.percentage, this.radius});
 
   factory Distribution.fromJson(Map<String, dynamic> json) {
     return Distribution(
@@ -318,6 +308,7 @@ class Distribution {
   }
   String categoryId;
   double percentage;
+  int? radius;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};

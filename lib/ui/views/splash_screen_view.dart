@@ -62,7 +62,7 @@ class _SplashScreenState extends State<SplashScreen>
               final key = await localDatabaseService.fetchAuthKey();
               print(key);
               navigationService.pushReplacementScreen(
-                key != "null" ? Routes.homeScreen : Routes.onBoardingScreen,
+                key == "null" ? Routes.homeScreen : Routes.onBoardingScreen,
                 arguments: {
                   'autoLogin': true,
                 },

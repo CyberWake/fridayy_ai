@@ -1,66 +1,29 @@
-import 'dart:convert';
-
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fridayy_one/business_logic/models/user_overview_model.dart';
+import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
 import 'package:fridayy_one/business_logic/utils/fridayy_svg.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/widgets/display_offer.dart';
 import 'package:story/story_page_view/story_page_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class StoryScreenView extends StatefulWidget {
+class StoryScreenView extends StatelessWidget {
   const StoryScreenView({
     Key? key,
     required this.offers,
     required this.startIndex,
   }) : super(key: key);
-  final List<NotifiedOffers> offers;
+  final List<OffersByBrand> offers;
   final int startIndex;
-
-  @override
-  State<StoryScreenView> createState() => _StoryScreenViewState();
-}
-
-class _StoryScreenViewState extends State<StoryScreenView> {
-  late List brandData = [];
-  @override
-  void initState() {
-    super.initState();
-    loadAssets();
-  }
-
-  loadAssets() async {
-    final String data = await DefaultAssetBundle.of(
-      navigationService.navigatorKey.currentContext!,
-    ).loadString("assets/brand_data.json");
-    brandData = jsonDecode(data) as List;
-    setState(() {});
-  }
-
-  Widget getOfferImage(
-    BuildContext context, {
-    required String name,
-  }) {
-    for (int i = 0; i < brandData.length; i++) {
-      if (brandData[i]['brandName'].toString() == name) {
-        return Image.memory(
-          base64.decode(brandData[i]['brandImg'].toString().split(',').last),
-          scale: 1,
-        );
-      }
-    }
-    return Image.network('https://via.placeholder.com/150');
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: StoryPageView(
-        initialPage: widget.startIndex,
+        initialPage: startIndex,
         itemBuilder: (context, pageIndex, storyIndex) {
-          final storyOffer = widget.offers[pageIndex];
+          final storyOffer = offers[pageIndex].offers![storyIndex];
           return Stack(
             children: [
               Positioned.fill(
@@ -69,13 +32,14 @@ class _StoryScreenViewState extends State<StoryScreenView> {
               Center(
                 child: DisplayOffer(
                   offerInfo: storyOffer,
+                  brandId: offers[pageIndex].brandId,
                 ),
               )
             ],
           );
         },
         gestureItemBuilder: (context, pageIndex, storyIndex) {
-          final storyOffer = widget.offers[pageIndex];
+          final storyOffer = offers[pageIndex].offers![storyIndex];
           return Stack(
             children: [
               Align(
@@ -138,9 +102,9 @@ class _StoryScreenViewState extends State<StoryScreenView> {
           }
           return 0;
         },
-        pageLength: widget.offers.length,
+        pageLength: offers.length,
         storyLength: (int pageIndex) {
-          return 1;
+          return offers[pageIndex].offers!.length;
         },
         onPageLimitReached: () {
           Navigator.pop(context);

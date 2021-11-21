@@ -23,6 +23,7 @@ class HomeScreen extends StatelessWidget {
       onModelReady: (model) => model.init(isAutoLogin: isAutoLogin),
       builder: (context, model, child) {
         return Scaffold(
+          backgroundColor: const Color(0xFFE5E5E5),
           appBar: AppBar(
             elevation: 0.0,
             backgroundColor: Colors.white,
@@ -51,7 +52,7 @@ class HomeScreen extends StatelessWidget {
                           isCenter: false,
                         )
                       : Text(
-                          model.userOverView.user.userName,
+                          model.userOverView!.user.userName,
                           style: Theme.of(context)
                               .textTheme
                               .bodyText1!
@@ -93,7 +94,7 @@ class HomeScreen extends StatelessWidget {
                           child: Text(
                             model.isBusy
                                 ? "..."
-                                : model.userOverView.user.userName
+                                : model.userOverView!.user.userName
                                     .substring(0, 1)
                                     .toUpperCase(),
                           ),
@@ -121,101 +122,90 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Stack(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(
-                          top: sizeConfig.getPropHeight(85),
-                          bottom: 0,
+                  model.isBusy
+                      ? const ShimmerCard(
+                          size: Size(379, 169),
+                          borderRadius: 16,
+                        )
+                      : OffersInfoWidgets(
+                          offersData: model.userOverView!.offers,
+                          onTap: homeModel.gotoOffers,
                         ),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFE9E9E9),
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(
-                              sizeConfig.getPropWidth(16),
-                            ),
-                            topRight: Radius.circular(
-                              sizeConfig.getPropWidth(16),
-                            ),
-                          ),
+                  Container(
+                    margin: EdgeInsets.only(
+                      top: sizeConfig.getPropHeight(85),
+                      bottom: 0,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFE9E9E9),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(
+                          sizeConfig.getPropWidth(16),
                         ),
-                        child: Column(
-                          children: [
-                            RecommendedOffers(
-                              brandData: homeModel.brandData,
-                              offers:
-                                  model.userOverView.offer.notifiedOffers ?? [],
-                              isLoading: model.isBusy,
-                            ),
-                            USPTile(
-                              uspName: 'Spending Behaviour',
-                              onTap: homeModel.gotoSpendingBehaviour,
-                            ),
-                            model.isBusy
-                                ? const ShimmerCard(
-                                    size: Size(379, 169),
-                                    borderRadius: 16,
-                                    marginTop: 22.5,
-                                  )
-                                : SpendingBehaviourCard(
-                                    spendingData: model.userOverView.spending,
-                                    onTap: homeModel.gotoSpendingBehaviour,
-                                  ),
-                            USPTile(
-                              uspName: 'Finance Analytics',
-                              onTap: homeModel.gotoFinanceAnalytics,
-                            ),
-                            model.isBusy
-                                ? const ShimmerCard(
-                                    size: Size(379, 169),
-                                    borderRadius: 16,
-                                    marginTop: 22.5,
-                                  )
-                                : Container(
-                                    height: sizeConfig.getPropHeight(190),
-                                    width: sizeConfig.getPropWidth(379),
-                                    margin: EdgeInsets.only(
-                                      top: sizeConfig.getPropHeight(22.5),
-                                    ),
-                                    padding: EdgeInsets.all(
-                                      sizeConfig.getPropWidth(20),
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(
-                                        sizeConfig.getPropWidth(16),
-                                      ),
-                                    ),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      'Wow ${model.userOverView.user.userName}\nyour spending score is better than ${model.userOverView.financial.percentile}% of users',
-                                      style:
-                                          Theme.of(context).textTheme.bodyText2,
-                                    ),
-                                  ),
-                            SizedBox(
-                              height: sizeConfig.getPropHeight(22.5),
-                            ),
-                          ],
+                        topRight: Radius.circular(
+                          sizeConfig.getPropWidth(16),
                         ),
                       ),
-                      model.isBusy
-                          ? const ShimmerCard(
-                              size: Size(379, 169),
-                              borderRadius: 16,
-                            )
-                          : OfferCard(
-                              totalOffers: model.userOverView.offer.totalOffers
-                                  .toDouble(),
-                              activeOffers: model
-                                  .userOverView.offer.activeOffers
-                                  .toDouble(),
-                              inActiveOffers: model
-                                  .userOverView.offer.offersExpiring
-                                  .toDouble(),
-                              onTap: homeModel.gotoOffers,
-                            ),
-                    ],
+                    ),
+                    child: Column(
+                      children: [
+                        RecommendedOffers(
+                          brandData: homeModel.brandData,
+                          offers:
+                              model.userOverView?.offers.recommendedOffers ??
+                                  [],
+                          isLoading: model.isBusy,
+                        ),
+                        USPTile(
+                          uspName: 'Spending Behaviour',
+                          onTap: homeModel.gotoSpendingBehaviour,
+                        ),
+                        model.isBusy
+                            ? const ShimmerCard(
+                                size: Size(379, 169),
+                                borderRadius: 16,
+                                marginTop: 22.5,
+                              )
+                            : SpendingBehaviourCard(
+                                spendingData: model.userOverView!.spending,
+                                onTap: homeModel.gotoSpendingBehaviour,
+                              ),
+                        USPTile(
+                          uspName: 'Finance Analytics',
+                          onTap: homeModel.gotoFinanceAnalytics,
+                        ),
+                        model.isBusy
+                            ? const ShimmerCard(
+                                size: Size(379, 169),
+                                borderRadius: 16,
+                                marginTop: 22.5,
+                              )
+                            : Container(
+                                height: sizeConfig.getPropHeight(190),
+                                width: sizeConfig.getPropWidth(379),
+                                margin: EdgeInsets.only(
+                                  top: sizeConfig.getPropHeight(22.5),
+                                ),
+                                padding: EdgeInsets.all(
+                                  sizeConfig.getPropWidth(20),
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(
+                                    sizeConfig.getPropWidth(16),
+                                  ),
+                                ),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  'Wow ${model.userOverView!.user.userName}\nyour spending score is better than 98% of users',
+                                  style: Theme.of(context).textTheme.bodyText2,
+                                ),
+                              ),
+                        SizedBox(
+                          height: sizeConfig.getPropHeight(22.5),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

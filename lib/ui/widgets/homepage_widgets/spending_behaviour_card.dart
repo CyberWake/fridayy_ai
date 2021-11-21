@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_logic/models/user_overview_model.dart';
+import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
-import 'package:fridayy_one/ui/widgets/doughnut_chart.dart';
 import 'package:fridayy_one/ui/widgets/expense_chips.dart';
+import 'package:fridayy_one/ui/widgets/pie_chart_with_varying_radius/pie_chart_with_varying_radius.dart';
 
 class SpendingBehaviourCard extends StatelessWidget {
   SpendingBehaviourCard({
@@ -13,42 +13,15 @@ class SpendingBehaviourCard extends StatelessWidget {
   final Spending spendingData;
   final void Function()? onTap;
 
-  final List<String> months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
-  ];
-
-  String getMonth() {
-    if (spendingData.month.isEmpty) {
-      return '';
-    }
-    return months[int.parse(
-          spendingData.month.substring(
-            2,
-          ),
-        ) -
-        1];
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: sizeConfig.getPropHeight(190),
+      height: sizeConfig.getPropHeight(587),
       width: sizeConfig.getPropWidth(379),
       margin: EdgeInsets.only(
         top: sizeConfig.getPropHeight(22.5),
       ),
-      padding: EdgeInsets.all(sizeConfig.getPropWidth(20)),
+      padding: EdgeInsets.symmetric(horizontal: sizeConfig.getPropWidth(20)),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(
@@ -57,34 +30,61 @@ class SpendingBehaviourCard extends StatelessWidget {
       ),
       child: InkWell(
         onTap: onTap,
-        child: Column(
+        child: Stack(
           children: [
-            SizedBox(
-              height: sizeConfig.getPropHeight(79),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            PieChartWithVaryingRadius(
+              size: 300,
+              data: spendingData.distribution ?? [],
+              onTap: onTap,
+            ),
+            Positioned(
+              top: sizeConfig.getPropHeight(315),
+              child: ExpenseChips(
+                data: spendingData.distribution ?? [],
+              ),
+            ),
+            Positioned(
+              top: sizeConfig.getPropHeight(300),
+              width: sizeConfig.getPropWidth(359),
+              child: const Divider(
+                thickness: 1,
+              ),
+            ),
+            Positioned(
+              bottom: sizeConfig.getPropHeight(107),
+              width: sizeConfig.getPropWidth(359),
+              child: const Divider(
+                thickness: 1,
+              ),
+            ),
+            Positioned(
+              bottom: sizeConfig.getPropHeight(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text(getMonth()),
-                      Text('${spendingData.currency}. ${spendingData.amount}')
-                    ],
+                  SizedBox(
+                    height: sizeConfig.getPropHeight(16),
                   ),
-                  DoughnutChart(
-                    size: 79,
-                    data: spendingData.distribution ?? [],
-                    onTap: onTap,
+                  Text(
+                    '${spendingData.currency} ${spendingData.total}',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6!
+                        .copyWith(fontSize: 28, color: Colors.black),
+                  ),
+                  SizedBox(
+                    height: sizeConfig.getPropHeight(8),
+                  ),
+                  Text(
+                    "Total Spending this month",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(color: const Color(0xFF040415)),
                   ),
                 ],
               ),
-            ),
-            const Divider(
-              thickness: 2,
-            ),
-            const Spacer(),
-            ExpenseChips(
-              data: spendingData.distribution ?? [],
             )
           ],
         ),

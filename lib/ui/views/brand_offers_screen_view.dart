@@ -3,7 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fridayy_one/business_logic/models/user_overview_model.dart';
+import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
 import 'package:fridayy_one/business_logic/utils/fridayy_svg.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/widgets/display_offer.dart';
@@ -13,8 +13,12 @@ class BrandOffersView extends StatelessWidget {
     Key? key,
     required this.offers,
     required this.brandData,
+    required this.brandName,
+    required this.brandId,
   }) : super(key: key);
-  final List<NotifiedOffers> offers;
+  final List<OfferInfo> offers;
+  final String brandName;
+  final String brandId;
   final List brandData;
 
   Widget getOfferImage(
@@ -54,7 +58,7 @@ class BrandOffersView extends StatelessWidget {
     );
   }
 
-  showCouponDetails(NotifiedOffers offerDetails) async {
+  showCouponDetails(OfferInfo offerDetails) async {
     showModalBottomSheet(
       context: navigationService.navigatorKey.currentContext!,
       constraints: BoxConstraints(
@@ -68,6 +72,7 @@ class BrandOffersView extends StatelessWidget {
         child: DisplayOffer(
           offerInfo: offerDetails,
           showClaimButton: true,
+          brandId: brandId,
         ),
       ),
     );
@@ -89,7 +94,7 @@ class BrandOffersView extends StatelessWidget {
           onPressed: () => navigationService.pop(),
         ),
         title: Text(
-          offers[0].brandName,
+          brandName,
           style: Theme.of(context)
               .textTheme
               .bodyText1!
@@ -182,7 +187,7 @@ class BrandOffersView extends StatelessWidget {
                             flex: 1,
                             child: getOfferImage(
                               context,
-                              name: offers[index].brandName,
+                              name: brandName,
                             ),
                           ),
                           Expanded(

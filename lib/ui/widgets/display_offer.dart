@@ -1,6 +1,6 @@
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_logic/models/user_overview_model.dart';
+import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/widgets/offer_info_tile.dart';
 import 'package:fridayy_one/ui/widgets/rounded_rectangular_button.dart';
@@ -11,8 +11,10 @@ class DisplayOffer extends StatelessWidget {
     Key? key,
     required this.offerInfo,
     this.showClaimButton = false,
+    required this.brandId,
   }) : super(key: key);
-  final NotifiedOffers offerInfo;
+  final String brandId;
+  final OfferInfo offerInfo;
   final bool showClaimButton;
 
   @override
@@ -44,7 +46,7 @@ class DisplayOffer extends StatelessWidget {
                   height: sizeConfig.getPropHeight(49),
                   width: sizeConfig.getPropWidth(113),
                   child: Image.network(
-                    'https://friday-images.s3.ap-south-1.amazonaws.com/${offerInfo.brandId}.jpeg',
+                    'https://friday-images.s3.ap-south-1.amazonaws.com/$brandId.jpeg',
                     scale: 1,
                   ),
                 ),
@@ -109,6 +111,10 @@ class DisplayOffer extends StatelessWidget {
                 OfferInfoTile(
                   infoName: 'Offer Validity',
                   value: offerInfo.expiryDate?.toString(),
+                ),
+                OfferInfoTile(
+                  infoName: 'Terms and conditions',
+                  value: offerInfo.termsAndConditionsApply ? "Applied" : "None",
                 ),
                 OfferInfoTile(
                   infoName: 'Other Info',

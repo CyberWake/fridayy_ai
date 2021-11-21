@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
 import 'package:fridayy_one/business_logic/models/pass_call_outcome.dart';
 import 'package:fridayy_one/business_logic/models/spending_brands_model.dart';
 import 'package:fridayy_one/business_logic/models/spending_category_model.dart';
 import 'package:fridayy_one/business_logic/models/spending_transaction_model.dart';
-import 'package:fridayy_one/business_logic/models/user_overview_model.dart';
 import 'package:fridayy_one/business_logic/utils/api_constants.dart';
 import 'package:fridayy_one/business_logic/utils/enums.dart';
 import 'package:fridayy_one/business_logic/view_models/base_view_model.dart';

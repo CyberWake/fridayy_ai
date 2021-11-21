@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_logic/models/user_overview_model.dart';
+import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
 import 'package:fridayy_one/business_logic/utils/routing_constants.dart';
 import 'package:fridayy_one/main.dart';
 import 'package:fridayy_one/ui/views/AuthPages/auth_view.dart';
@@ -91,8 +91,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return CupertinoPageRoute(
         builder: (context) => BrandOffersView(
           key: const Key('BrandOffersView'),
-          offers: inputData["offers"] as List<NotifiedOffers>,
+          offers: inputData["offers"] as List<OfferInfo>,
           brandData: inputData["brandData"] as List,
+          brandName: inputData["brandName"] as String,
+          brandId: inputData["brandId"] as String,
         ),
       );
     case Routes.storyScreen:
@@ -101,7 +103,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (context) => StoryScreenView(
           key: const Key('StoryScreen'),
-          offers: inputData["offers"] as List<NotifiedOffers>,
+          offers: inputData["offers"] as List<OffersByBrand>,
           startIndex: inputData["startIndex"] as int,
         ),
       );

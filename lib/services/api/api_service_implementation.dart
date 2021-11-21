@@ -63,7 +63,8 @@ class ApiServiceImpl extends ApiService {
     try {
       final Map<String, String> headerAuth = {
         'Content-Type': 'application/json',
-        'x-friday-key': localDatabaseService.userAuthKey,
+        'x-friday-key':
+            '3eb5488c-7cd0-43c9-9fb7-8b5434e5dba9' //localDatabaseService.userAuthKey,
       };
       final result = await http.get(
         Uri.parse(ApiConstants.baseUrl + apiName),

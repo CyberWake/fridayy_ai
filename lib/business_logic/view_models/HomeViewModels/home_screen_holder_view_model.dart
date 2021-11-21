@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
-import 'package:fridayy_one/business_logic/utils/enums.dart';
 import 'package:fridayy_one/business_logic/utils/fridayy_svg.dart';
 import 'package:fridayy_one/business_logic/view_models/base_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
@@ -23,15 +20,6 @@ class HomeScreenHolderViewModel extends BaseModel {
 
   List brandData = [];
   int currentTabIndex = 0;
-
-  init() async {
-    setState(ViewState.busy);
-    final String data = await DefaultAssetBundle.of(
-      navigationService.navigatorKey.currentContext!,
-    ).loadString("assets/brand_data.json");
-    brandData = jsonDecode(data) as List;
-    setState(ViewState.idle);
-  }
 
   void tabChanged(int newTabIndex) {
     currentTabIndex = newTabIndex;

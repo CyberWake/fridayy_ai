@@ -3,8 +3,8 @@ import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class DoughnutChart extends StatelessWidget {
-  const DoughnutChart({
+class PieChartWithVaryingRadius extends StatelessWidget {
+  const PieChartWithVaryingRadius({
     Key? key,
     required this.data,
     required this.size,
@@ -58,20 +58,32 @@ class DoughnutChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: sizeConfig.getPropHeight(size),
-      width: sizeConfig.getPropHeight(size),
-      child: InkWell(
-        onTap: onTap,
+    return InkWell(
+      onTap: onTap,
+      child: SizedBox(
+        height: sizeConfig.getPropHeight(size),
+        width: sizeConfig.getPropWidth(size),
         child: SfCircularChart(
           margin: EdgeInsets.zero,
+          legend: Legend(
+            isVisible: false,
+            position: LegendPosition.bottom,
+            overflowMode: LegendItemOverflowMode.wrap,
+          ),
           series: <CircularSeries>[
-            // Renders doughnut chart
-            DoughnutSeries<Distribution, String>(
+            PieSeries<Distribution, String>(
               dataSource: data,
+              startAngle: 0,
+              endAngle: 0,
+              pointRadiusMapper: (Distribution data, _) =>
+                  (data.radius).toString(),
+              dataLabelSettings: const DataLabelSettings(
+                isVisible: true,
+                labelPosition: ChartDataLabelPosition.outside,
+              ),
               pointColorMapper: (Distribution data, _) =>
                   getColor(data.categoryId),
-              xValueMapper: (Distribution data, _) => getName(data.categoryId),
+              xValueMapper: (Distribution data, _) => "",
               yValueMapper: (Distribution data, _) => data.percentage,
             ),
           ],

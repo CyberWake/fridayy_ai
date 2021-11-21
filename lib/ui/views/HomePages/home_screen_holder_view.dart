@@ -15,7 +15,6 @@ class HomeScreenHolder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseView<HomeScreenHolderViewModel>(
-      onModelReady: (model) => model.init(),
       builder: (context, model, child) {
         return Scaffold(
           body: PageView(
