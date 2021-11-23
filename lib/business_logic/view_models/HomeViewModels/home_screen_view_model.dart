@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
+import 'package:fridayy_one/business_logic/models/new_models/new_user_overview_model.dart';
 import 'package:fridayy_one/business_logic/models/pass_call_outcome.dart';
 import 'package:fridayy_one/business_logic/utils/api_constants.dart';
 import 'package:fridayy_one/business_logic/utils/dummy_data.dart';
@@ -26,15 +26,24 @@ class HomeScreenViewModel extends BaseModel {
     if (result.data != null) {
       print(result.data);
 
-      userOverView = NewUserOverView.fromJson(staticResult);
-      int radius = 110;
-      userOverView!.spending.distribution!.forEach((element) {
+      userOverView =
+          NewUserOverView.fromJson(result.data as Map<String, dynamic>);
+      int radius = 80;
+      userOverView!.spending.distribution!.reversed.toList().forEach((element) {
         element.radius = radius;
-        radius -= 5;
+        radius += 5;
       });
       if (userOverView!.offers.totalOffers > 0 || showDefault) {
         setState(ViewState.idle);
       }
+    } else if (result.exception != null) {
+      userOverView = NewUserOverView.fromJson(staticResult);
+      int radius = 80;
+      userOverView!.spending.distribution!.reversed.toList().forEach((element) {
+        element.radius = radius;
+        radius += 5;
+      });
+      setState(ViewState.idle);
     }
   }
 

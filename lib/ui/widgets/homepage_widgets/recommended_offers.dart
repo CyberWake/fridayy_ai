@@ -1,6 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
+import 'package:fridayy_one/business_logic/models/new_models/new_user_overview_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/views/story_screen_view.dart';
 import 'package:fridayy_one/ui/widgets/shimmer_card.dart';

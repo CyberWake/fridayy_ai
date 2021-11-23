@@ -1,10 +1,10 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_logic/models/category_brands_model.dart';
+import 'package:fridayy_one/business_logic/models/new_models/offer_category_brands_model.dart';
 import 'package:fridayy_one/business_logic/models/pass_call_outcome.dart';
-import 'package:fridayy_one/business_logic/models/user_overview_model.dart';
 import 'package:fridayy_one/business_logic/utils/api_constants.dart';
+import 'package:fridayy_one/business_logic/utils/dummy_data.dart';
 import 'package:fridayy_one/business_logic/utils/enums.dart';
 import 'package:fridayy_one/business_logic/utils/fridayy_svg.dart';
 import 'package:fridayy_one/business_logic/utils/routing_constants.dart';
@@ -13,26 +13,15 @@ import 'package:fridayy_one/services/service_locator.dart';
 
 class OfferScreenViewModel extends BaseModel {
   final PageController offerPageController = PageController(initialPage: 0);
-  final List<List<NotifiedOffers>> offersOfCategory = [
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-  ];
-
-  final List<List<CategoryBrandModel>> categoryBrands = [
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
+  final List<OfferCategoryBrands> offersOfCategory = [
+    OfferCategoryBrands(brands: []),
+    OfferCategoryBrands(brands: []),
+    OfferCategoryBrands(brands: []),
+    OfferCategoryBrands(brands: []),
+    OfferCategoryBrands(brands: []),
+    OfferCategoryBrands(brands: []),
+    OfferCategoryBrands(brands: []),
+    OfferCategoryBrands(brands: []),
   ];
 
   final List<Map<String, String>> types = [
@@ -85,7 +74,11 @@ class OfferScreenViewModel extends BaseModel {
   String filterDiscountType = "High to Low";
   String filterViewBy = "Brand";
   String filterExpiryType = "Any";
+
   bool filterRecommended = true;
+  late String dateFilter;
+  late int month;
+  late String year;
 
   init() async {
     offerPageController.addListener(() async {
@@ -95,36 +88,19 @@ class OfferScreenViewModel extends BaseModel {
       filterRecommended = true;
       notifyListeners();
     });
+    final date = DateTime.now();
+    month = date.month;
+    year = date.year.toString().substring(2);
+    dateFilter = year + (month > 9 ? month.toString() : '0${month.toString()}');
     setState(ViewState.busy);
     final result = await apiService.getRequest(
-      "${ApiConstants.categoryOffers}/${types[0]["id"]}?date=2109",
+      "${ApiConstants.categoryOffers}/${types[0]["id"]}?date=$dateFilter}",
     );
     if (result.data != null) {
-      (result.data['offers'] as List).forEach((element) {
-        offersOfCategory[0].add(
-          NotifiedOffers.fromJson(element as Map<String, dynamic>),
-        );
-        bool found = false;
-        for (int i = 0; i < categoryBrands[0].length; i++) {
-          if (categoryBrands[0][i].brandId ==
-              offersOfCategory[0].last.brandId) {
-            categoryBrands[0][i].brandCouponCount++;
-            categoryBrands[0][i].offers.add(offersOfCategory[0].last);
-            found = true;
-          }
-        }
-        if (!found) {
-          categoryBrands[0].add(
-            CategoryBrandModel(
-              categoryId: types[0]["id"].toString(),
-              brandId: offersOfCategory[0].last.brandId,
-              brandName: offersOfCategory[0].last.brandName,
-              brandCouponCount: 1,
-              offers: [offersOfCategory[0].last],
-            ),
-          );
-        }
-      });
+      offersOfCategory[0] =
+          OfferCategoryBrands.fromJson(result.data as Map<String, dynamic>);
+    } else if (result.exception != null) {
+      offersOfCategory[0] = OfferCategoryBrands.fromJson(offersPage[0]);
     }
     setState(ViewState.idle);
   }
@@ -138,39 +114,17 @@ class OfferScreenViewModel extends BaseModel {
       curve: Curves.easeIn,
     )
         .whenComplete(() async {
-      if (offersOfCategory[newTabIndex].isEmpty) {
+      if (offersOfCategory[newTabIndex].brands.isEmpty) {
         setState(ViewState.busy);
         final CallOutcome result = await apiService.getRequest(
-          "${ApiConstants.categoryOffers}/${types[newTabIndex]["id"]}?date=2109",
+          "${ApiConstants.categoryOffers}/${types[newTabIndex]["id"]}?date=$dateFilter",
         );
         if (result.data != null) {
-          (result.data['offers'] as List).forEach((element) {
-            offersOfCategory[newTabIndex].add(
-              NotifiedOffers.fromJson(element as Map<String, dynamic>),
-            );
-            bool found = false;
-            for (int i = 0; i < categoryBrands[newTabIndex].length; i++) {
-              if (categoryBrands[newTabIndex][i].brandId ==
-                  offersOfCategory[newTabIndex].last.brandId) {
-                categoryBrands[newTabIndex][i].brandCouponCount++;
-                categoryBrands[newTabIndex][i]
-                    .offers
-                    .add(offersOfCategory[newTabIndex].last);
-                found = true;
-              }
-            }
-            if (!found) {
-              categoryBrands[newTabIndex].add(
-                CategoryBrandModel(
-                  categoryId: types[newTabIndex]["id"].toString(),
-                  brandId: offersOfCategory[newTabIndex].last.brandId,
-                  brandName: offersOfCategory[newTabIndex].last.brandName,
-                  brandCouponCount: 1,
-                  offers: [offersOfCategory[newTabIndex].last],
-                ),
-              );
-            }
-          });
+          offersOfCategory[newTabIndex] =
+              OfferCategoryBrands.fromJson(result.data as Map<String, dynamic>);
+        } else if (result.exception != null) {
+          offersOfCategory[newTabIndex] = OfferCategoryBrands.fromJson(
+              offersPage[newTabIndex] as Map<String, dynamic>);
         }
         setState(ViewState.idle);
       }
@@ -197,19 +151,16 @@ class OfferScreenViewModel extends BaseModel {
   void gotoBrandOffers(List brandData, int brandIndex, int categoryIndex) {
     navigationService.pushScreen(
       Routes.brandOffers,
-      arguments: {
-        "brandData": brandData,
-        "offers": categoryBrands[categoryIndex][brandIndex].offers,
-      },
+      // arguments: {
+      //   "brandData": brandData,
+      //   "offers": categoryBrands[categoryIndex][brandIndex].offers,
+      // },
     );
   }
 
   Future refreshData() async {
     offersOfCategory.forEach((element) {
-      element.clear();
-    });
-    categoryBrands.forEach((element) {
-      element.clear();
+      element.brands.clear();
     });
     tabChanged(currentTabIndex);
   }

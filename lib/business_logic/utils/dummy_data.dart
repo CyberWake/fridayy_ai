@@ -321,3 +321,110 @@ final Map<String, dynamic> staticResult = {
     ]
   }
 };
+
+List<Map<String, dynamic>> offersPage = [
+  {
+    "brands": [
+      {
+        "brand_name": "Burger King",
+        "brand_id": "380dc49d-c648-45f7-99c4-e6c1cbc58ef2",
+        "total_offers": 21,
+        "expiring_this_week": 4,
+      },
+      {
+        "brand_name": "Swiggy",
+        "brand_id": "45192e45-09fa-4dea-bc23-773b648b3c2e",
+        "total_offers": 12,
+        "expiring_this_week": 3,
+      },
+      {
+        "brand_name": "Zomato",
+        "brand_id": "8a4b7a04-c6a1-4763-8a85-cdccce65aebd",
+        "total_offers": 15,
+        "expiring_this_week": 8,
+      },
+    ]
+  },
+  {
+    "brands": [
+      {
+        "brand_name": "Myntra",
+        "brand_id": "2f1e130a-3232-4cf2-89d9-69a902bd58eb",
+        "total_offers": 16,
+        "expiring_this_week": 3,
+      },
+      {
+        "brand_name": "Flipkart",
+        "brand_id": "9fbc6db7-9547-4a79-819f-c133483141d3",
+        "total_offers": 11,
+        "expiring_this_week": 2,
+      },
+      {
+        "brand_name": "AJIO",
+        "brand_id": "c8bc5c9e-3b8a-462d-8abe-311a6474c09e",
+        "total_offers": 367,
+        "expiring_this_week": 8,
+      },
+    ]
+  },
+  {
+    "brands": [
+      {
+        "brand_name": "Ola",
+        "brand_id": "954b2444-8220-4beb-8484-d2e0adcc7220",
+        "total_offers": 115,
+        "expiring_this_week": 3,
+      },
+    ]
+  },
+  {
+    "brands": [
+      {
+        "brand_name": "Paytm",
+        "brand_id": "d883c5ef-c0d4-475f-958b-700c0cfece75",
+        "total_offers": 497,
+        "expiring_this_week": 3,
+      },
+    ]
+  },
+  {
+    "brands": [
+      {
+        "brand_name": "NETMEDS",
+        "brand_id": "536ecfe5-d01d-4813-8eca-f93f057e6d17",
+        "total_offers": 331,
+        "expiring_this_week": 3,
+      },
+    ]
+  },
+  {
+    "brands": [
+      {
+        "brand_name": "Freecharge",
+        "brand_id": "95ac26a6-9e6a-4492-b2d8-af37f7d80600",
+        "total_offers": 178,
+        "expiring_this_week": 3,
+      },
+    ]
+  },
+  {
+    "brands": [
+      {
+        "brand_name": "AMCAT",
+        "brand_id": "9ef9673a-3dd4-49c4-b6f9-73d44f88a40f",
+        "total_offers": 17,
+        "expiring_this_week": 3,
+      },
+    ]
+  },
+  {
+    "brands": [
+      {
+        "brand_name": "Rummy",
+        "brand_id": "e8459dde-afd0-45d0-b8b3-3df775f01f39",
+        "total_offers": 70,
+        "expiring_this_week": 3,
+      },
+    ]
+  },
+];

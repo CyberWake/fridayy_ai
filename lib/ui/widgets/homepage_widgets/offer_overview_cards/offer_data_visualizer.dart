@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
+import 'package:fridayy_one/business_logic/models/new_models/new_user_overview_model.dart';
+import 'package:fridayy_one/business_logic/utils/extensions.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/widgets/charts/charts.dart';
 
@@ -17,12 +18,25 @@ class OfferOverView extends StatelessWidget {
     return Stack(
       children: [
         BarChart(
-          showLabel: false,
           data: categories,
         ),
-        BarChart(
-          showLabel: true,
-          data: categories,
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+          child: Column(
+            children: categories
+                .map(
+                  (e) => Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: sizeConfig.getPropHeight(9.9),
+                      horizontal: 0,
+                    ),
+                    child: e.categoryId.getSvgIcon(),
+                  ),
+                )
+                .toList()
+                .reversed
+                .toList(),
+          ),
         ),
         Positioned(
           bottom: sizeConfig.getPropHeight(24),

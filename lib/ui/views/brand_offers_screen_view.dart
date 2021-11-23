@@ -1,9 +1,8 @@
-import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
+import 'package:fridayy_one/business_logic/models/new_models/new_user_overview_model.dart';
 import 'package:fridayy_one/business_logic/utils/fridayy_svg.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/widgets/display_offer.dart';
@@ -20,21 +19,6 @@ class BrandOffersView extends StatelessWidget {
   final String brandName;
   final String brandId;
   final List brandData;
-
-  Widget getOfferImage(
-    BuildContext context, {
-    required String name,
-  }) {
-    for (int i = 0; i < brandData.length; i++) {
-      if (brandData[i]['brandName'].toString() == name) {
-        return Image.memory(
-          base64.decode(brandData[i]['brandImg'].toString().split(',').last),
-          scale: 1,
-        );
-      }
-    }
-    return Image.network('');
-  }
 
   Widget offerInfo(BuildContext context, String infoName, String value) {
     return Row(
@@ -185,9 +169,12 @@ class BrandOffersView extends StatelessWidget {
                         children: [
                           Expanded(
                             flex: 1,
-                            child: getOfferImage(
-                              context,
-                              name: brandName,
+                            child: Hero(
+                              tag: "${brandId}image",
+                              child: Image.network(
+                                'https://friday-images.s3.ap-south-1.amazonaws.com/$brandId.jpeg',
+                                fit: BoxFit.contain,
+                              ),
                             ),
                           ),
                           Expanded(

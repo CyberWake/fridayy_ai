@@ -1,6 +1,6 @@
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
+import 'package:fridayy_one/business_logic/models/new_models/new_user_overview_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/widgets/offer_info_tile.dart';
 import 'package:fridayy_one/ui/widgets/rounded_rectangular_button.dart';

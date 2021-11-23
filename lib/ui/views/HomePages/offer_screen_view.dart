@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fridayy_one/business_logic/utils/fridayy_svg.dart';
@@ -256,23 +254,6 @@ class OfferScreen extends StatelessWidget {
     );
   }
 
-  ImageProvider getOfferImage(
-    BuildContext context, {
-    required String name,
-  }) {
-    for (int i = 0; i < homeModel.brandData.length; i++) {
-      if (homeModel.brandData[i]['brandName'].toString() == name) {
-        return MemoryImage(
-          base64.decode(
-            homeModel.brandData[i]['brandImg'].toString().split(',').last,
-          ),
-          scale: 1.5,
-        );
-      }
-    }
-    return const AssetImage('');
-  }
-
   @override
   Widget build(BuildContext context) {
     return BaseView<OfferScreenViewModel>(
@@ -437,12 +418,13 @@ class OfferScreen extends StatelessWidget {
                               return RefreshIndicator(
                                 onRefresh: model.refreshData,
                                 child: GridView.builder(
-                                  itemCount: model
-                                          .categoryBrands[pageIndex].isEmpty
+                                  itemCount: model.offersOfCategory[pageIndex]
+                                          .brands.isEmpty
                                       ? model.isBusy
                                           ? 8
                                           : 1
-                                      : model.categoryBrands[pageIndex].length,
+                                      : model.offersOfCategory[pageIndex].brands
+                                          .length,
                                   padding: EdgeInsets.zero,
                                   gridDelegate:
                                       SliverGridDelegateWithFixedCrossAxisCount(
@@ -459,15 +441,16 @@ class OfferScreen extends StatelessWidget {
                                         size: Size(176.3, 117.2),
                                         borderRadius: 5,
                                       );
-                                    } else if (model.categoryBrands[pageIndex]
-                                            .isEmpty &&
+                                    } else if (model.offersOfCategory[pageIndex]
+                                            .brands.isEmpty &&
                                         !model.isBusy) {
                                       return const Center(
                                         child: Text("No Offers found"),
                                       );
                                     }
-                                    final brand =
-                                        model.categoryBrands[pageIndex][index];
+                                    final brand = model
+                                        .offersOfCategory[pageIndex]
+                                        .brands[index];
                                     return Material(
                                       borderRadius: BorderRadius.circular(
                                         sizeConfig.getPropHeight(5),
@@ -496,14 +479,12 @@ class OfferScreen extends StatelessWidget {
                                             children: [
                                               Expanded(
                                                 child: Container(
-                                                  decoration: BoxDecoration(
-                                                    image: DecorationImage(
-                                                      image: getOfferImage(
-                                                        context,
-                                                        name: brand.brandName,
-                                                      ),
-                                                      fit: BoxFit.none,
-                                                      scale: 4,
+                                                  child: Hero(
+                                                    tag:
+                                                        "${brand.brandId}image",
+                                                    child: Image.network(
+                                                      'https://friday-images.s3.ap-south-1.amazonaws.com/${brand.brandId}.jpeg',
+                                                      fit: BoxFit.contain,
                                                     ),
                                                   ),
                                                 ),
@@ -529,8 +510,7 @@ class OfferScreen extends StatelessWidget {
                                                           ),
                                                     ),
                                                     Text(
-                                                      brand.brandCouponCount
-                                                          .toString(),
+                                                      brand.totalOffers,
                                                       style: Theme.of(context)
                                                           .textTheme
                                                           .bodyText2!
@@ -543,7 +523,7 @@ class OfferScreen extends StatelessWidget {
                                                 ),
                                               ),
                                               Text(
-                                                '${brand.brandCouponCount} Offers expiring this week',
+                                                '${brand.expiringThisWeek} Offers expiring this week',
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodyText2!

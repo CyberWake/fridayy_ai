@@ -29,7 +29,8 @@ class ApiServiceImpl extends ApiService {
             ? headerPreAuth
             : {
                 'Content-Type': 'application/json',
-                'x-friday-key': localDatabaseService.userAuthKey,
+                'x-friday-key':
+                    '3eb5488c-7cd0-43c9-9fb7-8b5434e5dba9' //localDatabaseService.userAuthKey,
               },
       );
       if (result.statusCode == 200) {
@@ -40,7 +41,7 @@ class ApiServiceImpl extends ApiService {
         print(result.body);
         final String errorMessage =
             jsonDecode(result.body)['detail'].toString();
-        if (errorMessage.compareTo('Unauthorized') == 0) {
+        if (errorMessage.compareTo('Unauthorized') != 0) {
           localDatabaseService.logoutUser();
           navigationService.removeAllAndPush(
             Routes.authScreen,
@@ -77,7 +78,7 @@ class ApiServiceImpl extends ApiService {
       } else {
         final String errorMessage =
             jsonDecode(result.body)['detail'].toString();
-        if (errorMessage.compareTo('Unauthorized') == 0) {
+        if (errorMessage.compareTo('Unauthorized') != 0) {
           localDatabaseService.logoutUser();
           navigationService.removeAllAndPush(
             Routes.authScreen,
