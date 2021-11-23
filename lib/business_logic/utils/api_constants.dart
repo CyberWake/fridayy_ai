@@ -13,7 +13,7 @@ class ApiConstants {
 
   //category endpoint
   static const String categoryOffers = '/user/offers/category';
-  static const String offerDetails = '/user/offer';
+  static const String brandOffers = '/user/offers/';
 
   //spending endpoint
   static const String spendingTransactions = '/user/spendings/period';

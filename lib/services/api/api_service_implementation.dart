@@ -79,11 +79,11 @@ class ApiServiceImpl extends ApiService {
         final String errorMessage =
             jsonDecode(result.body)['detail'].toString();
         if (errorMessage.compareTo('Unauthorized') != 0) {
-          localDatabaseService.logoutUser();
-          navigationService.removeAllAndPush(
-            Routes.authScreen,
-            Routes.splashScreen,
-          );
+          // localDatabaseService.logoutUser();
+          // navigationService.removeAllAndPush(
+          //   Routes.authScreen,
+          //   Routes.splashScreen,
+          // );
         }
         navigationService.showSnackBar(errorMessage);
         return CallOutcome<Map<String, dynamic>>(

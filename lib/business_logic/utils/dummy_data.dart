@@ -428,3 +428,74 @@ List<Map<String, dynamic>> offersPage = [
     ]
   },
 ];
+
+final Map<String, dynamic> brandOffersDummyData = {
+  "offers": [
+    {
+      "body":
+          'Get 60% off on Whopper, Burgers, Volcanoes, Wraps and much more only on the BK App. Use code "KING60".\n1sd.in/jPBuYn\n*TnC',
+      "reward_type": "DISCOUNT",
+      "reward_amount": 60.0,
+      "link": null,
+      "terms_and_conditions_apply": true,
+      "expiry_date": 1638868499000,
+      "code": "KING60",
+      "reward_description": null
+    },
+    {
+      "body":
+          'Match Day Mania! Enjoy 50% off* only for today on Burger King on Swiggy. Order Now: https://bit.ly/3cjei9X *TnC',
+      "reward_type": "AMOUNT",
+      "reward_amount": 50.0,
+      "link": "https://bit.ly/3cjei9X",
+      "terms_and_conditions_apply": true,
+      "expiry_date": 1638868499000,
+      "code": null,
+      "reward_description": null
+    },
+    {
+      "body":
+          'Get 60% off on Whopper, Burgers, Volcanoes, Wraps and much more only on the BK App. Use code "KING60".\n1sd.in/jPBuYn\n*TnC',
+      "reward_type": "DISCOUNT",
+      "reward_amount": 60.0,
+      "link": null,
+      "terms_and_conditions_apply": true,
+      "expiry_date": 1638868499000,
+      "code": "KING60",
+      "reward_description": null
+    },
+    {
+      "body":
+          'Match Day Mania! Enjoy 50% off* only for today on Burger King on Swiggy. Order Now: https://bit.ly/3cjei9X *TnC',
+      "reward_type": "AMOUNT",
+      "reward_amount": 50.0,
+      "link": "https://bit.ly/3cjei9X",
+      "terms_and_conditions_apply": true,
+      "expiry_date": 1638868499000,
+      "code": null,
+      "reward_description": null
+    },
+    {
+      "body":
+          'Get 60% off on Whopper, Burgers, Volcanoes, Wraps and much more only on the BK App. Use code "KING60".\n1sd.in/jPBuYn\n*TnC',
+      "reward_type": "DISCOUNT",
+      "reward_amount": 60.0,
+      "link": null,
+      "terms_and_conditions_apply": true,
+      "expiry_date": 1638868499000,
+      "code": "KING60",
+      "reward_description": null
+    },
+    {
+      "body":
+          'Match Day Mania! Enjoy 50% off* only for today on Burger King on Swiggy. Order Now: https://bit.ly/3cjei9X *TnC',
+      "reward_type": "AMOUNT",
+      "reward_amount": 50.0,
+      "link": "https://bit.ly/3cjei9X",
+      "terms_and_conditions_apply": true,
+      "expiry_date": 1638868499000,
+      "code": null,
+      "reward_description": null
+    },
+  ]
+};

@@ -91,8 +91,6 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return CupertinoPageRoute(
         builder: (context) => BrandOffersView(
           key: const Key('BrandOffersView'),
-          offers: inputData["offers"] as List<OfferInfo>,
-          brandData: inputData["brandData"] as List,
           brandName: inputData["brandName"] as String,
           brandId: inputData["brandId"] as String,
         ),

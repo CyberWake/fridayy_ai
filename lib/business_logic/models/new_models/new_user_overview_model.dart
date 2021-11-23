@@ -233,11 +233,11 @@ class OfferInfo {
     return OfferInfo(
       body: json['body'] as String,
       rewardType: json['reward_type'] as String,
-      rewardAmount: json['rewardAmount'] as double?,
+      rewardAmount: json['reward_amount'] as double?,
       termsAndConditionsApply: json['terms_and_conditions_apply'] as bool,
       link: json['link'] as String?,
       code: json['code'] as String?,
-      expiryDate: json['expiry'] as int?,
+      expiryDate: json['expiry_date'] as int?,
       rewardDescription: json['reward_description'] as String?,
     );
   }

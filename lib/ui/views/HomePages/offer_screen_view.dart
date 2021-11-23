@@ -457,9 +457,8 @@ class OfferScreen extends StatelessWidget {
                                       ),
                                       child: InkWell(
                                         onTap: () => model.gotoBrandOffers(
-                                          homeModel.brandData,
-                                          index,
-                                          pageIndex,
+                                          brand.brandId,
+                                          brand.brandName,
                                         ),
                                         child: Container(
                                           decoration: BoxDecoration(
@@ -479,13 +478,9 @@ class OfferScreen extends StatelessWidget {
                                             children: [
                                               Expanded(
                                                 child: Container(
-                                                  child: Hero(
-                                                    tag:
-                                                        "${brand.brandId}image",
-                                                    child: Image.network(
-                                                      'https://friday-images.s3.ap-south-1.amazonaws.com/${brand.brandId}.jpeg',
-                                                      fit: BoxFit.contain,
-                                                    ),
+                                                  child: Image.network(
+                                                    'https://friday-images.s3.ap-south-1.amazonaws.com/${brand.brandId}.jpeg',
+                                                    fit: BoxFit.contain,
                                                   ),
                                                 ),
                                               ),

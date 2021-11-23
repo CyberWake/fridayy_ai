@@ -18,7 +18,6 @@ class HomeScreenHolderViewModel extends BaseModel {
     "Profile"
   ];
 
-  List brandData = [];
   int currentTabIndex = 0;
 
   void tabChanged(int newTabIndex) {

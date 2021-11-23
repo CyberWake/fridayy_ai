@@ -8,6 +8,7 @@ import 'package:fridayy_one/business_logic/view_models/HomeViewModels/home_scree
 import 'package:fridayy_one/business_logic/view_models/HomeViewModels/offer_screen_view_model.dart';
 import 'package:fridayy_one/business_logic/view_models/HomeViewModels/profile_screen_view_model.dart';
 import 'package:fridayy_one/business_logic/view_models/HomeViewModels/spending_screen_view_model.dart';
+import 'package:fridayy_one/business_logic/view_models/brand_offers_view_model.dart';
 import 'package:fridayy_one/business_logic/view_models/splash_screen_view_model.dart';
 import 'package:fridayy_one/services/Api/api_service_implementation.dart';
 import 'package:fridayy_one/services/local_database/localdatabase_service_impl.dart';
@@ -39,6 +40,7 @@ void setupServiceLocator() {
   serviceLocator.registerFactory(() => HomeScreenHolderViewModel());
   serviceLocator.registerFactory(() => HomeScreenViewModel());
   serviceLocator.registerFactory(() => OfferScreenViewModel());
+  serviceLocator.registerFactory(() => BrandOffersViewModel());
   serviceLocator.registerFactory(() => SpendingScreenViewModel());
   serviceLocator.registerFactory(() => ProfileScreenViewModel());
 }

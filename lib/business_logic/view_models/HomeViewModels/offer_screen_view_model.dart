@@ -148,13 +148,13 @@ class OfferScreenViewModel extends BaseModel {
     );
   }
 
-  void gotoBrandOffers(List brandData, int brandIndex, int categoryIndex) {
+  void gotoBrandOffers(String brandId, String brandName) {
     navigationService.pushScreen(
       Routes.brandOffers,
-      // arguments: {
-      //   "brandData": brandData,
-      //   "offers": categoryBrands[categoryIndex][brandIndex].offers,
-      // },
+      arguments: {
+        "brandId": brandId,
+        "brandName": brandName,
+      },
     );
   }
 
