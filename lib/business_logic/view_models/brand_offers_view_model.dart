@@ -6,7 +6,7 @@ import 'package:fridayy_one/business_logic/view_models/base_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 
 class BrandOffersViewModel extends BaseModel {
-  late BrandOffer brandOffers;
+  BrandOffer brandOffers = BrandOffer(offers: []);
 
   void init(String brandId) {
     setState(ViewState.busy);
@@ -18,9 +18,10 @@ class BrandOffersViewModel extends BaseModel {
         await apiService.getRequest(ApiConstants.brandOffers + brandId);
     if (result.data != null) {
       brandOffers = BrandOffer.fromJson(result.data as Map<String, dynamic>);
+      setState(ViewState.idle);
     } else if (result.exception != null) {
       brandOffers = BrandOffer.fromJson(brandOffersDummyData);
+      setState(ViewState.idle);
     }
-    setState(ViewState.idle);
   }
 }

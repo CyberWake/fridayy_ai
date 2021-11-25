@@ -32,7 +32,7 @@ class Message {
     data['body'] = this.body;
     data['thread_id'] = this.threadId;
     data['date'] = this.date;
-    data['dateSent'] = this.dateSent;
+    data['date_sent'] = this.dateSent;
     return data;
   }
 }

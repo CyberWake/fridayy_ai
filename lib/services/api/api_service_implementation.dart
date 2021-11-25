@@ -29,8 +29,8 @@ class ApiServiceImpl extends ApiService {
             ? headerPreAuth
             : {
                 'Content-Type': 'application/json',
-                'x-friday-key':
-                    '3eb5488c-7cd0-43c9-9fb7-8b5434e5dba9' //localDatabaseService.userAuthKey,
+                'x-friday-key': localDatabaseService.userAuthKey,
+                //'3eb5488c-7cd0-43c9-9fb7-8b5434e5dba9' //
               },
       );
       if (result.statusCode == 200) {
@@ -41,7 +41,7 @@ class ApiServiceImpl extends ApiService {
         print(result.body);
         final String errorMessage =
             jsonDecode(result.body)['detail'].toString();
-        if (errorMessage.compareTo('Unauthorized') != 0) {
+        if (errorMessage == "Unauthorized") {
           localDatabaseService.logoutUser();
           navigationService.removeAllAndPush(
             Routes.authScreen,
@@ -64,8 +64,8 @@ class ApiServiceImpl extends ApiService {
     try {
       final Map<String, String> headerAuth = {
         'Content-Type': 'application/json',
-        'x-friday-key':
-            '3eb5488c-7cd0-43c9-9fb7-8b5434e5dba9' //localDatabaseService.userAuthKey,
+        'x-friday-key': localDatabaseService
+            .userAuthKey, //'3eb5488c-7cd0-43c9-9fb7-8b5434e5dba9' //
       };
       final result = await http.get(
         Uri.parse(ApiConstants.baseUrl + apiName),
@@ -78,12 +78,13 @@ class ApiServiceImpl extends ApiService {
       } else {
         final String errorMessage =
             jsonDecode(result.body)['detail'].toString();
-        if (errorMessage.compareTo('Unauthorized') != 0) {
-          // localDatabaseService.logoutUser();
-          // navigationService.removeAllAndPush(
-          //   Routes.authScreen,
-          //   Routes.splashScreen,
-          // );
+        print(errorMessage);
+        if (errorMessage == "Unauthorized") {
+          localDatabaseService.logoutUser();
+          navigationService.removeAllAndPush(
+            Routes.authScreen,
+            Routes.splashScreen,
+          );
         }
         navigationService.showSnackBar(errorMessage);
         return CallOutcome<Map<String, dynamic>>(

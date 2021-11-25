@@ -25,7 +25,7 @@ class LoginScreenViewModel extends BaseModel {
             Routes.otpInputScreen,
             arguments: {
               'loginDetails': phoneNumber.text,
-              'otpId': result.data!['otpId']
+              'otpId': result.data!['otp_id']
             },
           );
         } else if (result.exception.toString() ==

@@ -13,6 +13,7 @@ class SignupScreen extends StatelessWidget {
   const SignupScreen({Key? key}) : super(key: key);
 
   Widget _buildCheckBoxWithText(
+    BuildContext context,
     String title,
     String subTitle,
     bool value,
@@ -27,34 +28,40 @@ class SignupScreen extends StatelessWidget {
           activeColor: const Color(0xFF2128BD),
           value: value,
           tristate: true,
-          onChanged: update,
+          onChanged: (state) {
+            FocusScope.of(context).requestFocus();
+            update(state);
+          },
         ),
         SizedBox(
           height: sizeConfig.getPropWidth(8),
         ),
-        RichText(
-          text: TextSpan(
-            text: title,
-            style: Theme.of(navigationService.navigatorKey.currentContext!)
-                .textTheme
-                .caption!
-                .copyWith(
-                  fontSize: 16,
-                  color: const Color(0xFF666666),
+        Expanded(
+          child: RichText(
+            text: TextSpan(
+              text: title,
+              style: Theme.of(navigationService.navigatorKey.currentContext!)
+                  .textTheme
+                  .caption!
+                  .copyWith(
+                    fontSize: 16,
+                    color: const Color(0xFF666666),
+                  ),
+              children: [
+                TextSpan(
+                  text: subTitle,
+                  style:
+                      Theme.of(navigationService.navigatorKey.currentContext!)
+                          .textTheme
+                          .caption!
+                          .copyWith(
+                            fontSize: 16,
+                            decoration: TextDecoration.underline,
+                          ),
+                  recognizer: TapGestureRecognizer()..onTap = onTap,
                 ),
-            children: [
-              TextSpan(
-                text: subTitle,
-                style: Theme.of(navigationService.navigatorKey.currentContext!)
-                    .textTheme
-                    .caption!
-                    .copyWith(
-                      fontSize: 16,
-                      decoration: TextDecoration.underline,
-                    ),
-                recognizer: TapGestureRecognizer()..onTap = onTap,
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],
@@ -90,6 +97,8 @@ class SignupScreen extends StatelessWidget {
                       validator: (number) =>
                           Validate.validatePhoneNumber(number),
                       prefix: "+91 ",
+                      textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.phone,
                     ),
                     SizedBox(
                       height: sizeConfig.getPropHeight(10),
@@ -99,6 +108,8 @@ class SignupScreen extends StatelessWidget {
                       hintText: "Name",
                       controller: model.name,
                       validator: (number) => Validate.validateName(number),
+                      textInputAction: TextInputAction.done,
+                      keyboardType: TextInputType.name,
                     ),
                     SizedBox(
                       height: sizeConfig.getPropHeight(10),
@@ -111,6 +122,7 @@ class SignupScreen extends StatelessWidget {
                       height: sizeConfig.getPropHeight(10),
                     ),
                     _buildCheckBoxWithText(
+                      context,
                       'I agree with ',
                       'Terms and Conditions',
                       model.terms,
@@ -118,6 +130,7 @@ class SignupScreen extends StatelessWidget {
                       model.showTerms,
                     ),
                     _buildCheckBoxWithText(
+                      context,
                       'I agree with Fridayy Ai ',
                       'Privacy Policy',
                       model.privacy,

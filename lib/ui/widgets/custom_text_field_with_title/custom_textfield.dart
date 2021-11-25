@@ -11,8 +11,12 @@ class CustomTextFieldWithTitle extends StatelessWidget {
     this.hintText,
     this.enabled,
     this.initialText,
+    required this.keyboardType,
+    required this.textInputAction,
   }) : super(key: key);
   final TextEditingController? controller;
+  final TextInputType keyboardType;
+  final TextInputAction textInputAction;
   final String title;
   final String? prefix;
   final String? hintText;
@@ -61,7 +65,8 @@ class CustomTextFieldWithTitle extends StatelessWidget {
             enabled: enabled ?? true,
             controller: controller,
             initialValue: initialText,
-            keyboardType: TextInputType.phone,
+            keyboardType: keyboardType,
+            textInputAction: textInputAction,
             style: TextStyle(
               color: Colors.black,
               letterSpacing: sizeConfig.getPropWidth(2),

@@ -28,7 +28,7 @@ class SignupScreenViewModel extends BaseModel {
           mobile: phoneNumber.text,
           countryCode: "+91",
           userName: name.text,
-          gender: userGender!.string(),
+          gender: userGender!.string().toUpperCase(),
         );
         final CallOutcome<Map<String, dynamic>> result = await apiService
             .postRequest(ApiConstants.register, user.toJson(), isAuth: true);
@@ -38,7 +38,7 @@ class SignupScreenViewModel extends BaseModel {
             Routes.otpInputScreen,
             arguments: {
               'signupDetails': phoneNumber.text,
-              'otpId': result.data!['otpId']
+              'otpId': result.data!['otp_id']
             },
           );
         } else if (result.exception.toString() ==

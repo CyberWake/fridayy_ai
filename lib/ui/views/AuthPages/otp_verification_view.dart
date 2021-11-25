@@ -56,6 +56,8 @@ class OtpVerification extends StatelessWidget {
                         validator: (number) {},
                         prefix: "+91 ",
                         enabled: false,
+                        textInputAction: TextInputAction.next,
+                        keyboardType: TextInputType.phone,
                       ),
                       SizedBox(
                         height: sizeConfig.getPropHeight(18),
@@ -77,6 +79,7 @@ class OtpVerification extends StatelessWidget {
                               obscureText: false,
                               animationType: AnimationType.fade,
                               hapticFeedbackTypes: HapticFeedbackTypes.medium,
+                              keyboardType: TextInputType.number,
                               pinTheme: PinTheme(
                                 shape: PinCodeFieldShape.box,
                                 borderRadius: BorderRadius.circular(10),

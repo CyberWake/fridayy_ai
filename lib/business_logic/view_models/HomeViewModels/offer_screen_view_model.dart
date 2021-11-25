@@ -12,7 +12,7 @@ import 'package:fridayy_one/business_logic/view_models/base_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 
 class OfferScreenViewModel extends BaseModel {
-  final PageController offerPageController = PageController(initialPage: 0);
+  late PageController offerPageController;
   final List<OfferCategoryBrands> offersOfCategory = [
     OfferCategoryBrands(brands: []),
     OfferCategoryBrands(brands: []),
@@ -80,7 +80,26 @@ class OfferScreenViewModel extends BaseModel {
   late int month;
   late String year;
 
-  init() async {
+  init(int index) async {
+    currentTabIndex = index;
+    offerPageController = PageController(initialPage: currentTabIndex);
+    final date = DateTime.now();
+    month = date.month;
+    year = date.year.toString().substring(2);
+    dateFilter = year + (month > 9 ? month.toString() : '0${month.toString()}');
+    setState(ViewState.busy);
+    final result = await apiService.getRequest(
+      "${ApiConstants.categoryOffers}/${types[currentTabIndex]["id"]}?date=$dateFilter}",
+    );
+    if (result.data != null) {
+      offersOfCategory[currentTabIndex] =
+          OfferCategoryBrands.fromJson(result.data as Map<String, dynamic>);
+      setState(ViewState.idle);
+    } else if (result.exception != null) {
+      offersOfCategory[currentTabIndex] =
+          OfferCategoryBrands.fromJson(offersPage[currentTabIndex]);
+      setState(ViewState.idle);
+    }
     offerPageController.addListener(() async {
       currentTabIndex = offerPageController.page!.round();
       filterDiscountType = "High to Low";
@@ -88,21 +107,6 @@ class OfferScreenViewModel extends BaseModel {
       filterRecommended = true;
       notifyListeners();
     });
-    final date = DateTime.now();
-    month = date.month;
-    year = date.year.toString().substring(2);
-    dateFilter = year + (month > 9 ? month.toString() : '0${month.toString()}');
-    setState(ViewState.busy);
-    final result = await apiService.getRequest(
-      "${ApiConstants.categoryOffers}/${types[0]["id"]}?date=$dateFilter}",
-    );
-    if (result.data != null) {
-      offersOfCategory[0] =
-          OfferCategoryBrands.fromJson(result.data as Map<String, dynamic>);
-    } else if (result.exception != null) {
-      offersOfCategory[0] = OfferCategoryBrands.fromJson(offersPage[0]);
-    }
-    setState(ViewState.idle);
   }
 
   void tabChanged(int newTabIndex) {
@@ -122,11 +126,13 @@ class OfferScreenViewModel extends BaseModel {
         if (result.data != null) {
           offersOfCategory[newTabIndex] =
               OfferCategoryBrands.fromJson(result.data as Map<String, dynamic>);
+          setState(ViewState.idle);
         } else if (result.exception != null) {
           offersOfCategory[newTabIndex] = OfferCategoryBrands.fromJson(
-              offersPage[newTabIndex] as Map<String, dynamic>);
+            offersPage[newTabIndex],
+          );
+          setState(ViewState.idle);
         }
-        setState(ViewState.idle);
       }
     });
   }

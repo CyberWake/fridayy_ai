@@ -39,6 +39,8 @@ class LoginScreen extends StatelessWidget {
                       validator: (number) =>
                           Validate.validatePhoneNumber(number),
                       prefix: "+91 ",
+                      textInputAction: TextInputAction.done,
+                      keyboardType: TextInputType.phone,
                     ),
                     SizedBox(
                       height: sizeConfig.getPropHeight(48),

@@ -67,7 +67,7 @@ class Offers {
     required this.activeOffers,
     required this.expiringSoonOffers,
     this.sortedCategories,
-    required this.lovedBrand,
+    this.lovedBrand,
     this.recommendedOffers,
     this.notifiedOffers,
   });
@@ -97,8 +97,9 @@ class Offers {
       totalOffers: json['total_offers'] as int,
       activeOffers: json['active_offers'] as int,
       expiringSoonOffers: json['expiring_soon_offers'] as int,
-      lovedBrand:
-          LovedBrand.fromJson(json['loved_brand'] as Map<String, dynamic>),
+      lovedBrand: json['loved_brand'] == null
+          ? null
+          : LovedBrand.fromJson(json['loved_brand'] as Map<String, dynamic>),
       recommendedOffers: recommendedOffers,
       notifiedOffers: notifiedOffers,
       sortedCategories: sortedCategories,
@@ -107,7 +108,7 @@ class Offers {
   int totalOffers;
   int activeOffers;
   int expiringSoonOffers;
-  LovedBrand lovedBrand;
+  LovedBrand? lovedBrand;
   List<SortedCategories>? sortedCategories;
   List<OffersByBrand>? recommendedOffers;
   List<OffersByBrand>? notifiedOffers;
@@ -122,7 +123,7 @@ class Offers {
           this.sortedCategories?.map((v) => v.toJson()).toList();
     }
 
-    data['loved_brand'] = this.lovedBrand.toJson();
+    data['loved_brand'] = this.lovedBrand?.toJson();
     if (this.recommendedOffers != null) {
       data['recommended_offers'] =
           this.recommendedOffers?.map((v) => v.toJson()).toList();
@@ -237,7 +238,7 @@ class OfferInfo {
       termsAndConditionsApply: json['terms_and_conditions_apply'] as bool,
       link: json['link'] as String?,
       code: json['code'] as String?,
-      expiryDate: json['expiry_date'] as int?,
+      expiryDate: (json['expiry_date'] as double).toInt(),
       rewardDescription: json['reward_description'] as String?,
     );
   }

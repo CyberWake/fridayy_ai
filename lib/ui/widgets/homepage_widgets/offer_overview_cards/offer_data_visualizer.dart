@@ -9,17 +9,17 @@ class OfferOverView extends StatelessWidget {
     Key? key,
     required this.categories,
     required this.totalOffers,
+    required this.gotoOfferCategory,
   }) : super(key: key);
   final List<SortedCategories> categories;
   final String totalOffers;
+  final Function(int) gotoOfferCategory;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        BarChart(
-          data: categories,
-        ),
+        BarChart(chartData: categories, gotoOffer: gotoOfferCategory),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
           child: Column(

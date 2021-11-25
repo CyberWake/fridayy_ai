@@ -50,7 +50,7 @@ class StoryListOffers extends StatelessWidget {
               return Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal:
-                      sizeConfig.getPropWidth(showGlow ?? false ? 20 : 8),
+                      sizeConfig.getPropWidth(showGlow ?? false ? 17 : 8),
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
@@ -62,9 +62,10 @@ class StoryListOffers extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                            color: showGlow ?? false
-                                ? const Color(0xFFF14A25)
-                                : const Color(0xFF2128BD)),
+                          color: showGlow ?? false
+                              ? const Color(0xFFF14A25)
+                              : const Color(0xFF2128BD),
+                        ),
                         color: Colors.white,
                         boxShadow: showGlow ?? false
                             ? [

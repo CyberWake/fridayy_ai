@@ -41,6 +41,29 @@ extension Category on String {
     }
   }
 
+  int getIndex() {
+    switch (this) {
+      case 'FAD':
+        return 0;
+      case 'LUX':
+        return 1;
+      case 'TRVL':
+        return 2;
+      case 'FIN':
+        return 3;
+      case 'MDCL':
+        return 4;
+      case 'UTL':
+        return 5;
+      case 'EAD':
+        return 6;
+      case 'OTH':
+        return 7;
+      default:
+        return -1;
+    }
+  }
+
   Color getColor() {
     switch (this) {
       case 'FAD':

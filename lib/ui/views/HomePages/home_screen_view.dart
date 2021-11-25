@@ -52,7 +52,7 @@ class HomeScreen extends StatelessWidget {
                           isCenter: false,
                         )
                       : Text(
-                          model.userOverView!.user.userName,
+                          model.userOverView!.user.userName.split(' ')[0],
                           style: Theme.of(context)
                               .textTheme
                               .bodyText1!
@@ -115,7 +115,7 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       USPTile(
                         uspName: 'Offers',
-                        onTap: homeModel.gotoOffers,
+                        onTap: () => homeModel.gotoOffers(0),
                       ),
                       SizedBox(
                         height: sizeConfig.getPropHeight(22.5),

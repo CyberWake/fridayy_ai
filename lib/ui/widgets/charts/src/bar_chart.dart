@@ -4,8 +4,10 @@ import 'package:fridayy_one/business_logic/utils/extensions.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class BarChart extends StatelessWidget {
-  const BarChart({Key? key, required this.data}) : super(key: key);
-  final List<SortedCategories> data;
+  const BarChart({Key? key, required this.chartData, required this.gotoOffer})
+      : super(key: key);
+  final List<SortedCategories> chartData;
+  final Function(int) gotoOffer;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class BarChart extends StatelessWidget {
           ),
           primaryYAxis: NumericAxis(
             minimum: 0,
-            maximum: data.last.count.toDouble() + 5,
+            maximum: chartData.last.count.toDouble() + 5,
             isVisible: false,
           ),
           legend: Legend(
@@ -30,9 +32,14 @@ class BarChart extends StatelessWidget {
           ),
           series: <BarSeries<SortedCategories, String>>[
             BarSeries<SortedCategories, String>(
-              dataSource: data,
+              dataSource: chartData,
               borderRadius:
                   const BorderRadius.horizontal(right: Radius.circular(10)),
+              onPointTap: (ChartPointDetails data) {
+                if (data.pointIndex != null) {
+                  gotoOffer(chartData[data.pointIndex!].categoryId.getIndex());
+                } // gotoOffer();
+              },
               pointColorMapper: (SortedCategories data, _) =>
                   data.categoryId.getColor(),
               xValueMapper: (SortedCategories data, _) =>

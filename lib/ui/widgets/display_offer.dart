@@ -4,6 +4,7 @@ import 'package:fridayy_one/business_logic/models/new_models/new_user_overview_m
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/widgets/offer_info_tile.dart';
 import 'package:fridayy_one/ui/widgets/rounded_rectangular_button.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DisplayOffer extends StatelessWidget {
@@ -16,6 +17,12 @@ class DisplayOffer extends StatelessWidget {
   final String brandId;
   final OfferInfo offerInfo;
   final bool showClaimButton;
+
+  String getDate() {
+    final DateFormat formatter = DateFormat('dd MMM, yyyy');
+    return formatter
+        .format(DateTime.fromMillisecondsSinceEpoch(offerInfo.expiryDate!));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +78,7 @@ class DisplayOffer extends StatelessWidget {
                           fontSize: 12,
                           color: const Color(0xFF9399A3),
                         ),
+                    overflow: TextOverflow.fade,
                   ),
                 ),
               ],
@@ -113,7 +121,7 @@ class DisplayOffer extends StatelessWidget {
                 ),
                 OfferInfoTile(
                   infoName: 'Offer Validity',
-                  value: offerInfo.expiryDate?.toString(),
+                  value: getDate(),
                 ),
                 OfferInfoTile(
                   infoName: 'Terms and conditions',

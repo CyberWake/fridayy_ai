@@ -149,4 +149,26 @@ class FridayySvg {
 <path d="M9.9916 6.83692H9.99994" stroke="#7B7B7B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
 <path fill-rule="evenodd" clip-rule="evenodd" d="M13.612 2.29184H6.38783C3.87033 2.29184 2.29199 4.07434 2.29199 6.59684V13.4035C2.29199 15.926 3.86283 17.7085 6.38783 17.7085H13.6112C16.137 17.7085 17.7087 15.926 17.7087 13.4035V6.59684C17.7087 4.07434 16.137 2.29184 13.612 2.29184Z" stroke="#7B7B7B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>''';
+  static const String fridayyLogo =
+      '''<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+ width="24.000000pt" height="24.000000pt" viewBox="0 0 24.000000 24.000000"
+ preserveAspectRatio="xMidYMid meet">
+
+<g transform="translate(0.000000,24.000000) scale(0.100000,-0.100000)"
+fill="#2128BD" stroke="none">
+<path d="M84 223 c-34 -7 -63 -46 -70 -94 -6 -42 -4 -48 30 -82 39 -41 66 -46
+121 -23 38 16 52 37 60 92 5 35 2 43 -29 77 -35 37 -53 42 -112 30z m95 -47
+c33 -34 33 -35 20 -78 -12 -38 -19 -45 -58 -57 l-43 -14 -35 35 c-34 34 -34
+36 -23 77 9 33 18 46 43 56 47 21 60 18 96 -19z"/>
+<path d="M77 162 c-23 -25 -21 -58 3 -82 38 -38 100 -14 100 38 0 51 -70 81
+-103 44z m77 -8 c22 -21 20 -47 -4 -69 -45 -40 -105 20 -65 65 22 24 48 26 69
+4z"/>
+</g>
+</svg>''';
+  static const String privacyIcon =
+      '''<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.75024C17.109 2.75024 21.25 6.89224 21.25 12.0002C21.25 17.1082 17.109 21.2502 12 21.2502C6.892 21.2502 2.75 17.1082 2.75 12.0002C2.75 6.89224 6.892 2.75024 12 2.75024Z" stroke="#5B667A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M11.9951 8.20435V12.6233" stroke="#5B667A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M11.995 15.7961H12.005" stroke="#5B667A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>''';
 }

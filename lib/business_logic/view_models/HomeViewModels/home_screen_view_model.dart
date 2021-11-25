@@ -24,8 +24,6 @@ class HomeScreenViewModel extends BaseModel {
   Future getOverViewExplicitly({bool showDefault = false}) async {
     final result = await apiService.getRequest(ApiConstants.userOverview);
     if (result.data != null) {
-      print(result.data);
-
       userOverView =
           NewUserOverView.fromJson(result.data as Map<String, dynamic>);
       int radius = 80;
@@ -37,7 +35,7 @@ class HomeScreenViewModel extends BaseModel {
         setState(ViewState.idle);
       }
     } else if (result.exception != null) {
-      userOverView = NewUserOverView.fromJson(staticResult);
+      userOverView = NewUserOverView.fromJson(userOverviewDummy);
       int radius = 80;
       userOverView!.spending.distribution!.reversed.toList().forEach((element) {
         element.radius = radius;

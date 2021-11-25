@@ -257,7 +257,7 @@ class OfferScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseView<OfferScreenViewModel>(
-      onModelReady: (model) => model.init(),
+      onModelReady: (model) => model.init(homeModel.offerCategoryIndex),
       builder: (context, model, child) {
         return Scaffold(
           appBar: AppBar(

@@ -46,57 +46,59 @@ class LovedBrandCard extends StatelessWidget {
           SizedBox(
             height: sizeConfig.getPropHeight(10),
           ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                lovedBrand.count.toString(),
-                style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                  fontSize: 40,
-                  color: const Color(0xFF2128BD),
-                  shadows: [
-                    const Shadow(
-                      blurRadius: 2,
-                      color: Color(0xFFFAB8C4),
-                      offset: Offset(2, 2),
-                    )
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  lovedBrand.count.toString(),
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                    fontSize: 40,
+                    color: const Color(0xFF2128BD),
+                    shadows: [
+                      const Shadow(
+                        blurRadius: 2,
+                        color: Color(0xFFFAB8C4),
+                        offset: Offset(2, 2),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  width: sizeConfig.getPropWidth(10),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      "offers",
+                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        fontSize: 24,
+                        color: const Color(0xFF2128BD),
+                        shadows: [
+                          const Shadow(
+                            blurRadius: 2,
+                            color: Color(0xFFFAB8C4),
+                            offset: Offset(2, 2),
+                          )
+                        ],
+                      ),
+                    ),
+                    Text(
+                      "in last 3 months",
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline4!
+                          .copyWith(fontSize: 12),
+                    ),
                   ],
                 ),
-              ),
-              SizedBox(
-                width: sizeConfig.getPropWidth(10),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "offers",
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                      fontSize: 24,
-                      color: const Color(0xFF2128BD),
-                      shadows: [
-                        const Shadow(
-                          blurRadius: 2,
-                          color: Color(0xFFFAB8C4),
-                          offset: Offset(2, 2),
-                        )
-                      ],
-                    ),
-                  ),
-                  Text(
-                    "in last 3 months",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline4!
-                        .copyWith(fontSize: 12),
-                  ),
-                ],
-              ),
-              const Spacer(),
-              Image.asset('assets/images/loved_emoji.png')
-            ],
+                const Spacer(),
+                Image.asset('assets/images/loved_emoji.png')
+              ],
+            ),
           )
         ],
       ),

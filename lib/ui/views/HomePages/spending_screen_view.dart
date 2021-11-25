@@ -261,7 +261,6 @@ class SpendingScreen extends StatelessWidget {
                           child: DoughnutChart(
                             size: 161,
                             data: model.categoryData,
-                            onTap: () {},
                           ),
                         ),
                         Expanded(

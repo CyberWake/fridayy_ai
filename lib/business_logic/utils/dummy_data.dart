@@ -1,4 +1,4 @@
-final Map<String, dynamic> staticResult = {
+final Map<String, dynamic> userOverviewDummy = {
   "user": {
     "user_name": "Ritik",
     "user_img": null,
@@ -498,4 +498,12 @@ final Map<String, dynamic> brandOffersDummyData = {
       "reward_description": null
     },
   ]
+};
+
+Map<String, dynamic> userProfileDummy = {
+  "mobile": "7985434482",
+  "country_code": "+91",
+  "user_name": "Ritik",
+  "user_img": null,
+  "email": null
 };

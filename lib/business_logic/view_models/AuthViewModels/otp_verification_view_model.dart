@@ -30,16 +30,18 @@ class OtpVerificationViewModel extends BaseModel {
           await apiService.postRequest(
         ApiConstants.loginOtpValidate,
         {
-          'otpId': otpId,
+          'otp_id': otpId,
           'otp': otpController.text,
           'mobile': mobile,
         },
         isAuth: true,
       );
       if (result.data != null) {
+        print(result.data);
         localDatabaseService.saveUserAuth(
           result.data!['auth'].toString(),
-        ); //'cbfed2c4-d6a4-4d32-9994-f63f2f7e2f67');//userXInternalKey['auth']
+        );
+        //'cbfed2c4-d6a4-4d32-9994-f63f2f7e2f67');//userXInternalKey['auth']
         if (result.exception == null) {
           print(result.data!['s3_details']);
           localDatabaseService.saveBucket(result.data!);
@@ -69,13 +71,15 @@ class OtpVerificationViewModel extends BaseModel {
           await apiService.postRequest(
         ApiConstants.registerOtpValidate,
         {
-          'otpId': otpId,
+          'otp_id': otpId,
           'otp': otpController.text,
           'mobile': mobile,
         },
         isAuth: true,
       );
       if (result.data != null) {
+        print(result.data);
+
         localDatabaseService.saveUserAuth(result.data!['auth'].toString());
         if (result.exception == null) {
           localDatabaseService.saveBucket(result.data!);

@@ -9,41 +9,36 @@ class DoughnutChart extends StatelessWidget {
     Key? key,
     required this.data,
     required this.size,
-    this.onTap,
   }) : super(key: key);
   final List<Distribution> data;
   final double size;
-  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: sizeConfig.getPropHeight(size),
       width: sizeConfig.getPropHeight(size),
-      child: InkWell(
-        onTap: onTap,
-        child: SfCircularChart(
-          margin: EdgeInsets.zero,
-          series: <CircularSeries>[
-            DoughnutSeries<Distribution, String>(
-              innerRadius: '70%',
-              startAngle: 270,
-              endAngle: 90,
-              dataSource: data,
-              pointColorMapper: (Distribution data, _) =>
-                  data.categoryId.getColor(),
-              xValueMapper: (Distribution data, _) => data.categoryId.getName(),
-              yValueMapper: (Distribution data, _) => data.percentage,
-              dataLabelMapper: (Distribution data, _) => data.count.toString(),
-              dataLabelSettings: const DataLabelSettings(
-                isVisible: true,
-                labelIntersectAction: LabelIntersectAction.none,
-                labelAlignment: ChartDataLabelAlignment.top,
-                labelPosition: ChartDataLabelPosition.outside,
-              ),
+      child: SfCircularChart(
+        margin: EdgeInsets.zero,
+        series: <CircularSeries>[
+          DoughnutSeries<Distribution, String>(
+            innerRadius: '70%',
+            startAngle: 270,
+            endAngle: 90,
+            dataSource: data,
+            pointColorMapper: (Distribution data, _) =>
+                data.categoryId.getColor(),
+            xValueMapper: (Distribution data, _) => data.categoryId.getName(),
+            yValueMapper: (Distribution data, _) => data.percentage,
+            dataLabelMapper: (Distribution data, _) => data.count.toString(),
+            dataLabelSettings: const DataLabelSettings(
+              isVisible: true,
+              labelIntersectAction: LabelIntersectAction.none,
+              labelAlignment: ChartDataLabelAlignment.top,
+              labelPosition: ChartDataLabelPosition.outside,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

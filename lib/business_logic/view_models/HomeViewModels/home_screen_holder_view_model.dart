@@ -5,6 +5,7 @@ import 'package:fridayy_one/services/service_locator.dart';
 
 class HomeScreenHolderViewModel extends BaseModel {
   final PageController controller = PageController();
+  int offerCategoryIndex = 0;
   final List<String> tabs = [
     FridayySvg.homeIcon,
     FridayySvg.offerIcon,
@@ -45,8 +46,9 @@ class HomeScreenHolderViewModel extends BaseModel {
     notifyListeners();
   }
 
-  void gotoOffers() {
+  void gotoOffers(int categoryIndex) {
     currentTabIndex = 1;
+    offerCategoryIndex = categoryIndex;
     controller.jumpToPage(currentTabIndex);
     notifyListeners();
   }

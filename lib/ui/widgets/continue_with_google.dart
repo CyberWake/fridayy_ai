@@ -66,7 +66,7 @@ class ContinueWith extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: sizeConfig.getPropHeight(56),
+          height: sizeConfig.getPropHeight(25),
         ),
         Container(
           alignment: Alignment.center,

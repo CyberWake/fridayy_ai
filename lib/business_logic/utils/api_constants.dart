@@ -21,7 +21,7 @@ class ApiConstants {
   static const String spendingBrand = '/user/spendings/brand';
 
   //user details endpoint
-  static const String userDetails = '/user/details';
+  static const String userProfile = '/user/profile';
   static const String userLogout = '/user/logout';
 
   //sms endpoint
