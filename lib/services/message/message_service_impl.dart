@@ -103,7 +103,6 @@ class MessageServiceImpl extends MessageService {
         );
       }
     } on Exception catch (e) {
-      print(e);
       return CallOutcome<List<Map<String, String>>>(exception: e);
     }
   }
@@ -115,7 +114,6 @@ class MessageServiceImpl extends MessageService {
     Map<String, String>? fields,
   }) async {
     try {
-      print('here5 ${messageFilesPaths.length}');
       for (int i = 0; i < messageFilesPaths.length; i++) {
         bucketUrl = url ?? bucketUrl;
         if (fields?.isEmpty ?? true) {
@@ -124,8 +122,6 @@ class MessageServiceImpl extends MessageService {
           );
         }
         s3BucketFields = fields ?? s3BucketFields;
-        print(bucketUrl);
-        print(s3BucketFields);
         final postUri = Uri.parse(bucketUrl);
         final request = http.MultipartRequest("POST", postUri);
         request.fields.addAll(s3BucketFields);
@@ -136,7 +132,6 @@ class MessageServiceImpl extends MessageService {
           ),
         );
         final uploadResult = await request.send();
-        print(uploadResult.statusCode);
         if (uploadResult.statusCode != 204) {
           return CallOutcome<bool>(
             exception: Exception(uploadResult.statusCode),
@@ -149,13 +144,11 @@ class MessageServiceImpl extends MessageService {
         {'s3_token': s3BucketFields['key']!.split('/')[2]},
       );
       if (result.data != null && result.exception == null) {
-        print(result.data);
         return CallOutcome<bool>(data: true);
       } else {
         return CallOutcome<bool>(exception: result.exception);
       }
     } on Exception catch (e) {
-      print(e);
       return CallOutcome<bool>(exception: e);
     }
   }

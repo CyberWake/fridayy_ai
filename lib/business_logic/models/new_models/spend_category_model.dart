@@ -1,8 +1,9 @@
 class SpendCategoryModel {
-  SpendCategoryModel(
-      {required this.totalSpend,
-      required this.currency,
-      required this.distribution});
+  SpendCategoryModel({
+    required this.totalSpend,
+    required this.currency,
+    required this.distribution,
+  });
 
   factory SpendCategoryModel.fromJson(Map<String, dynamic> json) {
     final List<Distribution> distribution = [];
@@ -31,11 +32,12 @@ class SpendCategoryModel {
 }
 
 class Distribution {
-  Distribution(
-      {required this.categoryId,
-      required this.percentage,
-      required this.amount,
-      required this.count});
+  Distribution({
+    required this.categoryId,
+    required this.percentage,
+    required this.amount,
+    required this.count,
+  });
 
   factory Distribution.fromJson(Map<String, dynamic> json) {
     return Distribution(

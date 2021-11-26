@@ -60,7 +60,6 @@ class _SplashScreenState extends State<SplashScreen>
             });
             colorExpand.reverse().whenComplete(() async {
               final key = await localDatabaseService.fetchAuthKey();
-              print(key);
               navigationService.pushReplacementScreen(
                 key != "null" ? Routes.homeScreen : Routes.onBoardingScreen,
                 arguments: {

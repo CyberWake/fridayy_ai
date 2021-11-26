@@ -6,21 +6,27 @@ class SpendsOnBrand {
     required this.brandId,
     required this.brandName,
     required this.categoryId,
+    required this.count,
   });
 
   factory SpendsOnBrand.fromJson(Map<String, dynamic> json) {
     return SpendsOnBrand(
-        amount: json['amount'] as double,
-        spendId: json['spend_id'] as String?,
-        date: json['date'].toString(),
-        brandId: json['brand_id'] as String,
-        brandName: json['brand_name'] as String,
-        categoryId: json['category_id'] as String?);
+      amount: json['amount'] as double,
+      spendId: json['spend_id'] as String?,
+      date: json['date'] == null
+          ? null
+          : int.parse(json['date'].toString().split('.')[0]),
+      brandId: json['brand_id'] as String,
+      brandName: json['brand_name'] as String,
+      categoryId: json['category_id'] as String?,
+      count: json['count'] as int?,
+    );
   }
 
   double amount;
   String? spendId;
-  String date;
+  int? date;
+  int? count;
   String brandId;
   String brandName;
   String? categoryId;

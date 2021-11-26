@@ -12,12 +12,6 @@ class HomeScreenHolderViewModel extends BaseModel {
     FridayySvg.activityIcon,
     FridayySvg.profileIcon,
   ];
-  final List<String> pageTitle = [
-    "Home",
-    "Offers",
-    "Spending Analysis",
-    "Profile"
-  ];
 
   int currentTabIndex = 0;
 

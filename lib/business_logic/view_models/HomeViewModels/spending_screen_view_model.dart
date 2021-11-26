@@ -10,29 +10,32 @@ import 'package:fridayy_one/business_logic/view_models/base_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 
 class SpendingScreenViewModel extends BaseModel {
+  final PageController controller = PageController(initialPage: 0);
   final String title = "Spending Analysis";
-  SpendsTransactionModel data =
+  SpendsTransactionModel spendsTransactionData =
       SpendsTransactionModel(totalAmount: 0, currency: "Rs", spends: []);
-  late SpendCategoryModel spendCategoryData;
-  late SpendsBrandModel spendBrandData;
+  SpendCategoryModel spendCategoryData =
+      SpendCategoryModel(totalSpend: 0, currency: "Rs", distribution: []);
+  SpendsBrandModel spendBrandData =
+      SpendsBrandModel(totalSpend: 0, currency: "Rs", brands: []);
   late String dateFilter;
   late int month;
   late String year;
   final List<String> years = [];
+  final List<bool> fetchedPage = [false, false, false];
+  int pageIndex = 0;
+
+  String get totalSpendAmount {
+    if (pageIndex == 0) {
+      return "Total Spent - ${spendsTransactionData.currency} ${spendsTransactionData.totalAmount}";
+    } else if (pageIndex == 1) {
+      return "Total Spent - ${spendCategoryData.currency} ${spendCategoryData.totalSpend}";
+    } else {
+      return "Total Spent - ${spendBrandData.currency} ${spendBrandData.totalSpend}";
+    }
+  }
 
   final List<DistributionSpending> categoryData = [];
-
-  final List<List> dataCategory = [
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-  ];
-
   final List<String> months = [
     'January',
     'February',
@@ -57,48 +60,78 @@ class SpendingScreenViewModel extends BaseModel {
     for (int i = 2010; i <= DateTime.now().year; i++) {
       years.add(i.toString());
     }
-    getData();
+    controller.addListener(() {
+      pageIndex = controller.page?.round() ?? 0;
+      fetchData();
+      notifyListeners();
+    });
   }
 
-  getData() async {
-    await getTransactionData();
-    await getCategoryData();
-    await getBrandData();
+  changeIndex(int index) {
+    controller.jumpToPage(index);
+  }
+
+  fetchData({bool fetchRefresh = false}) {
+    switch (pageIndex) {
+      case 0:
+        if (!fetchedPage[pageIndex]) {
+          getTransactionData();
+        } else if (fetchRefresh) {
+          getTransactionData();
+        }
+        break;
+      case 1:
+        if (!fetchedPage[pageIndex]) {
+          getCategoryData();
+        } else if (fetchRefresh) {
+          getCategoryData();
+        }
+        break;
+      case 2:
+        if (!fetchedPage[pageIndex]) {
+          getBrandData();
+        } else if (fetchRefresh) {
+          getBrandData();
+        }
+        break;
+    }
   }
 
   setDate() {
     dateFilter = year.substring(2) +
         (month > 9 ? month.toString() : '0${month.toString()}');
     notifyListeners();
-    getData();
+    fetchedPage.clear();
+    fetchedPage.addAll([false, false, false]);
+    fetchData(fetchRefresh: true);
   }
 
   Future getTransactionData() async {
     setState(ViewState.busy);
-    data = SpendsTransactionModel(totalAmount: 0, currency: "Rs", spends: []);
+    spendsTransactionData =
+        SpendsTransactionModel(totalAmount: 0, currency: "Rs", spends: []);
     final CallOutcome resultSpendingTransactions = await apiService
         .getRequest("${ApiConstants.spendingTransactions}?month=$dateFilter");
     if (resultSpendingTransactions.data != null) {
-      data = SpendsTransactionModel.fromJson(
+      fetchedPage[0] = true;
+      spendsTransactionData = SpendsTransactionModel.fromJson(
         resultSpendingTransactions.data! as Map<String, dynamic>,
       );
     } else {
-      data =
+      spendsTransactionData =
           SpendsTransactionModel(totalAmount: 0.0, currency: "Rs", spends: []);
     }
     setState(ViewState.idle);
   }
 
   Future getCategoryData() async {
-    print('here1');
     setState(ViewState.busy);
-    categoryData.clear();
     final CallOutcome result = await apiService.getRequest(
       "${ApiConstants.spendingCategory}?month=$dateFilter",
     );
-    print('here');
     if (result.data != null) {
-      print(result.data);
+      fetchedPage[1] = true;
+      categoryData.clear();
       spendCategoryData =
           SpendCategoryModel.fromJson(result.data as Map<String, dynamic>);
       spendCategoryData.distribution.forEach((element) {
@@ -110,9 +143,7 @@ class SpendingScreenViewModel extends BaseModel {
           ),
         );
       });
-    } else {
-      print(result.exception);
-    }
+    } else {}
     setState(ViewState.idle);
   }
 
@@ -121,11 +152,10 @@ class SpendingScreenViewModel extends BaseModel {
     final CallOutcome result = await apiService
         .getRequest('${ApiConstants.spendingBrand}?month=$dateFilter');
     if (result.data != null) {
+      fetchedPage[2] = true;
       spendBrandData =
           SpendsBrandModel.fromJson(result.data as Map<String, dynamic>);
-    } else {
-      print(result.exception);
-    }
+    } else {}
     setState(ViewState.idle);
   }
 

@@ -17,7 +17,6 @@ class DoughnutChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(data.first.categoryId);
     return SizedBox(
       height: sizeConfig.getPropHeight(size),
       width: sizeConfig.getPropHeight(size),

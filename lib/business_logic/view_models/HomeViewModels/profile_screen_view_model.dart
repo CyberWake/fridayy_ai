@@ -14,7 +14,6 @@ class ProfileScreenViewModel extends BaseModel {
     setState(ViewState.busy);
     final result = await apiService.getRequest(ApiConstants.userProfile);
     if (result.data != null) {
-      print(result.data);
       user = User.fromJson(result.data as Map<String, dynamic>);
       setState(ViewState.idle);
     } else if (result.exception != null) {
@@ -30,7 +29,6 @@ class ProfileScreenViewModel extends BaseModel {
       navigationService.showSnackBar(result.exception.toString());
     } else if (result.data!['result'] as bool) {
       localDatabaseService.logoutUser();
-      print(result.data);
       navigationService.removeAllAndPush(
         Routes.authScreen,
         Routes.splashScreen,

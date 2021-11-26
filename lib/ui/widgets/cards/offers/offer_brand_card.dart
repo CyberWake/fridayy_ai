@@ -210,7 +210,9 @@ class OfferBrandCard extends StatelessWidget {
                                         .textTheme
                                         .bodyText2!
                                         .copyWith(
-                                            fontSize: 11, color: Colors.black),
+                                          fontSize: 11,
+                                          color: Colors.black,
+                                        ),
                                   ),
                                   Text(
                                     "Tap to copy",
@@ -218,7 +220,9 @@ class OfferBrandCard extends StatelessWidget {
                                         .textTheme
                                         .bodyText2!
                                         .copyWith(
-                                            fontSize: 6, color: Colors.black),
+                                          fontSize: 6,
+                                          color: Colors.black,
+                                        ),
                                   ),
                                 ],
                               ),

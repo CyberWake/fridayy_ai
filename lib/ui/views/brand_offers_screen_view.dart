@@ -6,7 +6,7 @@ import 'package:fridayy_one/business_logic/utils/fridayy_svg.dart';
 import 'package:fridayy_one/business_logic/view_models/brand_offers_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/views/base_view.dart';
-import 'package:fridayy_one/ui/widgets/cards/offer_brand_card.dart';
+import 'package:fridayy_one/ui/widgets/cards/offers/offer_brand_card.dart';
 import 'package:fridayy_one/ui/widgets/shimmer_card.dart';
 
 class BrandOffersView extends StatelessWidget {
@@ -132,7 +132,9 @@ class BrandOffersView extends StatelessWidget {
                   itemBuilder: (context, index) {
                     if (model.brandOffers.offers.isEmpty) {
                       return const ShimmerCard(
-                          size: Size(379, 120), borderRadius: 5);
+                        size: Size(379, 120),
+                        borderRadius: 5,
+                      );
                     } else {
                       final offer = model.brandOffers.offers[index];
                       return OfferBrandCard(

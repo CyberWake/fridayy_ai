@@ -491,8 +491,10 @@ class OfferScreen extends StatelessWidget {
                                                             CachedNetworkImage(
                                                           imageUrl:
                                                               'https://friday-images.s3.ap-south-1.amazonaws.com/${brand.brandId}.jpeg',
-                                                          imageBuilder: (context,
-                                                                  imageProvider) =>
+                                                          imageBuilder: (
+                                                            context,
+                                                            imageProvider,
+                                                          ) =>
                                                               Container(
                                                             decoration:
                                                                 BoxDecoration(
@@ -505,13 +507,19 @@ class OfferScreen extends StatelessWidget {
                                                               ),
                                                             ),
                                                           ),
-                                                          placeholder: (context,
-                                                                  url) =>
+                                                          placeholder: (
+                                                            context,
+                                                            url,
+                                                          ) =>
                                                               const CircularProgressIndicator(),
-                                                          errorWidget: (context,
-                                                                  url, error) =>
+                                                          errorWidget: (
+                                                            context,
+                                                            url,
+                                                            error,
+                                                          ) =>
                                                               const Icon(
-                                                                  Icons.error),
+                                                            Icons.error,
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
@@ -529,7 +537,8 @@ class OfferScreen extends StatelessWidget {
                                                           Text(
                                                             brand.brandName,
                                                             style: Theme.of(
-                                                                    context)
+                                                              context,
+                                                            )
                                                                 .textTheme
                                                                 .bodyText2!
                                                                 .copyWith(
@@ -541,7 +550,8 @@ class OfferScreen extends StatelessWidget {
                                                           Text(
                                                             brand.totalOffers,
                                                             style: Theme.of(
-                                                                    context)
+                                                              context,
+                                                            )
                                                                 .textTheme
                                                                 .bodyText2!
                                                                 .copyWith(

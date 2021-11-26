@@ -19,7 +19,6 @@ class LoginScreenViewModel extends BaseModel {
             UserModel(mobile: phoneNumber.text, countryCode: "+91");
         final CallOutcome<Map<String, dynamic>> result = await apiService
             .postRequest(ApiConstants.login, user.toJson(), isAuth: true);
-        print(result.exception);
         if (result.data != null) {
           navigationService.pushScreen(
             Routes.otpInputScreen,

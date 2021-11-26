@@ -24,7 +24,6 @@ class HomeScreenViewModel extends BaseModel {
   Future getOverViewExplicitly({bool showDefault = false}) async {
     final result = await apiService.getRequest(ApiConstants.userOverview);
     if (result.data != null) {
-      print(result.data);
       userOverView =
           NewUserOverView.fromJson(result.data as Map<String, dynamic>);
       int radius = 80;
@@ -36,7 +35,6 @@ class HomeScreenViewModel extends BaseModel {
         setState(ViewState.idle);
       }
     } else if (result.exception != null) {
-      print(result.exception);
       userOverView = NewUserOverView.fromJson(userOverviewDummy);
       int radius = 80;
       userOverView!.spending.distribution!.reversed.toList().forEach((element) {
@@ -53,7 +51,6 @@ class HomeScreenViewModel extends BaseModel {
       final CallOutcome<List<Map<String, String>>> messageData =
           await messageService.readMessage();
       if (messageData.exception == null && messageData.data != null) {
-        print(messageData.data);
         final CallOutcome<bool> result =
             await messageService.postSms(messageData.data!);
         if (result.exception == null && result.data == true) {

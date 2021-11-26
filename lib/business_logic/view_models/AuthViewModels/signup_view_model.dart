@@ -33,7 +33,6 @@ class SignupScreenViewModel extends BaseModel {
         final CallOutcome<Map<String, dynamic>> result = await apiService
             .postRequest(ApiConstants.register, user.toJson(), isAuth: true);
         if (result.data != null) {
-          print(result.data);
           navigationService.pushScreen(
             Routes.otpInputScreen,
             arguments: {

@@ -2,12 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fridayy_one/business_logic/utils/enums.dart';
 import 'package:fridayy_one/business_logic/utils/fridayy_svg.dart';
+import 'package:intl/intl.dart';
 
 extension GenderExtension on Gender {
   String string() {
     String gender = this.toString().replaceAll('Gender.', '');
     gender = gender.substring(0, 1).toUpperCase() + gender.substring(1);
     return gender;
+  }
+}
+
+extension DateFormatter on int {
+  String toDateddMMMyyyy() {
+    final DateFormat formatter = DateFormat('dd MMM yyyy');
+    return formatter.format(DateTime.fromMillisecondsSinceEpoch(this));
   }
 }
 

@@ -15,9 +15,10 @@ class SpendsBrandModel {
       });
     }
     return SpendsBrandModel(
-        totalSpend: double.parse(json['total_spend'].toString()),
-        currency: json['currency'].toString(),
-        brands: brands);
+      totalSpend: double.parse(json['total_spend'].toString()),
+      currency: json['currency'].toString(),
+      brands: brands,
+    );
   }
   double totalSpend;
   String currency;

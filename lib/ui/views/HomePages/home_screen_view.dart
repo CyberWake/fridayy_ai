@@ -152,37 +152,6 @@ class HomeScreen extends StatelessWidget {
                               spendingData: model.userOverView!.spending,
                               onTap: homeModel.gotoSpendingBehaviour,
                             ),
-                      // USPTile(
-                      //   uspName: 'Finance Analytics',
-                      //   onTap: homeModel.gotoFinanceAnalytics,
-                      // ),
-                      // model.isBusy
-                      //     ? const ShimmerCard(
-                      //         size: Size(379, 169),
-                      //         borderRadius: 16,
-                      //         marginTop: 22.5,
-                      //       )
-                      //     : Container(
-                      //         height: sizeConfig.getPropHeight(190),
-                      //         width: sizeConfig.getPropWidth(379),
-                      //         margin: EdgeInsets.only(
-                      //           top: sizeConfig.getPropHeight(22.5),
-                      //         ),
-                      //         padding: EdgeInsets.all(
-                      //           sizeConfig.getPropWidth(20),
-                      //         ),
-                      //         decoration: BoxDecoration(
-                      //           color: Colors.white,
-                      //           borderRadius: BorderRadius.circular(
-                      //             sizeConfig.getPropWidth(16),
-                      //           ),
-                      //         ),
-                      //         alignment: Alignment.center,
-                      //         child: Text(
-                      //           'Wow ${model.userOverView!.user.userName}\nyour spending score is better than 98% of users',
-                      //           style: Theme.of(context).textTheme.bodyText2,
-                      //         ),
-                      //       ),
                       SizedBox(
                         height: sizeConfig.getPropHeight(22.5),
                       ),
