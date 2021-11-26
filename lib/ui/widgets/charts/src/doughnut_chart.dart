@@ -9,33 +9,41 @@ class DoughnutChart extends StatelessWidget {
     Key? key,
     required this.data,
     required this.size,
+    this.isSemiDonut = true,
   }) : super(key: key);
-  final List<Distribution> data;
+  final List<DistributionSpending> data;
   final double size;
+  final bool isSemiDonut;
 
   @override
   Widget build(BuildContext context) {
+    print(data.first.categoryId);
     return SizedBox(
       height: sizeConfig.getPropHeight(size),
       width: sizeConfig.getPropHeight(size),
       child: SfCircularChart(
         margin: EdgeInsets.zero,
         series: <CircularSeries>[
-          DoughnutSeries<Distribution, String>(
-            innerRadius: '70%',
-            startAngle: 270,
-            endAngle: 90,
+          DoughnutSeries<DistributionSpending, String>(
+            innerRadius: isSemiDonut ? '70%' : '50%',
+            startAngle: isSemiDonut ? 270 : 0,
+            endAngle: isSemiDonut ? 90 : 0,
             dataSource: data,
-            pointColorMapper: (Distribution data, _) =>
+            pointColorMapper: (DistributionSpending data, _) =>
                 data.categoryId.getColor(),
-            xValueMapper: (Distribution data, _) => data.categoryId.getName(),
-            yValueMapper: (Distribution data, _) => data.percentage,
-            dataLabelMapper: (Distribution data, _) => data.count.toString(),
-            dataLabelSettings: const DataLabelSettings(
+            xValueMapper: (DistributionSpending data, _) =>
+                data.categoryId.getName(),
+            yValueMapper: (DistributionSpending data, _) => data.percentage,
+            dataLabelMapper: (DistributionSpending data, _) => isSemiDonut
+                ? data.count.toString()
+                : data.percentage.toString(),
+            dataLabelSettings: DataLabelSettings(
               isVisible: true,
               labelIntersectAction: LabelIntersectAction.none,
               labelAlignment: ChartDataLabelAlignment.top,
-              labelPosition: ChartDataLabelPosition.outside,
+              labelPosition: isSemiDonut
+                  ? ChartDataLabelPosition.inside
+                  : ChartDataLabelPosition.outside,
             ),
           ),
         ],

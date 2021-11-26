@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
       onModelReady: (model) => model.init(isAutoLogin: isAutoLogin),
       builder: (context, model, child) {
         return Scaffold(
-          backgroundColor: const Color(0xFFE5E5E5),
+          // backgroundColor: const Color(0xFFE5E5E5),
           appBar: AppBar(
             elevation: 0.0,
             backgroundColor: Colors.white,
@@ -34,13 +34,13 @@ class HomeScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: sizeConfig.getPropHeight(21),
+                  height: sizeConfig.getPropHeight(15),
                   child: Text(
-                    'Hello',
+                    'Hello,',
                     style: Theme.of(context)
                         .textTheme
                         .headline4!
-                        .copyWith(fontSize: 14),
+                        .copyWith(fontSize: 14, fontWeight: FontWeight.w400),
                   ),
                 ),
                 SizedBox(
@@ -55,8 +55,8 @@ class HomeScreen extends StatelessWidget {
                           model.userOverView!.user.userName.split(' ')[0],
                           style: Theme.of(context)
                               .textTheme
-                              .bodyText1!
-                              .copyWith(fontSize: 20),
+                              .headline4!
+                              .copyWith(color: const Color(0xFF202046)),
                         ),
                 ),
               ],
@@ -152,37 +152,37 @@ class HomeScreen extends StatelessWidget {
                               spendingData: model.userOverView!.spending,
                               onTap: homeModel.gotoSpendingBehaviour,
                             ),
-                      USPTile(
-                        uspName: 'Finance Analytics',
-                        onTap: homeModel.gotoFinanceAnalytics,
-                      ),
-                      model.isBusy
-                          ? const ShimmerCard(
-                              size: Size(379, 169),
-                              borderRadius: 16,
-                              marginTop: 22.5,
-                            )
-                          : Container(
-                              height: sizeConfig.getPropHeight(190),
-                              width: sizeConfig.getPropWidth(379),
-                              margin: EdgeInsets.only(
-                                top: sizeConfig.getPropHeight(22.5),
-                              ),
-                              padding: EdgeInsets.all(
-                                sizeConfig.getPropWidth(20),
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(
-                                  sizeConfig.getPropWidth(16),
-                                ),
-                              ),
-                              alignment: Alignment.center,
-                              child: Text(
-                                'Wow ${model.userOverView!.user.userName}\nyour spending score is better than 98% of users',
-                                style: Theme.of(context).textTheme.bodyText2,
-                              ),
-                            ),
+                      // USPTile(
+                      //   uspName: 'Finance Analytics',
+                      //   onTap: homeModel.gotoFinanceAnalytics,
+                      // ),
+                      // model.isBusy
+                      //     ? const ShimmerCard(
+                      //         size: Size(379, 169),
+                      //         borderRadius: 16,
+                      //         marginTop: 22.5,
+                      //       )
+                      //     : Container(
+                      //         height: sizeConfig.getPropHeight(190),
+                      //         width: sizeConfig.getPropWidth(379),
+                      //         margin: EdgeInsets.only(
+                      //           top: sizeConfig.getPropHeight(22.5),
+                      //         ),
+                      //         padding: EdgeInsets.all(
+                      //           sizeConfig.getPropWidth(20),
+                      //         ),
+                      //         decoration: BoxDecoration(
+                      //           color: Colors.white,
+                      //           borderRadius: BorderRadius.circular(
+                      //             sizeConfig.getPropWidth(16),
+                      //           ),
+                      //         ),
+                      //         alignment: Alignment.center,
+                      //         child: Text(
+                      //           'Wow ${model.userOverView!.user.userName}\nyour spending score is better than 98% of users',
+                      //           style: Theme.of(context).textTheme.bodyText2,
+                      //         ),
+                      //       ),
                       SizedBox(
                         height: sizeConfig.getPropHeight(22.5),
                       ),

@@ -187,6 +187,18 @@ class ProfileScreenView extends StatelessWidget {
     );
   }
 
+  Widget _buildShimmerCard() {
+    return Expanded(
+      child: ShimmerCard(
+        size: Size(
+          sizeConfig.getPropWidth(379),
+          sizeConfig.getPropHeight(44),
+        ),
+        borderRadius: 10,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BaseView<ProfileScreenViewModel>(
@@ -293,13 +305,7 @@ class ProfileScreenView extends StatelessWidget {
                                 heading(context, 'Personal Information'),
                                 const Divider(),
                                 model.isBusy
-                                    ? ShimmerCard(
-                                        size: Size(
-                                          sizeConfig.getPropWidth(379),
-                                          sizeConfig.getPropHeight(44),
-                                        ),
-                                        borderRadius: 10,
-                                      )
+                                    ? _buildShimmerCard()
                                     : dataTile(
                                         context,
                                         'Phone Number',
@@ -308,13 +314,7 @@ class ProfileScreenView extends StatelessWidget {
                                       ),
                                 const Divider(),
                                 model.isBusy
-                                    ? ShimmerCard(
-                                        size: Size(
-                                          sizeConfig.getPropWidth(379),
-                                          sizeConfig.getPropHeight(44),
-                                        ),
-                                        borderRadius: 10,
-                                      )
+                                    ? _buildShimmerCard()
                                     : dataTile(
                                         context,
                                         'E-mail',
@@ -322,13 +322,7 @@ class ProfileScreenView extends StatelessWidget {
                                       ),
                                 const Divider(),
                                 model.isBusy
-                                    ? ShimmerCard(
-                                        size: Size(
-                                          sizeConfig.getPropWidth(379),
-                                          sizeConfig.getPropHeight(44),
-                                        ),
-                                        borderRadius: 10,
-                                      )
+                                    ? _buildShimmerCard()
                                     : dataTile(
                                         context,
                                         'Last Refreshed',
@@ -367,13 +361,7 @@ class ProfileScreenView extends StatelessWidget {
                           heading(context, 'App Settings'),
                           const Divider(),
                           model.isBusy
-                              ? ShimmerCard(
-                                  size: Size(
-                                    sizeConfig.getPropWidth(379),
-                                    sizeConfig.getPropHeight(44),
-                                  ),
-                                  borderRadius: 10,
-                                )
+                              ? _buildShimmerCard()
                               : buttonTile(
                                   context,
                                   FridayySvg.fridayyLogo,
@@ -381,13 +369,7 @@ class ProfileScreenView extends StatelessWidget {
                                 ),
                           const Divider(),
                           model.isBusy
-                              ? ShimmerCard(
-                                  size: Size(
-                                    sizeConfig.getPropWidth(379),
-                                    sizeConfig.getPropHeight(44),
-                                  ),
-                                  borderRadius: 10,
-                                )
+                              ? _buildShimmerCard()
                               : buttonTile(
                                   context,
                                   FridayySvg.privacyIcon,
@@ -395,13 +377,7 @@ class ProfileScreenView extends StatelessWidget {
                                 ),
                           const Divider(),
                           model.isBusy
-                              ? ShimmerCard(
-                                  size: Size(
-                                    sizeConfig.getPropWidth(379),
-                                    sizeConfig.getPropHeight(44),
-                                  ),
-                                  borderRadius: 10,
-                                )
+                              ? _buildShimmerCard()
                               : buttonTile(
                                   context,
                                   FridayySvg.educationIcon,

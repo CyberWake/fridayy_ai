@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -67,9 +68,21 @@ class OfferBrandCard extends StatelessWidget {
                 flex: 2,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Image.network(
-                    'https://friday-images.s3.ap-south-1.amazonaws.com/$brandId.jpeg',
-                    fit: BoxFit.contain,
+                  child: CachedNetworkImage(
+                    imageUrl:
+                        'https://friday-images.s3.ap-south-1.amazonaws.com/$brandId.jpeg',
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                    placeholder: (context, url) =>
+                        const CircularProgressIndicator(),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
                   ),
                 ),
               ),
@@ -143,7 +156,7 @@ class OfferBrandCard extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(
                     0,
-                    sizeConfig.getPropHeight(10),
+                    0,
                     sizeConfig.getPropWidth(14),
                     sizeConfig.getPropHeight(10),
                   ),
@@ -151,51 +164,67 @@ class OfferBrandCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      SvgPicture.string(FridayySvg.iButtonIcon),
-                      SizedBox(
-                        height: sizeConfig.getPropHeight(20),
+                      GestureDetector(
+                        onTap: () =>
+                            navigationService.showSnackBar('To be implemented'),
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                            top: sizeConfig.getPropHeight(10),
+                            bottom: sizeConfig.getPropHeight(10),
+                          ),
+                          child: SvgPicture.string(FridayySvg.iButtonIcon),
+                        ),
                       ),
-                      DottedBorder(
-                        color: const Color(0xFF7B7B7B),
-                        strokeWidth: 1,
-                        dashPattern: [9, 3],
-                        radius: const Radius.circular(20),
-                        child: GestureDetector(
-                          onTap: (){
-                            if(offerInfo.code!=null){
-                              FlutterClipboard.copy(offerInfo.code!).whenComplete(
-                                    () => navigationService.showSnackBar('Coupon Code copied'),
-                              );
-                            }else{
-                              navigationService.showSnackBar('Coupon Code not present');
-                            }
-                          },
-                          child: SizedBox(
-                            height: sizeConfig.getPropHeight(46),
-                            width: sizeConfig.getPropWidth(86),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(
-                                  offerInfo.code ?? "NA",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText2!
-                                      .copyWith(
-                                          fontSize: 11, color: Colors.black),
-                                ),
-                                Text(
-                                  "Tap to copy",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText2!
-                                      .copyWith(fontSize: 6, color: Colors.black),
-                                ),
-                              ],
+                      SizedBox(
+                        height: sizeConfig.getPropHeight(10),
+                      ),
+                      if (offerInfo.code != null)
+                        DottedBorder(
+                          color: const Color(0xFF7B7B7B),
+                          strokeWidth: 1,
+                          dashPattern: [9, 3],
+                          radius: const Radius.circular(20),
+                          child: GestureDetector(
+                            onTap: () {
+                              if (offerInfo.code != null) {
+                                FlutterClipboard.copy(offerInfo.code!)
+                                    .whenComplete(
+                                  () => navigationService
+                                      .showSnackBar('Coupon Code copied'),
+                                );
+                              } else {
+                                navigationService
+                                    .showSnackBar('Coupon Code not present');
+                              }
+                            },
+                            child: SizedBox(
+                              height: sizeConfig.getPropHeight(46),
+                              width: sizeConfig.getPropWidth(86),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(
+                                    offerInfo.code ?? "NA",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText2!
+                                        .copyWith(
+                                            fontSize: 11, color: Colors.black),
+                                  ),
+                                  Text(
+                                    "Tap to copy",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText2!
+                                        .copyWith(
+                                            fontSize: 6, color: Colors.black),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
                     ],
                   ),
                 ),

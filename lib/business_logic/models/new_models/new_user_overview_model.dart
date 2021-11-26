@@ -238,7 +238,7 @@ class OfferInfo {
       termsAndConditionsApply: json['terms_and_conditions_apply'] as bool,
       link: json['link'] as String?,
       code: json['code'] as String?,
-      expiryDate: (json['expiry_date'] as double).toInt(),
+      expiryDate: ((json['expiry_date'] as double) * 1000).toInt(),
       rewardDescription: json['reward_description'] as String?,
     );
   }
@@ -273,10 +273,11 @@ class Spending {
   });
 
   factory Spending.fromJson(Map<String, dynamic> json) {
-    final List<Distribution> distributions = [];
+    final List<DistributionSpending> distributions = [];
     if (json['distribution'] != null) {
       json['distribution'].forEach((v) {
-        distributions.add(Distribution.fromJson(v as Map<String, dynamic>));
+        distributions
+            .add(DistributionSpending.fromJson(v as Map<String, dynamic>));
       });
     }
     return Spending(
@@ -287,7 +288,7 @@ class Spending {
   }
   double total;
   String currency;
-  List<Distribution>? distribution;
+  List<DistributionSpending>? distribution;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -300,16 +301,16 @@ class Spending {
   }
 }
 
-class Distribution {
-  Distribution({
+class DistributionSpending {
+  DistributionSpending({
     required this.categoryId,
     required this.percentage,
     this.count,
     this.radius,
   });
 
-  factory Distribution.fromJson(Map<String, dynamic> json) {
-    return Distribution(
+  factory DistributionSpending.fromJson(Map<String, dynamic> json) {
+    return DistributionSpending(
       categoryId: json['category_id'] as String,
       percentage: json['percentage'] as double,
     );

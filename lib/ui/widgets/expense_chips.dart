@@ -4,7 +4,7 @@ import 'package:fridayy_one/services/service_locator.dart';
 
 class ExpenseChips extends StatelessWidget {
   const ExpenseChips({Key? key, required this.data}) : super(key: key);
-  final List<Distribution> data;
+  final List<DistributionSpending> data;
 
   String? getName(String id) {
     switch (id) {
@@ -56,7 +56,7 @@ class ExpenseChips extends StatelessWidget {
       height: sizeConfig.getPropWidth(148),
       width: sizeConfig.getPropWidth(300),
       child: GridView.builder(
-        scrollDirection: Axis.vertical,
+        scrollDirection: Axis.horizontal,
         itemCount: data.length,
         padding: EdgeInsets.zero,
         itemBuilder: (context, index) {

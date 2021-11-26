@@ -30,17 +30,17 @@ class OfferBriefInfoCard extends StatelessWidget {
                 alignment: Alignment.topCenter,
                 child: DoughnutChart(
                   data: [
-                    Distribution(
+                    DistributionSpending(
                       categoryId: "ACT",
                       percentage: activeOffers / totalOffers,
                       count: activeOffers,
                     ),
-                    Distribution(
+                    DistributionSpending(
                       categoryId: "EXS",
                       percentage: expiringSoonOffers / totalOffers,
                       count: expiringSoonOffers,
                     ),
-                    Distribution(
+                    DistributionSpending(
                       categoryId: "EXP",
                       percentage:
                           (totalOffers - (activeOffers + expiringSoonOffers)) /

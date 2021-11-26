@@ -11,7 +11,7 @@ class PieChartWithVaryingRadius extends StatelessWidget {
     required this.size,
     this.onTap,
   }) : super(key: key);
-  final List<Distribution> data;
+  final List<DistributionSpending> data;
   final double size;
   final void Function()? onTap;
 
@@ -30,21 +30,21 @@ class PieChartWithVaryingRadius extends StatelessWidget {
             overflowMode: LegendItemOverflowMode.wrap,
           ),
           series: <CircularSeries>[
-            PieSeries<Distribution, String>(
+            PieSeries<DistributionSpending, String>(
               dataSource: data,
               startAngle: 100,
               endAngle: 100,
-              pointRadiusMapper: (Distribution data, _) =>
+              pointRadiusMapper: (DistributionSpending data, _) =>
                   (data.radius).toString(),
               dataLabelSettings: const DataLabelSettings(
                 labelIntersectAction: LabelIntersectAction.none,
                 isVisible: true,
                 labelPosition: ChartDataLabelPosition.outside,
               ),
-              pointColorMapper: (Distribution data, _) =>
+              pointColorMapper: (DistributionSpending data, _) =>
                   data.categoryId.getColor(),
-              xValueMapper: (Distribution data, _) => "",
-              yValueMapper: (Distribution data, _) => data.percentage,
+              xValueMapper: (DistributionSpending data, _) => "",
+              yValueMapper: (DistributionSpending data, _) => data.percentage,
             ),
           ],
         ),

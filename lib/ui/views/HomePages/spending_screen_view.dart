@@ -9,10 +9,16 @@ import 'package:fridayy_one/ui/views/base_view.dart';
 import 'package:fridayy_one/ui/widgets/charts/src/doughnut_chart.dart';
 import 'package:fridayy_one/ui/widgets/rounded_rectangular_button.dart';
 import 'package:fridayy_one/ui/widgets/shimmer_card.dart';
+import 'package:intl/intl.dart';
 
 class SpendingScreen extends StatelessWidget {
   const SpendingScreen({Key? key, required this.homeModel}) : super(key: key);
   final HomeScreenHolderViewModel homeModel;
+
+  String getDate(int expiry) {
+    final DateFormat formatter = DateFormat('dd MMM yyyy');
+    return formatter.format(DateTime.fromMillisecondsSinceEpoch(expiry));
+  }
 
   Widget buildFilter(SpendingScreenViewModel model) {
     return StatefulBuilder(
@@ -166,12 +172,13 @@ class SpendingScreen extends StatelessWidget {
           ),
           border: Border.all(color: const Color(0xFFE7ECEE)),
         ),
+        alignment: Alignment.center,
         child: ListView.separated(
           itemCount: model.isBusy
               ? 7
-              : model.data.count == 0
+              : model.data.spends.isEmpty
                   ? 1
-                  : model.data.count,
+                  : model.data.spends.length,
           shrinkWrap: true,
           itemBuilder: (context, index) {
             if (model.isBusy) {
@@ -179,7 +186,7 @@ class SpendingScreen extends StatelessWidget {
                 size: Size(380, 72),
                 borderRadius: 16.0,
               );
-            } else if (model.data.count == 0) {
+            } else if (model.data.spends.isEmpty) {
               return const Center(
                 child: Text('No data found'),
               );
@@ -209,7 +216,7 @@ class SpendingScreen extends StatelessWidget {
                     ),
               ),
               subtitle: Text(
-                spend.date,
+                getDate(double.parse(spend.date).toInt()),
                 style: Theme.of(context).textTheme.bodyText2!.copyWith(
                       fontSize: 14,
                       color: const Color(0xFF717E95),
@@ -247,58 +254,60 @@ class SpendingScreen extends StatelessWidget {
         height: sizeConfig.getPropHeight(600),
         child: Column(
           children: [
-            SizedBox(
-              height: sizeConfig.getPropHeight(161),
-              child: model.isBusy
-                  ? const ShimmerCard(
-                      size: Size(380, 152),
-                      borderRadius: 16,
-                    )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Expanded(
-                          child: DoughnutChart(
-                            size: 161,
-                            data: model.categoryData,
+            if (model.categoryData.isNotEmpty)
+              SizedBox(
+                height: sizeConfig.getPropHeight(161),
+                child: model.isBusy
+                    ? const ShimmerCard(
+                        size: Size(380, 152),
+                        borderRadius: 16,
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: DoughnutChart(
+                              size: 161,
+                              data: model.categoryData,
+                              isSemiDonut: false,
+                            ),
                           ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: List.generate(model.categoryData.length,
-                                (index) {
-                              return Row(
-                                children: [
-                                  Container(
-                                    height: sizeConfig.getPropHeight(13),
-                                    width: sizeConfig.getPropHeight(13),
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: model
-                                          .categoryData[index].categoryId
-                                          .getColor(),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: List.generate(model.categoryData.length,
+                                  (index) {
+                                return Row(
+                                  children: [
+                                    Container(
+                                      height: sizeConfig.getPropHeight(13),
+                                      width: sizeConfig.getPropHeight(13),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: model
+                                            .categoryData[index].categoryId
+                                            .getColor(),
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    '  ${model.categoryData[index].categoryId.getName()} ${model.categoryData[index].percentage}%',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyText2!
-                                        .copyWith(
-                                          fontSize: 12,
-                                          color: Colors.black,
-                                        ),
-                                  )
-                                ],
-                              );
-                            }),
-                          ),
-                        )
-                      ],
-                    ),
-            ),
+                                    Text(
+                                      '  ${model.categoryData[index].categoryId.getName()} ${model.categoryData[index].percentage}%',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText2!
+                                          .copyWith(
+                                            fontSize: 12,
+                                            color: Colors.black,
+                                          ),
+                                    )
+                                  ],
+                                );
+                              }),
+                            ),
+                          )
+                        ],
+                      ),
+              ),
             Expanded(
               child: Container(
                 margin: EdgeInsets.symmetric(
@@ -313,12 +322,15 @@ class SpendingScreen extends StatelessWidget {
                     color: const Color(0xFFE7ECEE),
                   ),
                 ),
+                alignment: model.spendCategoryData.distribution.isEmpty
+                    ? Alignment.center
+                    : Alignment.topCenter,
                 child: ListView.separated(
                   itemCount: model.isBusy
                       ? 8
-                      : model.spendCategoryData.isEmpty
+                      : model.spendCategoryData.distribution.isEmpty
                           ? 1
-                          : model.spendCategoryData.length,
+                          : model.spendCategoryData.distribution.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     if (model.isBusy) {
@@ -326,12 +338,13 @@ class SpendingScreen extends StatelessWidget {
                         size: Size(380, 72),
                         borderRadius: 16.0,
                       );
-                    } else if (model.spendCategoryData.isEmpty) {
+                    } else if (model.spendCategoryData.distribution.isEmpty) {
                       return const Center(
                         child: Text('No data found'),
                       );
                     }
-                    final category = model.spendCategoryData[index];
+                    final category =
+                        model.spendCategoryData.distribution[index];
                     return ListTile(
                       leading: Container(
                         width: sizeConfig.getPropHeight(44),
@@ -403,12 +416,15 @@ class SpendingScreen extends StatelessWidget {
           ),
           border: Border.all(color: const Color(0xFFE7ECEE)),
         ),
+        alignment: model.spendBrandData.brands.isEmpty
+            ? Alignment.center
+            : Alignment.topCenter,
         child: ListView.separated(
           itemCount: model.isBusy
               ? 7
-              : model.spendBrandData.isEmpty
+              : model.spendBrandData.brands.isEmpty
                   ? 1
-                  : model.spendBrandData.length,
+                  : model.spendBrandData.brands.length,
           shrinkWrap: true,
           itemBuilder: (context, index) {
             if (model.isBusy) {
@@ -416,12 +432,12 @@ class SpendingScreen extends StatelessWidget {
                 size: Size(380, 72),
                 borderRadius: 16.0,
               );
-            } else if (model.spendBrandData.isEmpty) {
+            } else if (model.spendBrandData.brands.isEmpty) {
               return const Center(
                 child: Text('No data found'),
               );
             }
-            final brand = model.spendBrandData[index];
+            final brand = model.spendBrandData.brands[index];
             return ListTile(
               leading: Container(
                 width: sizeConfig.getPropHeight(44),
@@ -446,14 +462,14 @@ class SpendingScreen extends StatelessWidget {
                     ),
               ),
               subtitle: Text(
-                brand.spends[0].categoryId!.getName(),
+                brand.categoryId!,
                 style: Theme.of(context).textTheme.bodyText2!.copyWith(
                       fontSize: 14,
                       color: const Color(0xFF717E95),
                     ),
               ),
               trailing: Text(
-                "${brand.count} Spends",
+                "${model.spendBrandData.brands.length} Spends",
                 style: Theme.of(context).textTheme.bodyText2!.copyWith(
                       fontSize: 16,
                       color: const Color(0xFF000000),
@@ -522,13 +538,25 @@ class SpendingScreen extends StatelessWidget {
                     toolbarHeight: sizeConfig.getPropHeight(105),
                     automaticallyImplyLeading: false,
                     backgroundColor: const Color(0xFFF9F9F9),
-                    title: Text(
-                      model
-                          .months[int.parse(model.dateFilter.substring(2)) - 1],
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText2!
-                          .copyWith(fontSize: 20, color: Colors.black),
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          model.months[
+                              int.parse(model.dateFilter.substring(2)) - 1],
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText2!
+                              .copyWith(fontSize: 20, color: Colors.black),
+                        ),
+                        Text(
+                          "Total Spent - ${model.data.currency} ${model.data.totalAmount}",
+                          style: Theme.of(context).textTheme.caption!.copyWith(
+                                fontSize: 16,
+                                color: const Color(0xFF2128BD),
+                              ),
+                        ),
+                      ],
                     ),
                     actions: [
                       InkWell(

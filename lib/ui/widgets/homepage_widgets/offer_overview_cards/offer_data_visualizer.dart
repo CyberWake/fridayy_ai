@@ -5,7 +5,7 @@ import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/widgets/charts/charts.dart';
 
 class OfferOverView extends StatelessWidget {
-  const OfferOverView({
+  OfferOverView({
     Key? key,
     required this.categories,
     required this.totalOffers,
@@ -14,6 +14,16 @@ class OfferOverView extends StatelessWidget {
   final List<SortedCategories> categories;
   final String totalOffers;
   final Function(int) gotoOfferCategory;
+
+  final List<Color> backgroundColor = [
+    const Color(0xFFCEF9F2),
+    const Color(0xFFFAB8C4),
+    const Color(0xFFFFDC60),
+    const Color(0xFFCEF9F2),
+    const Color(0xFFFAB8C4),
+    const Color(0xFFFFDC60),
+    const Color(0xFFCEF9F2),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +35,14 @@ class OfferOverView extends StatelessWidget {
           child: Column(
             children: categories
                 .map(
-                  (e) => Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: sizeConfig.getPropHeight(9.9),
-                      horizontal: 0,
+                  (e) => Expanded(
+                    child: Container(
+                      width: 25,
+                      color: backgroundColor[
+                          categories.indexWhere((element) => element == e)],
+                      alignment: Alignment.centerLeft,
+                      child: e.categoryId.getSvgIcon(),
                     ),
-                    child: e.categoryId.getSvgIcon(),
                   ),
                 )
                 .toList()
@@ -56,7 +68,7 @@ class OfferOverView extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .headline6!
-                    .copyWith(fontSize: 40, color: Colors.black),
+                    .copyWith(fontSize: 40, color: const Color(0xFF040415)),
               ),
             ],
           ),

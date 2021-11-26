@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fridayy_one/business_logic/utils/fridayy_svg.dart';
@@ -417,123 +418,158 @@ class OfferScreen extends StatelessWidget {
                             itemBuilder: (context, pageIndex) {
                               return RefreshIndicator(
                                 onRefresh: model.refreshData,
-                                child: GridView.builder(
-                                  itemCount: model.offersOfCategory[pageIndex]
-                                          .brands.isEmpty
-                                      ? model.isBusy
-                                          ? 8
-                                          : 1
-                                      : model.offersOfCategory[pageIndex].brands
-                                          .length,
-                                  padding: EdgeInsets.zero,
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                    mainAxisSpacing:
-                                        sizeConfig.getPropWidth(10),
-                                    crossAxisSpacing:
-                                        sizeConfig.getPropWidth(10),
-                                    crossAxisCount: 2,
-                                    childAspectRatio: 182 / 121,
-                                  ),
-                                  itemBuilder: (context, index) {
-                                    if (model.isBusy) {
-                                      return const ShimmerCard(
-                                        size: Size(176.3, 117.2),
-                                        borderRadius: 5,
-                                      );
-                                    } else if (model.offersOfCategory[pageIndex]
-                                            .brands.isEmpty &&
-                                        !model.isBusy) {
-                                      return const Center(
+                                child: model.offersOfCategory[pageIndex].brands
+                                            .isEmpty &&
+                                        !model.isBusy
+                                    ? const Center(
                                         child: Text("No Offers found"),
-                                      );
-                                    }
-                                    final brand = model
-                                        .offersOfCategory[pageIndex]
-                                        .brands[index];
-                                    return Material(
-                                      borderRadius: BorderRadius.circular(
-                                        sizeConfig.getPropHeight(5),
-                                      ),
-                                      child: InkWell(
-                                        onTap: () => model.gotoBrandOffers(
-                                          brand.brandId,
-                                          brand.brandName,
+                                      )
+                                    : GridView.builder(
+                                        itemCount: model
+                                                .offersOfCategory[pageIndex]
+                                                .brands
+                                                .isEmpty
+                                            ? model.isBusy
+                                                ? 8
+                                                : 0
+                                            : model.offersOfCategory[pageIndex]
+                                                .brands.length,
+                                        padding: EdgeInsets.zero,
+                                        gridDelegate:
+                                            SliverGridDelegateWithFixedCrossAxisCount(
+                                          mainAxisSpacing:
+                                              sizeConfig.getPropWidth(10),
+                                          crossAxisSpacing:
+                                              sizeConfig.getPropWidth(10),
+                                          crossAxisCount: 2,
+                                          childAspectRatio: 182 / 121,
                                         ),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: const Color(0xFFE7ECEE),
-                                            ),
+                                        itemBuilder: (context, index) {
+                                          if (model.isBusy) {
+                                            return const ShimmerCard(
+                                              size: Size(176.3, 117.2),
+                                              borderRadius: 5,
+                                            );
+                                          }
+                                          final brand = model
+                                              .offersOfCategory[pageIndex]
+                                              .brands[index];
+                                          return Material(
                                             borderRadius: BorderRadius.circular(
                                               sizeConfig.getPropHeight(5),
                                             ),
-                                          ),
-                                          padding: EdgeInsets.only(
-                                            top: sizeConfig.getPropHeight(15),
-                                            bottom:
-                                                sizeConfig.getPropHeight(16),
-                                          ),
-                                          child: Column(
-                                            children: [
-                                              Expanded(
-                                                child: Container(
-                                                  child: Image.network(
-                                                    'https://friday-images.s3.ap-south-1.amazonaws.com/${brand.brandId}.jpeg',
-                                                    fit: BoxFit.contain,
+                                            child: InkWell(
+                                              onTap: () =>
+                                                  model.gotoBrandOffers(
+                                                brand.brandId,
+                                                brand.brandName,
+                                              ),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                    color:
+                                                        const Color(0xFFE7ECEE),
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                    sizeConfig.getPropHeight(5),
                                                   ),
                                                 ),
-                                              ),
-                                              SizedBox(
-                                                height: sizeConfig
-                                                    .getPropHeight(22),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
+                                                padding: EdgeInsets.only(
+                                                  top: sizeConfig
+                                                      .getPropHeight(15),
+                                                  bottom: sizeConfig
+                                                      .getPropHeight(16),
+                                                ),
+                                                child: Column(
                                                   children: [
-                                                    Text(
-                                                      brand.brandName,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodyText2!
-                                                          .copyWith(
-                                                            fontSize: 14,
-                                                            color: Colors.black,
+                                                    Expanded(
+                                                      child: Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child:
+                                                            CachedNetworkImage(
+                                                          imageUrl:
+                                                              'https://friday-images.s3.ap-south-1.amazonaws.com/${brand.brandId}.jpeg',
+                                                          imageBuilder: (context,
+                                                                  imageProvider) =>
+                                                              Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              image:
+                                                                  DecorationImage(
+                                                                image:
+                                                                    imageProvider,
+                                                                fit: BoxFit
+                                                                    .contain,
+                                                              ),
+                                                            ),
                                                           ),
+                                                          placeholder: (context,
+                                                                  url) =>
+                                                              const CircularProgressIndicator(),
+                                                          errorWidget: (context,
+                                                                  url, error) =>
+                                                              const Icon(
+                                                                  Icons.error),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: sizeConfig
+                                                          .getPropHeight(22),
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceEvenly,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            brand.brandName,
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyText2!
+                                                                .copyWith(
+                                                                  fontSize: 14,
+                                                                  color: Colors
+                                                                      .black,
+                                                                ),
+                                                          ),
+                                                          Text(
+                                                            brand.totalOffers,
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyText2!
+                                                                .copyWith(
+                                                                  fontSize: 14,
+                                                                  color: Colors
+                                                                      .black,
+                                                                ),
+                                                          )
+                                                        ],
+                                                      ),
                                                     ),
                                                     Text(
-                                                      brand.totalOffers,
+                                                      '${brand.expiringThisWeek} Offers expiring this week',
                                                       style: Theme.of(context)
                                                           .textTheme
                                                           .bodyText2!
                                                           .copyWith(
-                                                            fontSize: 14,
-                                                            color: Colors.black,
+                                                            color: Colors.grey,
+                                                            fontSize: 10,
                                                           ),
                                                     )
                                                   ],
                                                 ),
                                               ),
-                                              Text(
-                                                '${brand.expiringThisWeek} Offers expiring this week',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyText2!
-                                                    .copyWith(
-                                                      color: Colors.grey,
-                                                      fontSize: 10,
-                                                    ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
+                                            ),
+                                          );
+                                        },
                                       ),
-                                    );
-                                  },
-                                ),
                               );
                             },
                           ),

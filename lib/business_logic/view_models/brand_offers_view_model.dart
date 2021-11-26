@@ -14,6 +14,7 @@ class BrandOffersViewModel extends BaseModel {
   }
 
   fetchOffers(String brandId) async {
+    print(brandId);
     final result =
         await apiService.getRequest(ApiConstants.brandOffers + brandId);
     if (result.data != null) {

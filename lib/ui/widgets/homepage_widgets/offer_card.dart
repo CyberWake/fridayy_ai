@@ -106,6 +106,7 @@ class OffersInfoWidgets extends StatelessWidget {
                   borderRadius: BorderRadius.circular(
                     sizeConfig.getPropWidth(16),
                   ),
+                  border: Border.all(color: const Color(0xFFE7ECEE)),
                 ),
                 child: _buildChild(context, index),
               ),

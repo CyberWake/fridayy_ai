@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:fridayy_one/business_logic/models/new_models/new_user_overview_model.dart';
@@ -52,12 +53,24 @@ class DisplayOffer extends StatelessWidget {
                   ),
                   height: sizeConfig.getPropHeight(49),
                   width: sizeConfig.getPropWidth(113),
-                  child: Hero(
-                    tag: "${brandId}image",
-                    child: Image.network(
-                      'https://friday-images.s3.ap-south-1.amazonaws.com/$brandId.jpeg',
-                      fit: BoxFit.contain,
+                  alignment: Alignment.center,
+                  child: CachedNetworkImage(
+                    imageUrl:
+                        'https://friday-images.s3.ap-south-1.amazonaws.com/$brandId.jpeg',
+                    imageBuilder: (context, imageProvider) => Container(
+                      height: sizeConfig.getPropHeight(49),
+                      width: sizeConfig.getPropWidth(113),
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
                     ),
+                    placeholder: (context, url) =>
+                        const CircularProgressIndicator(),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
                   ),
                 ),
                 Text(
@@ -146,7 +159,8 @@ class DisplayOffer extends StatelessWidget {
                   FlutterClipboard.copy(offerInfo.code!).whenComplete(
                     () => navigationService.showSnackBar('Coupon Code copied'),
                   );
-                } else if (offerInfo.link != null) {
+                }
+                if (offerInfo.link != null) {
                   await canLaunch(offerInfo.link!)
                       ? await launch(offerInfo.link!)
                       : navigationService.showSnackBar('Failed to open link');

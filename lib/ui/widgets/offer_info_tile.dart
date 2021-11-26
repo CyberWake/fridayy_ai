@@ -29,7 +29,7 @@ class OfferInfoTile extends StatelessWidget {
                     fontSize: 13,
                     color: const Color(0xFF71828A),
                   ),
-              overflow: TextOverflow.clip,
+              overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.right,
             ),
           ),

@@ -1,4 +1,5 @@
 import 'package:animations/animations.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fridayy_one/business_logic/models/new_models/new_user_overview_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
@@ -78,12 +79,24 @@ class StoryListOffers extends StatelessWidget {
                               ]
                             : [],
                       ),
-                      child: Hero(
-                        tag: "${offers[index].brandId}image",
-                        child: Image.network(
-                          'https://friday-images.s3.ap-south-1.amazonaws.com/${offers[index].brandId}.jpeg',
-                          fit: BoxFit.contain,
+                      alignment: Alignment.center,
+                      child: CachedNetworkImage(
+                        imageUrl:
+                            'https://friday-images.s3.ap-south-1.amazonaws.com/${offers[index].brandId}.jpeg',
+                        imageBuilder: (context, imageProvider) => Container(
+                          height: sizeConfig.getPropHeight(size ?? 76),
+                          width: sizeConfig.getPropWidth(size ?? 76),
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
                         ),
+                        placeholder: (context, url) =>
+                            const CircularProgressIndicator(),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
                       ),
                     ),
                   ],

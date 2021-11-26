@@ -16,7 +16,8 @@ class SpendingBehaviourCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: sizeConfig.getPropHeight(587),
+      height: sizeConfig
+          .getPropHeight(spendingData.distribution != null ? 107 : 587),
       width: sizeConfig.getPropWidth(379),
       margin: EdgeInsets.only(
         top: sizeConfig.getPropHeight(22.5),
@@ -27,36 +28,41 @@ class SpendingBehaviourCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(
           sizeConfig.getPropWidth(16),
         ),
+        border: Border.all(color: const Color(0xFFE7ECEE)),
       ),
       child: InkWell(
         onTap: onTap,
         child: Stack(
           children: [
-            PieChartWithVaryingRadius(
-              size: 300,
-              data: spendingData.distribution?.reversed.toList() ?? [],
-              onTap: onTap,
-            ),
-            Positioned(
-              top: sizeConfig.getPropHeight(315),
-              child: ExpenseChips(
-                data: spendingData.distribution ?? [],
+            if (spendingData.distribution != null)
+              PieChartWithVaryingRadius(
+                size: 300,
+                data: spendingData.distribution?.reversed.toList() ?? [],
+                onTap: onTap,
               ),
-            ),
-            Positioned(
-              top: sizeConfig.getPropHeight(300),
-              width: sizeConfig.getPropWidth(359),
-              child: const Divider(
-                thickness: 1,
+            if (spendingData.distribution != null)
+              Positioned(
+                top: sizeConfig.getPropHeight(315),
+                child: ExpenseChips(
+                  data: spendingData.distribution ?? [],
+                ),
               ),
-            ),
-            Positioned(
-              bottom: sizeConfig.getPropHeight(107),
-              width: sizeConfig.getPropWidth(359),
-              child: const Divider(
-                thickness: 1,
+            if (spendingData.distribution != null)
+              Positioned(
+                top: sizeConfig.getPropHeight(300),
+                width: sizeConfig.getPropWidth(359),
+                child: const Divider(
+                  thickness: 1,
+                ),
               ),
-            ),
+            if (spendingData.distribution != null)
+              Positioned(
+                bottom: sizeConfig.getPropHeight(107),
+                width: sizeConfig.getPropWidth(359),
+                child: const Divider(
+                  thickness: 1,
+                ),
+              ),
             Positioned(
               bottom: sizeConfig.getPropHeight(20),
               child: Column(

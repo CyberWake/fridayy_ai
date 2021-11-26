@@ -64,6 +64,35 @@ extension Category on String {
     }
   }
 
+  Color barChartColor() {
+    switch (this) {
+      case 'FAD':
+        return const Color(0xFFF86F34);
+      case 'MDCL':
+        return const Color(0xFF2128BD);
+      case 'UTL':
+        return const Color(0xFF75CDD3);
+      case 'TRVL':
+        return const Color(0xFFFFB731);
+      case 'LUX':
+        return const Color(0xFF16331C);
+      case 'FIN':
+        return const Color(0xFF0A8677);
+      case 'OTH':
+        return const Color(0xFFC61C1C);
+      case 'EAD':
+        return const Color(0xFF14EDAA);
+      case 'EXP':
+        return const Color(0xFFF14A25);
+      case 'ACT':
+        return const Color(0xFFB160B7);
+      case 'EXS':
+        return const Color(0xFFFFE500);
+      default:
+        return const Color(0xFFFFFFFF);
+    }
+  }
+
   Color getColor() {
     switch (this) {
       case 'FAD':

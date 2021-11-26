@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fridayy_one/business_logic/models/new_models/new_user_overview_model.dart';
+import 'package:fridayy_one/business_logic/models/new_models/spend_category_model.dart';
+import 'package:fridayy_one/business_logic/models/new_models/spends_brand_model.dart';
+import 'package:fridayy_one/business_logic/models/new_models/spends_transaction_model.dart';
 import 'package:fridayy_one/business_logic/models/pass_call_outcome.dart';
-import 'package:fridayy_one/business_logic/models/spending_brands_model.dart';
-import 'package:fridayy_one/business_logic/models/spending_category_model.dart';
-import 'package:fridayy_one/business_logic/models/spending_transaction_model.dart';
 import 'package:fridayy_one/business_logic/utils/api_constants.dart';
 import 'package:fridayy_one/business_logic/utils/enums.dart';
 import 'package:fridayy_one/business_logic/view_models/base_view_model.dart';
@@ -11,16 +11,16 @@ import 'package:fridayy_one/services/service_locator.dart';
 
 class SpendingScreenViewModel extends BaseModel {
   final String title = "Spending Analysis";
-  SpendingTransactionModel data =
-      SpendingTransactionModel(amount: 0, count: 0, spends: []);
-  final List<SpendingCategoryModel> spendCategoryData = [];
-  final List<SpendingBrandModel> spendBrandData = [];
+  SpendsTransactionModel data =
+      SpendsTransactionModel(totalAmount: 0, currency: "Rs", spends: []);
+  late SpendCategoryModel spendCategoryData;
+  late SpendsBrandModel spendBrandData;
   late String dateFilter;
   late int month;
   late String year;
   final List<String> years = [];
 
-  final List<Distribution> categoryData = [];
+  final List<DistributionSpending> categoryData = [];
 
   final List<List> dataCategory = [
     [],
@@ -75,58 +75,56 @@ class SpendingScreenViewModel extends BaseModel {
 
   Future getTransactionData() async {
     setState(ViewState.busy);
-    data = SpendingTransactionModel(amount: 0, count: 0, spends: []);
+    data = SpendsTransactionModel(totalAmount: 0, currency: "Rs", spends: []);
     final CallOutcome resultSpendingTransactions = await apiService
-        .getRequest("${ApiConstants.spendingTransactions}/$dateFilter");
+        .getRequest("${ApiConstants.spendingTransactions}?month=$dateFilter");
     if (resultSpendingTransactions.data != null) {
-      print(resultSpendingTransactions.data);
-      data = SpendingTransactionModel.fromJson(
+      data = SpendsTransactionModel.fromJson(
         resultSpendingTransactions.data! as Map<String, dynamic>,
       );
     } else {
-      data = SpendingTransactionModel(amount: 0.0, count: 0, spends: []);
+      data =
+          SpendsTransactionModel(totalAmount: 0.0, currency: "Rs", spends: []);
     }
     setState(ViewState.idle);
   }
 
   Future getCategoryData() async {
+    print('here1');
     setState(ViewState.busy);
-    double totalAmount = 0;
-    spendCategoryData.clear();
     categoryData.clear();
     final CallOutcome result = await apiService.getRequest(
-      "${ApiConstants.spendingCategory}/?date=$dateFilter",
+      "${ApiConstants.spendingCategory}?month=$dateFilter",
     );
+    print('here');
     if (result.data != null) {
-      (result.data!['result'] as List).forEach((element) {
-        spendCategoryData.add(
-          SpendingCategoryModel.fromJson(element as Map<String, dynamic>),
-        );
-        totalAmount += spendCategoryData.last.amount;
-      });
-      spendCategoryData.forEach((element) {
+      print(result.data);
+      spendCategoryData =
+          SpendCategoryModel.fromJson(result.data as Map<String, dynamic>);
+      spendCategoryData.distribution.forEach((element) {
         categoryData.add(
-          Distribution(
+          DistributionSpending(
             categoryId: element.categoryId,
-            percentage: (element.amount / totalAmount) * 100,
+            percentage: element.percentage,
+            count: element.count,
           ),
         );
       });
+    } else {
+      print(result.exception);
     }
     setState(ViewState.idle);
   }
 
   Future getBrandData() async {
     setState(ViewState.busy);
-    spendBrandData.clear();
     final CallOutcome result = await apiService
-        .getRequest('${ApiConstants.spendingBrand}?date=$dateFilter');
+        .getRequest('${ApiConstants.spendingBrand}?month=$dateFilter');
     if (result.data != null) {
-      print(result.data);
-      (result.data!['result'] as List).forEach((element) {
-        spendBrandData
-            .add(SpendingBrandModel.fromJson(element as Map<String, dynamic>));
-      });
+      spendBrandData =
+          SpendsBrandModel.fromJson(result.data as Map<String, dynamic>);
+    } else {
+      print(result.exception);
     }
     setState(ViewState.idle);
   }
