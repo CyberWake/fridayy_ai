@@ -12,13 +12,15 @@ class ApiConstants {
   static const String userOverview = '/user/overview';
 
   //category endpoint
-  static const String categoryOffers = '/user/offers/category';
-  static const String brandOffers = '/user/offers/brand/';
+  static const String offerOnCategory = '/user/offers/category';
+  static const String offersOnBrand = '/user/offers/brand';
 
   //spending endpoint
   static const String spendingTransactions = '/user/spends';
   static const String spendingCategory = '/user/spends/categories';
   static const String spendingBrand = '/user/spends/brands';
+  static const String spendingOnBrand = '/user/spends/brand';
+  static const String spendingOnCategory = '/user/spends/category';
 
   //user details endpoint
   static const String userProfile = '/user/profile';

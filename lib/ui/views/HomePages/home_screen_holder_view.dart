@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fridayy_one/business_logic/view_models/HomeViewModels/home_screen_holder_view_model.dart';
+import 'package:fridayy_one/business_logic/view_models/home_view_models/home_screen_holder_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
-import 'package:fridayy_one/ui/views/HomePages/home_screen_view.dart';
-import 'package:fridayy_one/ui/views/HomePages/offer_screen_view.dart';
+import 'package:fridayy_one/ui/views/HomePages/Offer/offer_screen_view.dart';
+import 'package:fridayy_one/ui/views/HomePages/dashboard/home_screen_view.dart';
 import 'package:fridayy_one/ui/views/HomePages/profile_screen_view.dart';
-import 'package:fridayy_one/ui/views/HomePages/spending_screen_view.dart';
+import 'package:fridayy_one/ui/views/HomePages/spend/spending_screen_view.dart';
 import 'package:fridayy_one/ui/views/base_view.dart';
 
 class HomeScreenHolder extends StatelessWidget {

@@ -1,4 +1,4 @@
-import 'package:fridayy_one/business_logic/models/new_models/new_user_overview_model.dart';
+import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
 
 class BrandOffer {
   BrandOffer({required this.offers});

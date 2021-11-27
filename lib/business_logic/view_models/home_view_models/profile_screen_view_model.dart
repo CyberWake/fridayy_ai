@@ -1,4 +1,4 @@
-import 'package:fridayy_one/business_logic/models/new_models/new_user_overview_model.dart';
+import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
 import 'package:fridayy_one/business_logic/models/pass_call_outcome.dart';
 import 'package:fridayy_one/business_logic/utils/api_constants.dart';
 import 'package:fridayy_one/business_logic/utils/dummy_data.dart';

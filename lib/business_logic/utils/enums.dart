@@ -5,4 +5,4 @@ enum ViewState {
 
 enum Gender { male, female, others }
 
-enum ListType { spendTrans, spendCategory, spendBrand }
+enum ListType { spendTrans, spendCategory, spendBrand, offerBrand }

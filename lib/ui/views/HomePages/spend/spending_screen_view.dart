@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fridayy_one/business_logic/models/new_models/spend_category_model.dart';
-import 'package:fridayy_one/business_logic/models/new_models/spends_on_brand_model.dart';
+import 'package:fridayy_one/business_logic/models/spend_category_model.dart';
+import 'package:fridayy_one/business_logic/models/spends_model.dart';
+import 'package:fridayy_one/business_logic/utils/constants.dart';
 import 'package:fridayy_one/business_logic/utils/enums.dart';
 import 'package:fridayy_one/business_logic/utils/extensions.dart';
 import 'package:fridayy_one/business_logic/utils/fridayy_svg.dart';
-import 'package:fridayy_one/business_logic/view_models/HomeViewModels/home_screen_holder_view_model.dart';
-import 'package:fridayy_one/business_logic/view_models/HomeViewModels/spending_screen_view_model.dart';
+import 'package:fridayy_one/business_logic/view_models/home_view_models/home_screen_holder_view_model.dart';
+import 'package:fridayy_one/business_logic/view_models/home_view_models/spends/spending_screen_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/views/base_view.dart';
 import 'package:fridayy_one/ui/widgets/cards/render_list.dart';
@@ -78,8 +79,8 @@ class SpendingScreen extends StatelessWidget {
                           BorderRadius.circular(sizeConfig.getPropWidth(16)),
                       underline: const SizedBox(),
                       icon: const Icon(Icons.keyboard_arrow_down_rounded),
-                      value: model.months[model.month - 1],
-                      items: model.months.map((String value) {
+                      value: months[model.month - 1],
+                      items: months.map((String value) {
                         return DropdownMenuItem<String>(
                           alignment: Alignment.centerLeft,
                           value: value,
@@ -88,7 +89,7 @@ class SpendingScreen extends StatelessWidget {
                       }).toList(),
                       onChanged: (value) {
                         update(() {
-                          model.month = model.months.indexOf('$value') + 1;
+                          model.month = months.indexOf('$value') + 1;
                         });
                       },
                     ),
@@ -157,7 +158,7 @@ class SpendingScreen extends StatelessWidget {
       edgeOffset: 0.0,
       strokeWidth: 0.0,
       triggerMode: RefreshIndicatorTriggerMode.anywhere,
-      child: RenderList<SpendsOnBrand>(
+      child: RenderList<SpendsModel>(
         isBusy: model.isBusy,
         items: model.spendsTransactionData.spends,
         type: ListType.spendTrans,
@@ -234,6 +235,10 @@ class SpendingScreen extends StatelessWidget {
                 isBusy: model.isBusy,
                 items: model.spendCategoryData.distribution,
                 type: ListType.spendCategory,
+                listItemAdditionalParams: {
+                  'month': months[int.parse(model.dateFilter.substring(2)) - 1],
+                  'filter': model.dateFilter,
+                },
               ),
             ),
           ],
@@ -248,10 +253,14 @@ class SpendingScreen extends StatelessWidget {
       edgeOffset: 0.0,
       strokeWidth: 0.0,
       triggerMode: RefreshIndicatorTriggerMode.anywhere,
-      child: RenderList<SpendsOnBrand>(
+      child: RenderList<SpendsModel>(
         isBusy: model.isBusy,
         items: model.spendBrandData.brands,
         type: ListType.spendBrand,
+        listItemAdditionalParams: {
+          'month': months[int.parse(model.dateFilter.substring(2)) - 1],
+          'filter': model.dateFilter,
+        },
       ),
     );
   }
@@ -307,7 +316,7 @@ class SpendingScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                model.months[
+                                months[
                                     int.parse(model.dateFilter.substring(2)) -
                                         1],
                                 style: Theme.of(context)

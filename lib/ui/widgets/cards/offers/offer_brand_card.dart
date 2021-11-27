@@ -5,10 +5,11 @@ import 'package:clipboard/clipboard.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fridayy_one/business_logic/models/new_models/new_user_overview_model.dart';
+import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
 import 'package:fridayy_one/business_logic/utils/fridayy_svg.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/widgets/display_offer.dart';
+import 'package:fridayy_one/ui/widgets/popups/offers/tell_us_what_happened.dart';
 
 class OfferBrandCard extends StatelessWidget {
   const OfferBrandCard({
@@ -36,6 +37,26 @@ class OfferBrandCard extends StatelessWidget {
           offerInfo: offerInfoDetails,
           showClaimButton: true,
           brandId: brandId,
+        ),
+      ),
+    );
+  }
+
+  showTellUsPopUp(OfferInfo offerInfoDetails) async {
+    showModalBottomSheet(
+      context: navigationService.navigatorKey.currentContext!,
+      constraints: BoxConstraints(
+        maxWidth: sizeConfig.getPropWidth(379),
+        minHeight: sizeConfig.getPropHeight(351),
+      ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
+        child: Center(
+          child: TellUsDialog(
+            offerInfo: offerInfoDetails,
+          ),
         ),
       ),
     );
@@ -165,8 +186,7 @@ class OfferBrandCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       GestureDetector(
-                        onTap: () =>
-                            navigationService.showSnackBar('To be implemented'),
+                        onTap: () => showTellUsPopUp(offerInfo),
                         child: Padding(
                           padding: EdgeInsets.only(
                             top: sizeConfig.getPropHeight(10),

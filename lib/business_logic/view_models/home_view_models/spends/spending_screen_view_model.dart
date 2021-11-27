@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_logic/models/new_models/new_user_overview_model.dart';
-import 'package:fridayy_one/business_logic/models/new_models/spend_category_model.dart';
-import 'package:fridayy_one/business_logic/models/new_models/spends_brand_model.dart';
-import 'package:fridayy_one/business_logic/models/new_models/spends_transaction_model.dart';
+import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
 import 'package:fridayy_one/business_logic/models/pass_call_outcome.dart';
+import 'package:fridayy_one/business_logic/models/spend_category_model.dart';
+import 'package:fridayy_one/business_logic/models/spends_brand_model.dart';
+import 'package:fridayy_one/business_logic/models/spends_transaction_model.dart';
 import 'package:fridayy_one/business_logic/utils/api_constants.dart';
 import 'package:fridayy_one/business_logic/utils/enums.dart';
 import 'package:fridayy_one/business_logic/view_models/base_view_model.dart';
@@ -36,20 +36,6 @@ class SpendingScreenViewModel extends BaseModel {
   }
 
   final List<DistributionSpending> categoryData = [];
-  final List<String> months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
-  ];
 
   init() async {
     final date = DateTime.now();

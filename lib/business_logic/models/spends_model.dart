@@ -1,47 +1,36 @@
-class Spends {
-  Spends({
+class SpendsModel {
+  SpendsModel({
     required this.amount,
+    required this.spendId,
     required this.date,
-    this.spendingId,
-    required this.transactionType,
-    this.from,
-    this.to,
-    this.remainingBalance,
+    required this.brandId,
+    required this.brandName,
     required this.categoryId,
+    required this.count,
+    required this.paymentType,
   });
 
-  factory Spends.fromJson(Map<String, dynamic> json) {
-    return Spends(
+  factory SpendsModel.fromJson(Map<String, dynamic> json) {
+    return SpendsModel(
       amount: json['amount'] as double,
-      date: json['date'] as String,
-      transactionType: json['transaction_type'] as String,
+      spendId: json['spend_id'] as String?,
+      date: json['date'] == null
+          ? null
+          : int.parse(json['date'].toString().split('.')[0]),
+      paymentType: json['payment_type'] as String?,
+      brandId: json['brand_id'] as String?,
+      brandName: json['brand_name'] as String?,
       categoryId: json['category_id'] as String?,
-      spendingId: json['spending_id'] as String?,
-      to: json['to'] as String?,
-      from: json['from'] as String?,
-      remainingBalance: json['remaining_balance'] as double?,
+      count: json['count'] as int?,
     );
   }
 
   double amount;
-  String date;
-  String? spendingId;
-  String transactionType;
-  String? from;
-  String? to;
-  double? remainingBalance;
+  String? spendId;
+  int? date;
+  int? count;
+  String? paymentType;
+  String? brandId;
+  String? brandName;
   String? categoryId;
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['amount'] = this.amount;
-    data['date'] = this.date;
-    data['spending_id'] = this.spendingId;
-    data['transaction_type'] = this.transactionType;
-    data['from'] = this.from;
-    data['to'] = this.to;
-    data['remaining_balance'] = this.remainingBalance;
-    data['category_id'] = this.categoryId;
-    return data;
-  }
 }

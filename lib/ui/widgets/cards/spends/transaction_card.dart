@@ -1,12 +1,33 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_logic/models/new_models/spends_on_brand_model.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fridayy_one/business_logic/models/spends_model.dart';
 import 'package:fridayy_one/business_logic/utils/extensions.dart';
+import 'package:fridayy_one/business_logic/utils/fridayy_svg.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 
 class SpendsTransactionCard extends StatelessWidget {
-  const SpendsTransactionCard({Key? key, required this.spend})
+  const SpendsTransactionCard({Key? key, required this.spend, required this.id})
       : super(key: key);
-  final SpendsOnBrand spend;
+  final SpendsModel spend;
+  final String? id;
+
+  Widget getTransactionIcon() {
+    switch (spend.paymentType) {
+      case 'CARD':
+        return const Icon(
+          Icons.payment,
+          color: Color(0xFF2128BD),
+        );
+      case 'UPI':
+        return SvgPicture.string(FridayySvg.upiIcon);
+      default:
+        return const Icon(
+          Icons.credit_score,
+          color: Color(0xFF2128BD),
+        );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,25 +42,60 @@ class SpendsTransactionCard extends StatelessWidget {
           ),
           color: const Color(0xFFF9F9F9),
         ),
-        child: Image.network(
-          'https://friday-images.s3.ap-south-1.amazonaws.com/${spend.brandId}.jpeg',
-          fit: BoxFit.contain,
-        ),
+        child: id == null
+            ? CachedNetworkImage(
+                imageUrl:
+                    'https://friday-images.s3.ap-south-1.amazonaws.com/${spend.brandId ?? id}.jpeg',
+                imageBuilder: (context, imageProvider) => Container(
+                  width: sizeConfig.getPropHeight(44),
+                  height: sizeConfig.getPropHeight(44),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                      sizeConfig.getPropWidth(8),
+                    ),
+                    color: const Color(0xFFF9F9F9),
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+                placeholder: (context, url) =>
+                    const CircularProgressIndicator(),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+              )
+            : getTransactionIcon(),
       ),
-      title: Text(
-        spend.brandName,
-        style: Theme.of(context).textTheme.bodyText2!.copyWith(
-              fontSize: 16,
-              color: Colors.black,
+      title: id == null
+          ? Text(
+              spend.brandName ?? '',
+              style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                    fontSize: 16,
+                    color: Colors.black,
+                  ),
+            )
+          : Text(
+              spend.date?.toDateddMMMyyyy() ?? '',
+              style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                    fontSize: 14,
+                    color: const Color(0xFF717E95),
+                  ),
             ),
-      ),
-      subtitle: Text(
-        spend.date?.toDateddMMMyyyy() ?? '',
-        style: Theme.of(context).textTheme.bodyText2!.copyWith(
-              fontSize: 14,
-              color: const Color(0xFF717E95),
+      subtitle: id == null
+          ? Text(
+              spend.date?.toDateddMMMyyyy() ?? '',
+              style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                    fontSize: 14,
+                    color: const Color(0xFF717E95),
+                  ),
+            )
+          : Text(
+              spend.paymentType ?? 'Online',
+              style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                    fontSize: 16,
+                    color: Colors.black,
+                  ),
             ),
-      ),
       trailing: Text(
         "Rs. ${spend.amount}",
         style: Theme.of(context).textTheme.bodyText2!.copyWith(

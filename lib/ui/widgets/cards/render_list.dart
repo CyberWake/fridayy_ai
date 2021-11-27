@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_logic/models/new_models/spend_category_model.dart';
-import 'package:fridayy_one/business_logic/models/new_models/spends_on_brand_model.dart';
+import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
+import 'package:fridayy_one/business_logic/models/spend_category_model.dart';
+import 'package:fridayy_one/business_logic/models/spends_model.dart';
 import 'package:fridayy_one/business_logic/utils/enums.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/widgets/cards/card_separator.dart';
 import 'package:fridayy_one/ui/widgets/cards/card_shimmer.dart';
+import 'package:fridayy_one/ui/widgets/cards/offers/offer_brand_card.dart';
 import 'package:fridayy_one/ui/widgets/cards/spends/brand_card.dart';
 import 'package:fridayy_one/ui/widgets/cards/spends/category_card.dart';
 import 'package:fridayy_one/ui/widgets/cards/spends/transaction_card.dart';
@@ -12,14 +14,20 @@ import 'package:fridayy_one/ui/widgets/no_data_found.dart';
 
 class RenderList<T> extends StatelessWidget {
   const RenderList({
-    Key? key,
     required this.items,
     required this.isBusy,
     required this.type,
-  }) : super(key: key);
+    this.listItemAdditionalParams,
+    this.showBorderAndSeparator = true,
+  }) : assert(
+          type != ListType.offerBrand || listItemAdditionalParams != null,
+          "Pass addition params",
+        );
   final List<T> items;
+  final Map<String, dynamic>? listItemAdditionalParams;
   final bool isBusy;
   final ListType type;
+  final bool showBorderAndSeparator;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +41,8 @@ class RenderList<T> extends StatelessWidget {
           sizeConfig.getPropWidth(16),
         ),
         border: Border.all(
-          color: const Color(0xFFE7ECEE),
+          color:
+              showBorderAndSeparator ? const Color(0xFFE7ECEE) : Colors.white,
         ),
       ),
       alignment: items.isEmpty ? Alignment.center : Alignment.topCenter,
@@ -43,25 +52,48 @@ class RenderList<T> extends StatelessWidget {
             : items.isEmpty
                 ? 1
                 : items.length,
-        shrinkWrap: true,
         itemBuilder: (context, index) {
           if (isBusy) {
-            return const ListShimmerCard();
+            return ListShimmerCard(
+              height: showBorderAndSeparator ? null : 120,
+            );
           } else if (items.isEmpty) {
             return const NoDataFound();
           }
           if (type == ListType.spendTrans) {
-            return SpendsTransactionCard(spend: items[index] as SpendsOnBrand);
+            return SpendsTransactionCard(
+              spend: items[index] as SpendsModel,
+              id: listItemAdditionalParams != null
+                  ? listItemAdditionalParams!['brandId'].toString()
+                  : null,
+            );
           } else if (type == ListType.spendCategory) {
-            return SpendsCategoryCard(category: items[index] as Distribution);
+            return SpendsCategoryCard(
+              category: items[index] as Distribution,
+              month: listItemAdditionalParams!['month'].toString(),
+              filter: listItemAdditionalParams!['filter'].toString(),
+            );
           } else if (type == ListType.spendBrand) {
-            return SpendsBrandCard(brand: items[index] as SpendsOnBrand);
+            return SpendsBrandCard(
+              brand: items[index] as SpendsModel,
+              month: listItemAdditionalParams!['month'].toString(),
+              filter: listItemAdditionalParams!['filter'].toString(),
+            );
+          } else if (type == ListType.offerBrand) {
+            return OfferBrandCard(
+              offerInfo: items[index] as OfferInfo,
+              brandId: listItemAdditionalParams!['brandId'].toString(),
+              brandName: listItemAdditionalParams!['brandName'].toString(),
+            );
           } else {
             return Container();
           }
         },
         separatorBuilder: (BuildContext context, int index) {
-          return const CardSeparator();
+          return CardSeparator(
+            color:
+                showBorderAndSeparator ? const Color(0xFFEEF2F8) : Colors.white,
+          );
         },
       ),
     );

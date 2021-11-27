@@ -2,12 +2,14 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
+import 'package:fridayy_one/business_logic/utils/enums.dart';
 import 'package:fridayy_one/business_logic/utils/fridayy_svg.dart';
-import 'package:fridayy_one/business_logic/view_models/brand_offers_view_model.dart';
+import 'package:fridayy_one/business_logic/view_models/home_view_models/offers/brand_offers_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/views/base_view.dart';
-import 'package:fridayy_one/ui/widgets/cards/offers/offer_brand_card.dart';
-import 'package:fridayy_one/ui/widgets/shimmer_card.dart';
+import 'package:fridayy_one/ui/widgets/cards/render_list.dart';
+import 'package:fridayy_one/ui/widgets/popups/offers/brands_page_filter.dart';
 
 class BrandOffersView extends StatelessWidget {
   const BrandOffersView({
@@ -37,6 +39,29 @@ class BrandOffersView extends StatelessWidget {
               ),
         ),
       ],
+    );
+  }
+
+  showFilterPopUp(BrandOffersViewModel model) async {
+    showModalBottomSheet(
+      context: navigationService.navigatorKey.currentContext!,
+      constraints: BoxConstraints(
+        maxWidth: sizeConfig.getPropWidth(379),
+        minHeight: sizeConfig.getPropHeight(351),
+      ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
+        child: Center(
+          child: BrandsPageFilter(
+            offerType: model.currentOfferType,
+            availThrough: model.currentDiscountType,
+            expiring: model.currentExpiringType,
+            onSaveFilter: model.updatefilter,
+          ),
+        ),
+      ),
     );
   }
 
@@ -110,7 +135,7 @@ class BrandOffersView extends StatelessWidget {
                       ),
                     ),
                     InkWell(
-                      onTap: () {},
+                      onTap: () => showFilterPopUp(model),
                       child: Padding(
                         padding: EdgeInsets.only(
                           left: sizeConfig.getPropWidth(12),
@@ -124,30 +149,15 @@ class BrandOffersView extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: ListView.separated(
-                  padding: EdgeInsets.all(sizeConfig.getPropWidth(16)),
-                  itemCount: model.brandOffers.offers.isEmpty
-                      ? 5
-                      : model.brandOffers.offers.length,
-                  itemBuilder: (context, index) {
-                    if (model.brandOffers.offers.isEmpty) {
-                      return const ShimmerCard(
-                        size: Size(379, 120),
-                        borderRadius: 5,
-                      );
-                    } else {
-                      final offer = model.brandOffers.offers[index];
-                      return OfferBrandCard(
-                        offerInfo: offer,
-                        brandId: brandId,
-                        brandName: brandName,
-                      );
-                    }
+                child: RenderList<OfferInfo>(
+                  isBusy: model.isBusy,
+                  items: model.brandOffers.offers,
+                  type: ListType.offerBrand,
+                  showBorderAndSeparator: false,
+                  listItemAdditionalParams: {
+                    "brandId": brandId,
+                    "brandName": brandName
                   },
-                  separatorBuilder: (BuildContext context, int index) =>
-                      SizedBox(
-                    height: sizeConfig.getPropHeight(16),
-                  ),
                 ),
               ),
             ],

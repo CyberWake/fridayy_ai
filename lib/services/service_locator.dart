@@ -3,12 +3,14 @@ import 'package:fridayy_one/business_logic/view_models/AuthViewModels/auth_view_
 import 'package:fridayy_one/business_logic/view_models/AuthViewModels/login_view_model.dart';
 import 'package:fridayy_one/business_logic/view_models/AuthViewModels/otp_verification_view_model.dart';
 import 'package:fridayy_one/business_logic/view_models/AuthViewModels/signup_view_model.dart';
-import 'package:fridayy_one/business_logic/view_models/HomeViewModels/home_screen_holder_view_model.dart';
-import 'package:fridayy_one/business_logic/view_models/HomeViewModels/home_screen_view_model.dart';
-import 'package:fridayy_one/business_logic/view_models/HomeViewModels/offer_screen_view_model.dart';
-import 'package:fridayy_one/business_logic/view_models/HomeViewModels/profile_screen_view_model.dart';
-import 'package:fridayy_one/business_logic/view_models/HomeViewModels/spending_screen_view_model.dart';
-import 'package:fridayy_one/business_logic/view_models/brand_offers_view_model.dart';
+import 'package:fridayy_one/business_logic/view_models/home_view_models/dashboard/home_screen_view_model.dart';
+import 'package:fridayy_one/business_logic/view_models/home_view_models/home_screen_holder_view_model.dart';
+import 'package:fridayy_one/business_logic/view_models/home_view_models/offers/brand_offers_view_model.dart';
+import 'package:fridayy_one/business_logic/view_models/home_view_models/offers/offer_screen_view_model.dart';
+import 'package:fridayy_one/business_logic/view_models/home_view_models/profile_screen_view_model.dart';
+import 'package:fridayy_one/business_logic/view_models/home_view_models/spends/brand_transactions_view_model.dart';
+import 'package:fridayy_one/business_logic/view_models/home_view_models/spends/category_transactions_view_model.dart';
+import 'package:fridayy_one/business_logic/view_models/home_view_models/spends/spending_screen_view_model.dart';
 import 'package:fridayy_one/business_logic/view_models/splash_screen_view_model.dart';
 import 'package:fridayy_one/services/Api/api_service_implementation.dart';
 import 'package:fridayy_one/services/local_database/localdatabase_service_impl.dart';
@@ -42,5 +44,7 @@ void setupServiceLocator() {
   serviceLocator.registerFactory(() => OfferScreenViewModel());
   serviceLocator.registerFactory(() => BrandOffersViewModel());
   serviceLocator.registerFactory(() => SpendingScreenViewModel());
+  serviceLocator.registerFactory(() => BrandTransactionsViewModel());
+  serviceLocator.registerFactory(() => CategoryTransactionsViewModel());
   serviceLocator.registerFactory(() => ProfileScreenViewModel());
 }

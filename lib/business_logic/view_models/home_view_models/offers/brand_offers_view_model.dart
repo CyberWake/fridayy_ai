@@ -1,4 +1,4 @@
-import 'package:fridayy_one/business_logic/models/new_models/brand_offers.dart';
+import 'package:fridayy_one/business_logic/models/brand_offers.dart';
 import 'package:fridayy_one/business_logic/utils/api_constants.dart';
 import 'package:fridayy_one/business_logic/utils/dummy_data.dart';
 import 'package:fridayy_one/business_logic/utils/enums.dart';
@@ -7,6 +7,9 @@ import 'package:fridayy_one/services/service_locator.dart';
 
 class BrandOffersViewModel extends BaseModel {
   BrandOffer brandOffers = BrandOffer(offers: []);
+  String currentOfferType = 'Cashback';
+  String currentDiscountType = 'Card';
+  bool currentExpiringType = false;
 
   void init(String brandId) {
     setState(ViewState.busy);
@@ -15,7 +18,7 @@ class BrandOffersViewModel extends BaseModel {
 
   fetchOffers(String brandId) async {
     final result =
-        await apiService.getRequest(ApiConstants.brandOffers + brandId);
+        await apiService.getRequest('${ApiConstants.offersOnBrand}/$brandId');
     if (result.data != null) {
       brandOffers = BrandOffer.fromJson(result.data as Map<String, dynamic>);
       setState(ViewState.idle);
@@ -23,5 +26,13 @@ class BrandOffersViewModel extends BaseModel {
       brandOffers = BrandOffer.fromJson(brandOffersDummyData);
       setState(ViewState.idle);
     }
+  }
+
+  updatefilter(String? offerType, String? discountType, bool? expiringType) {
+    currentOfferType = offerType ?? 'Cashback';
+    currentDiscountType = discountType ?? 'Card';
+    currentExpiringType = expiringType ?? false;
+    // TODO: applying filter
+    setState(ViewState.idle);
   }
 }

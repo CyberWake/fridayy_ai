@@ -11,6 +11,8 @@ class CustomTextFieldWithTitle extends StatelessWidget {
     this.hintText,
     this.enabled,
     this.initialText,
+    this.style,
+    this.filledColor = Colors.white,
     required this.keyboardType,
     required this.textInputAction,
   }) : super(key: key);
@@ -22,6 +24,8 @@ class CustomTextFieldWithTitle extends StatelessWidget {
   final String? hintText;
   final String? initialText;
   final bool? enabled;
+  final TextStyle? style;
+  final Color? filledColor;
   final String? Function(String?) validator;
 
   static InputBorder borderStyle = OutlineInputBorder(
@@ -67,10 +71,11 @@ class CustomTextFieldWithTitle extends StatelessWidget {
             initialValue: initialText,
             keyboardType: keyboardType,
             textInputAction: textInputAction,
-            style: TextStyle(
-              color: Colors.black,
-              letterSpacing: sizeConfig.getPropWidth(2),
-            ),
+            style: style ??
+                TextStyle(
+                  color: Colors.black,
+                  letterSpacing: sizeConfig.getPropWidth(2),
+                ),
             validator: (value) => validator(value),
             decoration: InputDecoration(
               focusedBorder: borderStyle,
@@ -83,6 +88,10 @@ class CustomTextFieldWithTitle extends StatelessWidget {
                   ),
               prefixText: prefix,
               hintText: hintText,
+              helperStyle: style,
+              filled: true,
+              helperMaxLines: 2,
+              fillColor: filledColor,
             ),
           ),
         ),

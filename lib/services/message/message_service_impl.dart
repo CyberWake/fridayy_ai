@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:fridayy_one/business_logic/models/message_model.dart';
 import 'package:fridayy_one/business_logic/models/pass_call_outcome.dart';
-import 'package:fridayy_one/business_logic/models/user_overview_model.dart';
 import 'package:fridayy_one/business_logic/utils/api_constants.dart';
 import 'package:fridayy_one/services/message/message_service.dart';
 import 'package:fridayy_one/services/service_locator.dart';
@@ -12,18 +11,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sms_advanced/sms_advanced.dart';
 
 class MessageServiceImpl extends MessageService {
-  UserOverView userOverView = UserOverView(
-    user: User(userName: ' '),
-    offer: Offer(
-      notifiedOffers: [],
-      offersExpiring: 0,
-      totalOffers: 0,
-      activeOffers: 0,
-    ),
-    spending: Spending(month: '', currency: '', amount: 0, distribution: []),
-    financial: Financial(percentile: 0),
-  );
-
   late Map<String, String> s3BucketFields;
   String bucketUrl = "https://friday-presigned-urls.s3.amazonaws.com/";
 

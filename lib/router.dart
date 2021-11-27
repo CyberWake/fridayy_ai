@@ -1,17 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_logic/models/new_models/new_user_overview_model.dart';
+import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
 import 'package:fridayy_one/business_logic/utils/routing_constants.dart';
 import 'package:fridayy_one/main.dart';
 import 'package:fridayy_one/ui/views/AuthPages/auth_view.dart';
 import 'package:fridayy_one/ui/views/AuthPages/login_view.dart';
 import 'package:fridayy_one/ui/views/AuthPages/otp_verification_view.dart';
 import 'package:fridayy_one/ui/views/AuthPages/signup_view.dart';
+import 'package:fridayy_one/ui/views/HomePages/Offer/brand_offers_screen_view.dart';
+import 'package:fridayy_one/ui/views/HomePages/dashboard/story_screen_view.dart';
 import 'package:fridayy_one/ui/views/HomePages/home_screen_holder_view.dart';
-import 'package:fridayy_one/ui/views/brand_offers_screen_view.dart';
+import 'package:fridayy_one/ui/views/HomePages/spend/brand_transactions.dart';
 import 'package:fridayy_one/ui/views/onboarding_view.dart';
 import 'package:fridayy_one/ui/views/splash_screen_view.dart';
-import 'package:fridayy_one/ui/views/story_screen_view.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -93,6 +94,19 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           key: const Key('BrandOffersView'),
           brandName: inputData["brandName"] as String,
           brandId: inputData["brandId"] as String,
+        ),
+      );
+    case Routes.brandTransactionsScreen:
+      final Map<String, dynamic> inputData =
+          settings.arguments! as Map<String, dynamic>;
+      return CupertinoPageRoute(
+        builder: (context) => BrandTransactions(
+          key: const Key('BrandTransactions'),
+          brandName: inputData["brandName"] as String,
+          brandId: inputData["brandId"] as String,
+          amountSpend: inputData["amountSpend"] as double,
+          month: inputData["month"] as String,
+          filter: inputData["filter"] as String,
         ),
       );
     case Routes.storyScreen:

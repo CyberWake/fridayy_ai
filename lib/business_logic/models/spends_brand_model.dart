@@ -1,4 +1,4 @@
-import 'package:fridayy_one/business_logic/models/new_models/spends_on_brand_model.dart';
+import 'package:fridayy_one/business_logic/models/spends_model.dart';
 
 class SpendsBrandModel {
   SpendsBrandModel({
@@ -8,10 +8,10 @@ class SpendsBrandModel {
   });
 
   factory SpendsBrandModel.fromJson(Map<String, dynamic> json) {
-    final List<SpendsOnBrand> brands = [];
+    final List<SpendsModel> brands = [];
     if (json['brands'] != null) {
       json['brands'].forEach((v) {
-        brands.add(SpendsOnBrand.fromJson(v as Map<String, dynamic>));
+        brands.add(SpendsModel.fromJson(v as Map<String, dynamic>));
       });
     }
     return SpendsBrandModel(
@@ -22,5 +22,5 @@ class SpendsBrandModel {
   }
   double totalSpend;
   String currency;
-  List<SpendsOnBrand> brands;
+  List<SpendsModel> brands;
 }

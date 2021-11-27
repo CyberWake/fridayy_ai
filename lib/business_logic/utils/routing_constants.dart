@@ -9,4 +9,5 @@ class Routes {
   static const String homeScreen = '/home';
   static const String storyScreen = '/stories';
   static const String brandOffers = '/brandOffers';
+  static const String brandTransactionsScreen = '/brandTransactions';
 }
