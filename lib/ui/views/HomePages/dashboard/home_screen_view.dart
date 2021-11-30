@@ -30,28 +30,26 @@ class HomeScreen extends StatelessWidget {
             backgroundColor: Colors.white,
             centerTitle: false,
             automaticallyImplyLeading: false,
+            toolbarHeight: 60,
             title: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: sizeConfig.getPropHeight(18),
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 2.0),
-                    child: Text(
-                      'Hello,',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline4!
-                          .copyWith(fontSize: 14, fontWeight: FontWeight.w400),
-                    ),
+                  height: sizeConfig.getPropHeight(20),
+                  child: Text(
+                    'Hello,',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline4!
+                        .copyWith(fontSize: 14, fontWeight: FontWeight.w400),
                   ),
                 ),
                 SizedBox(
-                  height: sizeConfig.getPropHeight(25),
+                  height: sizeConfig.getPropHeight(30),
                   child: model.isBusy && homeModel.userOverView == null
                       ? const ShimmerCard(
-                          size: Size(60, 26),
+                          size: Size(60, 30),
                           borderRadius: 4,
                           isCenter: false,
                         )

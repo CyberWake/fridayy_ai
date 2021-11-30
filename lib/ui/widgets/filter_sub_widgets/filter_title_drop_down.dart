@@ -40,6 +40,12 @@ class FilterTitleDropDown extends StatelessWidget {
               borderRadius: BorderRadius.circular(4),
             ),
             child: DropdownButton<String>(
+              hint: Text(
+                'Choose',
+                style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                      fontSize: 14,
+                    ),
+              ),
               isExpanded: true,
               underline: const SizedBox(),
               icon: const Icon(Icons.keyboard_arrow_down_rounded),

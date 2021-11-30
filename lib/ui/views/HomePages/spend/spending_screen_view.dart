@@ -337,7 +337,7 @@ class SpendingScreen extends StatelessWidget {
                                     ),
                               ),
                               Text(
-                                model.isBusy ? "" : model.totalSpendAmount,
+                                model.isReady ? model.totalSpendAmount : "",
                                 style: Theme.of(context)
                                     .textTheme
                                     .caption!

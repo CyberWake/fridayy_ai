@@ -20,14 +20,27 @@ class SpendingScreenViewModel extends BaseModel {
   // SpendsBrandModel spendBrandData =
   //     SpendsBrandModel(totalSpend: 0, currency: "Rs", brands: []);
   // late String dateFilter;
-  bool loadingTransactions = true;
-  bool loadingCategories = true;
-  bool loadingBrands = true;
+  bool loadingTransactions = false;
+  bool loadingCategories = false;
+  bool loadingBrands = false;
   late int month;
   late String year;
   final List<String> years = [];
   int pageIndex = 0;
   late HomeScreenHolderViewModel homeModel;
+
+  bool get isReady {
+    switch (pageIndex) {
+      case 0:
+        return !loadingTransactions && !isBusy;
+      case 1:
+        return !loadingCategories && !isBusy;
+      case 2:
+        return !loadingBrands && !isBusy;
+      default:
+        return !isBusy;
+    }
+  }
 
   String get totalSpendAmount {
     if (pageIndex == 0) {
@@ -107,66 +120,76 @@ class SpendingScreenViewModel extends BaseModel {
   }
 
   Future getTransactionData() async {
-    setState(ViewState.busy);
-    final CallOutcome resultSpendingTransactions = await apiService.getRequest(
-      "${ApiConstants.spendingTransactions}?month=${homeModel.dateFilter}",
-    );
-    if (resultSpendingTransactions.data != null) {
-      homeModel.fetchedPage[0] = true;
-      homeModel.spendsTransactionData = SpendsTransactionModel.fromJson(
-        resultSpendingTransactions.data! as Map<String, dynamic>,
+    if (!loadingTransactions) {
+      loadingTransactions = true;
+      setState(ViewState.busy);
+      final CallOutcome resultSpendingTransactions =
+          await apiService.getRequest(
+        "${ApiConstants.spendingTransactions}?month=${homeModel.dateFilter}",
       );
-    } else {
-      // spendsTransactionData =
-      //     SpendsTransactionModel(totalAmount: 0.0, currency: "Rs", spends: []);
-    }
-    if (homeModel.currentTabIndex == 2) {
-      loadingTransactions = false;
-      setState(ViewState.idle);
+      if (resultSpendingTransactions.data != null) {
+        homeModel.fetchedPage[0] = true;
+        homeModel.spendsTransactionData = SpendsTransactionModel.fromJson(
+          resultSpendingTransactions.data! as Map<String, dynamic>,
+        );
+      } else {
+        // spendsTransactionData =
+        //     SpendsTransactionModel(totalAmount: 0.0, currency: "Rs", spends: []);
+      }
+      if (homeModel.currentTabIndex == 2) {
+        loadingTransactions = false;
+        setState(ViewState.idle);
+      }
     }
   }
 
   Future getCategoryData() async {
-    setState(ViewState.busy);
-    final CallOutcome result = await apiService.getRequest(
-      "${ApiConstants.spendingCategory}?month=${homeModel.dateFilter}",
-    );
-    if (result.data != null) {
-      homeModel.fetchedPage[1] = true;
-      homeModel.categoryData.clear();
-      homeModel.spendCategoryData =
-          SpendCategoryModel.fromJson(result.data as Map<String, dynamic>);
-      homeModel.spendCategoryData!.distribution
-          .sort((a, b) => b.percentage.compareTo(a.percentage));
-      homeModel.spendCategoryData!.distribution.forEach((element) {
-        homeModel.categoryData.add(
-          DistributionSpending(
-            categoryId: element.categoryId,
-            percentage: element.percentage,
-            count: element.count,
-          ),
-        );
-      });
-    } else {}
-    if (homeModel.currentTabIndex == 2) {
-      loadingCategories = false;
-      setState(ViewState.idle);
+    if (!loadingCategories) {
+      loadingCategories = true;
+      setState(ViewState.busy);
+      final CallOutcome result = await apiService.getRequest(
+        "${ApiConstants.spendingCategory}?month=${homeModel.dateFilter}",
+      );
+      if (result.data != null) {
+        homeModel.fetchedPage[1] = true;
+        homeModel.categoryData.clear();
+        homeModel.spendCategoryData =
+            SpendCategoryModel.fromJson(result.data as Map<String, dynamic>);
+        homeModel.spendCategoryData!.distribution
+            .sort((a, b) => b.percentage.compareTo(a.percentage));
+        homeModel.spendCategoryData!.distribution.forEach((element) {
+          homeModel.categoryData.add(
+            DistributionSpending(
+              categoryId: element.categoryId,
+              percentage: element.percentage,
+              count: element.count,
+            ),
+          );
+        });
+      } else {}
+      if (homeModel.currentTabIndex == 2) {
+        loadingCategories = false;
+        setState(ViewState.idle);
+      }
     }
   }
 
   Future getBrandData() async {
-    setState(ViewState.busy);
-    final CallOutcome result = await apiService.getRequest(
-      '${ApiConstants.spendingBrand}?month=${homeModel.dateFilter}',
-    );
-    if (result.data != null) {
-      homeModel.fetchedPage[2] = true;
-      homeModel.spendBrandData =
-          SpendsBrandModel.fromJson(result.data as Map<String, dynamic>);
-    } else {}
-    if (homeModel.currentTabIndex == 2) {
-      loadingBrands = false;
-      setState(ViewState.idle);
+    if (!loadingBrands) {
+      loadingBrands = true;
+      setState(ViewState.busy);
+      final CallOutcome result = await apiService.getRequest(
+        '${ApiConstants.spendingBrand}?month=${homeModel.dateFilter}',
+      );
+      if (result.data != null) {
+        homeModel.fetchedPage[2] = true;
+        homeModel.spendBrandData =
+            SpendsBrandModel.fromJson(result.data as Map<String, dynamic>);
+      } else {}
+      if (homeModel.currentTabIndex == 2) {
+        loadingBrands = false;
+        setState(ViewState.idle);
+      }
     }
   }
 
