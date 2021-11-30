@@ -1,10 +1,13 @@
+import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fridayy_one/business_logic/utils/extensions.dart';
 import 'package:fridayy_one/business_logic/utils/fridayy_svg.dart';
 import 'package:fridayy_one/business_logic/view_models/home_view_models/home_screen_holder_view_model.dart';
 import 'package:fridayy_one/business_logic/view_models/home_view_models/offers/offer_screen_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
+import 'package:fridayy_one/ui/views/HomePages/Offer/brand_offers_screen_view.dart';
 import 'package:fridayy_one/ui/views/base_view.dart';
 import 'package:fridayy_one/ui/widgets/shimmer_card.dart';
 
@@ -15,7 +18,7 @@ class OfferScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseView<OfferScreenViewModel>(
-      onModelReady: (model) => model.init(homeModel.offerCategoryIndex),
+      onModelReady: (model) => model.init(homeModel),
       builder: (context, model, child) {
         return Scaffold(
           appBar: AppBar(
@@ -106,7 +109,7 @@ class OfferScreen extends StatelessWidget {
                     ),
                     if (model.filterViewBy == "Brand")
                       SizedBox(
-                        height: sizeConfig.getPropHeight(52),
+                        height: sizeConfig.getPropHeight(65),
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: model.types.length,
@@ -118,8 +121,9 @@ class OfferScreen extends StatelessWidget {
                             return InkWell(
                               onTap: () => model.tabChanged(index),
                               child: SizedBox(
-                                width: sizeConfig
-                                    .getPropWidth(index == 0 ? 80 : 76),
+                                width: sizeConfig.getPropWidth(
+                                  index == 0 || index == 6 ? 82 : 76,
+                                ),
                                 child: Column(
                                   children: [
                                     Container(
@@ -137,19 +141,22 @@ class OfferScreen extends StatelessWidget {
                                       ),
                                       child: FittedBox(
                                         child: SvgPicture.string(
-                                          model.types[index]["image"] ?? "",
+                                          model.types[index].getSvg(),
                                           color: model.currentTabIndex == index
                                               ? const Color(0xFF2128BD)
                                               : Colors.grey,
                                         ),
                                       ),
                                     ),
-                                    Text(
-                                      model.types[index]["title"] ?? "",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1!
-                                          .copyWith(fontSize: 12),
+                                    Flexible(
+                                      child: Text(
+                                        model.types[index].getName(),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .copyWith(fontSize: 12),
+                                        textAlign: TextAlign.center,
+                                      ),
                                     )
                                   ],
                                 ),
@@ -167,7 +174,7 @@ class OfferScreen extends StatelessWidget {
                             sizeConfig.getPropWidth(16),
                             0,
                           ),
-                          height: sizeConfig.getPropHeight(515),
+                          height: sizeConfig.getPropHeight(502),
                           child: PageView.builder(
                             controller: model.offerPageController,
                             itemCount: model.types.length,
@@ -175,22 +182,24 @@ class OfferScreen extends StatelessWidget {
                             itemBuilder: (context, pageIndex) {
                               return RefreshIndicator(
                                 onRefresh: model.refreshData,
-                                child: model.offersOfCategory[pageIndex].brands
-                                            .isEmpty &&
+                                child: homeModel.offersOfCategory[pageIndex]
+                                            .brands.isEmpty &&
                                         !model.isBusy
                                     ? const Center(
                                         child: Text("No Offers found"),
                                       )
                                     : GridView.builder(
-                                        itemCount: model
+                                        itemCount: homeModel
                                                 .offersOfCategory[pageIndex]
                                                 .brands
                                                 .isEmpty
                                             ? model.isBusy
                                                 ? 8
                                                 : 0
-                                            : model.offersOfCategory[pageIndex]
-                                                .brands.length,
+                                            : homeModel
+                                                .offersOfCategory[pageIndex]
+                                                .brands
+                                                .length,
                                         padding: EdgeInsets.zero,
                                         gridDelegate:
                                             SliverGridDelegateWithFixedCrossAxisCount(
@@ -208,20 +217,12 @@ class OfferScreen extends StatelessWidget {
                                               borderRadius: 5,
                                             );
                                           }
-                                          final brand = model
+                                          final brand = homeModel
                                               .offersOfCategory[pageIndex]
                                               .brands[index];
-                                          return Material(
-                                            borderRadius: BorderRadius.circular(
-                                              sizeConfig.getPropHeight(5),
-                                            ),
-                                            child: InkWell(
-                                              onTap: () =>
-                                                  model.gotoBrandOffers(
-                                                brand.brandId,
-                                                brand.brandName,
-                                              ),
-                                              child: Container(
+                                          return OpenContainer(
+                                            closedBuilder: (context, onTap) {
+                                              return Container(
                                                 decoration: BoxDecoration(
                                                   border: Border.all(
                                                     color:
@@ -253,6 +254,10 @@ class OfferScreen extends StatelessWidget {
                                                             imageProvider,
                                                           ) =>
                                                               Container(
+                                                            width: sizeConfig
+                                                                .getPropWidth(
+                                                              93,
+                                                            ),
                                                             decoration:
                                                                 BoxDecoration(
                                                               image:
@@ -332,8 +337,25 @@ class OfferScreen extends StatelessWidget {
                                                     )
                                                   ],
                                                 ),
-                                              ),
+                                              );
+                                            },
+                                            openBuilder: (context, onTap) {
+                                              return BrandOffersView(
+                                                brandId: brand.brandId,
+                                                brandName: brand.brandName,
+                                              );
+                                            },
+                                            transitionDuration: const Duration(
+                                              milliseconds: 750,
                                             ),
+                                            closedElevation: 0.0,
+                                            openElevation: 0.0,
+                                            tappable: true,
+                                            closedShape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            closedColor: Colors.transparent,
                                           );
                                         },
                                       ),

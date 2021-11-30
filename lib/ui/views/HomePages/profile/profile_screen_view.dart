@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fridayy_one/business_logic/utils/extensions.dart';
 import 'package:fridayy_one/business_logic/utils/fridayy_svg.dart';
 import 'package:fridayy_one/business_logic/view_models/home_view_models/home_screen_holder_view_model.dart';
-import 'package:fridayy_one/business_logic/view_models/home_view_models/profile_screen_view_model.dart';
+import 'package:fridayy_one/business_logic/view_models/home_view_models/profile/profile_screen_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/views/base_view.dart';
 import 'package:fridayy_one/ui/widgets/rounded_rectangular_button.dart';
@@ -202,7 +203,7 @@ class ProfileScreenView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseView<ProfileScreenViewModel>(
-      onModelReady: (model) => model.init(),
+      onModelReady: (model) => model.init(homeModel),
       builder: (context, model, child) {
         return Scaffold(
           appBar: AppBar(
@@ -268,7 +269,7 @@ class ProfileScreenView extends StatelessWidget {
                                   borderRadius: 10,
                                 )
                               : Text(
-                                  model.user.userName.substring(0, 1),
+                                  homeModel.user!.userName.substring(0, 1),
                                   style: const TextStyle(fontSize: 42),
                                 ),
                         ),
@@ -285,7 +286,7 @@ class ProfileScreenView extends StatelessWidget {
                                   borderRadius: 10,
                                 )
                               : Text(
-                                  model.user.userName,
+                                  homeModel.user!.userName,
                                   style: Theme.of(context).textTheme.bodyText2,
                                 ),
                         ),
@@ -309,8 +310,8 @@ class ProfileScreenView extends StatelessWidget {
                                     : dataTile(
                                         context,
                                         'Phone Number',
-                                        model.user.countryCode! +
-                                            model.user.mobile!,
+                                        homeModel.user!.countryCode! +
+                                            homeModel.user!.mobile!,
                                       ),
                                 const Divider(),
                                 model.isBusy
@@ -318,7 +319,7 @@ class ProfileScreenView extends StatelessWidget {
                                     : dataTile(
                                         context,
                                         'E-mail',
-                                        model.user.email ?? 'NA',
+                                        homeModel.user!.email ?? 'NA',
                                       ),
                                 const Divider(),
                                 model.isBusy
@@ -326,7 +327,15 @@ class ProfileScreenView extends StatelessWidget {
                                     : dataTile(
                                         context,
                                         'Last Refreshed',
-                                        '02:00 18 Oct 2021',
+                                        localDatabaseService.lastRefreshedAt ==
+                                                null
+                                            ? 'NA'
+                                            : (DateTime.parse(
+                                                      localDatabaseService
+                                                          .lastRefreshedAt!,
+                                                    ).millisecondsSinceEpoch ~/
+                                                    1000)
+                                                .toDate(),
                                       ),
                                 const Divider(),
                               ],

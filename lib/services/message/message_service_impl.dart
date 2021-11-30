@@ -15,7 +15,8 @@ class MessageServiceImpl extends MessageService {
   String bucketUrl = "https://friday-presigned-urls.s3.amazonaws.com/";
 
   @override
-  Future<CallOutcome<List<Map<String, String>>>> readMessage() async {
+  Future<CallOutcome<Map<String, List<Map<String, dynamic>>>>>
+      readMessage() async {
     try {
       final SmsQuery query = SmsQuery();
       final List<Map<String, dynamic>> messageDataBelow = [];
@@ -46,11 +47,10 @@ class MessageServiceImpl extends MessageService {
           } else {
             messageDataAfter.add(message.toJson());
           }
-          localDatabaseService.saveMessage(message);
           messageData.add(message.toJson());
         }
       }
-      if (messageDataBelow.length > 100 && messageDataAfter.length > 100) {
+      if (messageDataBelow.isNotEmpty && messageDataAfter.isNotEmpty) {
         final directory = await getApplicationDocumentsDirectory();
         final File messagesFileBelow =
             File('${directory.path}/messages_below.json');
@@ -58,45 +58,40 @@ class MessageServiceImpl extends MessageService {
         final File messagesFileAfter =
             File('${directory.path}/messages_after.json');
         messagesFileAfter.writeAsStringSync(jsonEncode(messageDataAfter));
-        return CallOutcome<List<Map<String, String>>>(
-          data: [
-            {"messageBelow": messagesFileBelow.path},
-            {"messageAfter": messagesFileAfter.path},
-          ],
+        return CallOutcome<Map<String, List<Map<String, dynamic>>>>(
+          data: {
+            "messageBelow": messageDataBelow,
+            "messageAfter": messageDataAfter
+          },
         );
-      } else if (messageDataAfter.length > 100) {
+      } else if (messageDataAfter.isNotEmpty) {
         final directory = await getApplicationDocumentsDirectory();
         final File messagesFileAfter =
             File('${directory.path}/messages_after.json');
         messagesFileAfter.writeAsStringSync(jsonEncode(messageDataAfter));
-        return CallOutcome<List<Map<String, String>>>(
-          data: [
-            {"messageAfter": messagesFileAfter.path},
-          ],
+        return CallOutcome<Map<String, List<Map<String, dynamic>>>>(
+          data: {"messageAfter": messageDataAfter},
         );
-      } else if (messageDataBelow.length > 100) {
+      } else if (messageDataBelow.isNotEmpty) {
         final directory = await getApplicationDocumentsDirectory();
         final File messagesFileBelow =
             File('${directory.path}/messages_below.json');
         messagesFileBelow.writeAsStringSync(jsonEncode(messageDataBelow));
-        return CallOutcome<List<Map<String, String>>>(
-          data: [
-            {"messageBelow": messagesFileBelow.path},
-          ],
-        );
-      } else {
-        return CallOutcome<List<Map<String, String>>>(
-          exception: Exception('Messages already synced'),
+        return CallOutcome<Map<String, List<Map<String, dynamic>>>>(
+          data: {"messageBelow": messageDataBelow},
         );
       }
+      return CallOutcome<Map<String, List<Map<String, String>>>>(
+        exception: Exception('Messages already synced'),
+      );
     } on Exception catch (e) {
-      return CallOutcome<List<Map<String, String>>>(exception: e);
+      return CallOutcome<Map<String, List<Map<String, dynamic>>>>(exception: e);
     }
   }
 
   @override
   Future<CallOutcome<bool>> postSms(
-    List<Map<String, String>> messageFilesPaths, {
+    Map<String, List<Map<String, dynamic>>> messageFilesPaths, {
     String? url,
     Map<String, String>? fields,
   }) async {
@@ -105,24 +100,45 @@ class MessageServiceImpl extends MessageService {
         bucketUrl = url ?? bucketUrl;
         if (fields?.isEmpty ?? true) {
           s3BucketFields = await localDatabaseService.fetchBucket(
-            isBefore: messageFilesPaths[i].keys.first == "messageBelow",
+            //isBefore: i == 1 ? true : false,
+            isBefore: messageFilesPaths.keys.toList()[i] == "messageBelow",
           );
         }
         s3BucketFields = fields ?? s3BucketFields;
         final postUri = Uri.parse(bucketUrl);
         final request = http.MultipartRequest("POST", postUri);
         request.fields.addAll(s3BucketFields);
+        print(request.fields);
+
+        final directory = await getApplicationDocumentsDirectory();
+        final File filePath = File(
+          //'${directory.path}/${i == 1 ? 'messages_below.json' : 'messages_after.json'}'
+          '${directory.path}/${messageFilesPaths.keys.toList()[i]}.json',
+        );
+        filePath.writeAsStringSync(
+          jsonEncode(
+            //i == 1 ? before : after,
+            messageFilesPaths.values.toList()[i],
+          ),
+        );
         request.files.add(
           await http.MultipartFile.fromPath(
             'file',
-            messageFilesPaths[i].values.first,
+            filePath.path,
           ),
         );
         final uploadResult = await request.send();
         if (uploadResult.statusCode != 204) {
+          print('this1');
           return CallOutcome<bool>(
             exception: Exception(uploadResult.statusCode),
           );
+        } else {
+          print(uploadResult.statusCode);
+          messageFilesPaths.values.toList()[i].forEach((element) {
+            final Message message = Message.fromMap(element);
+            localDatabaseService.saveMessage(message);
+          });
         }
       }
       final CallOutcome<Map<String, dynamic>> result =
@@ -133,6 +149,8 @@ class MessageServiceImpl extends MessageService {
       if (result.data != null && result.exception == null) {
         return CallOutcome<bool>(data: true);
       } else {
+        print('this');
+        print(result.exception);
         return CallOutcome<bool>(exception: result.exception);
       }
     } on Exception catch (e) {

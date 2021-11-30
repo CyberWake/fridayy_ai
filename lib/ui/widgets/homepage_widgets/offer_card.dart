@@ -1,55 +1,66 @@
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
+import 'package:fridayy_one/business_logic/models/user_overview_model.dart';
+import 'package:fridayy_one/business_logic/view_models/home_view_models/home_screen_holder_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/widgets/homepage_widgets/offer_overview_cards/loved_brand_card.dart';
 import 'package:fridayy_one/ui/widgets/homepage_widgets/offer_overview_cards/offer_brief_info_card.dart';
 import 'package:fridayy_one/ui/widgets/homepage_widgets/offer_overview_cards/offer_data_visualizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class OffersInfoWidgets extends StatelessWidget {
-  OffersInfoWidgets({
+class OffersInfoWidgets extends StatefulWidget {
+  const OffersInfoWidgets({
     Key? key,
     required this.onTap,
     required this.offersData,
+    required this.activePage,
+    required this.homeModel,
   }) : super(key: key);
   final void Function(int) onTap;
+  final int activePage;
   final Offers offersData;
+  final HomeScreenHolderViewModel homeModel;
 
-  final PageController _controller = PageController();
+  @override
+  State<OffersInfoWidgets> createState() => _OffersInfoWidgetsState();
+}
+
+class _OffersInfoWidgetsState extends State<OffersInfoWidgets> {
+  late PageController _controller;
+  late HomeScreenHolderViewModel homeModel;
 
   Widget _buildChild(BuildContext context, int pageIndex) {
-    if (offersData.lovedBrand == null &&
-        (offersData.sortedCategories?.isEmpty ?? true) &&
+    if (widget.offersData.lovedBrand == null &&
+        (widget.offersData.sortedCategories?.isEmpty ?? true) &&
         pageIndex == 0) {
       return InkWell(
         borderRadius: BorderRadius.circular(
           sizeConfig.getPropWidth(16),
         ),
-        onTap: () => onTap(0),
+        onTap: () => widget.onTap(0),
         child: OfferBriefInfoCard(
-          notifiedOffers: offersData.notifiedOffers!,
-          totalOffers: offersData.totalOffers,
-          activeOffers: offersData.activeOffers,
-          expiringSoonOffers: offersData.expiringSoonOffers,
+          notifiedOffers: widget.offersData.notifiedOffers!,
+          totalOffers: widget.offersData.totalOffers,
+          activeOffers: widget.offersData.activeOffers,
+          expiringSoonOffers: widget.offersData.expiringSoonOffers,
         ),
       );
-    } else if (offersData.lovedBrand == null && pageIndex == 0) {
+    } else if (widget.offersData.lovedBrand == null && pageIndex == 0) {
       return OfferOverView(
-        categories: offersData.sortedCategories!.reversed.toList(),
-        totalOffers: offersData.totalOffers.toString(),
-        gotoOfferCategory: onTap,
+        categories: widget.offersData.sortedCategories!.reversed.toList(),
+        totalOffers: widget.offersData.totalOffers.toString(),
+        gotoOfferCategory: widget.onTap,
       );
-    } else if (offersData.lovedBrand == null && pageIndex == 1) {
+    } else if (widget.offersData.lovedBrand == null && pageIndex == 1) {
       return InkWell(
         borderRadius: BorderRadius.circular(
           sizeConfig.getPropWidth(16),
         ),
-        onTap: () => onTap(0),
+        onTap: () => widget.onTap(0),
         child: OfferBriefInfoCard(
-          notifiedOffers: offersData.notifiedOffers!,
-          totalOffers: offersData.totalOffers,
-          activeOffers: offersData.activeOffers,
-          expiringSoonOffers: offersData.expiringSoonOffers,
+          notifiedOffers: widget.offersData.notifiedOffers!,
+          totalOffers: widget.offersData.totalOffers,
+          activeOffers: widget.offersData.activeOffers,
+          expiringSoonOffers: widget.offersData.expiringSoonOffers,
         ),
       );
     } else if (pageIndex == 0) {
@@ -57,31 +68,41 @@ class OffersInfoWidgets extends StatelessWidget {
         borderRadius: BorderRadius.circular(
           sizeConfig.getPropWidth(16),
         ),
-        onTap: () => onTap(0),
-        child: LovedBrandCard(lovedBrand: offersData.lovedBrand!),
+        onTap: () => widget.onTap(0),
+        child: LovedBrandCard(lovedBrand: widget.offersData.lovedBrand!),
       );
     } else if (pageIndex == 1) {
       return OfferOverView(
-        categories: offersData.sortedCategories!.reversed.toList(),
-        totalOffers: offersData.totalOffers.toString(),
-        gotoOfferCategory: onTap,
+        categories: widget.offersData.sortedCategories!.reversed.toList(),
+        totalOffers: widget.offersData.totalOffers.toString(),
+        gotoOfferCategory: widget.onTap,
       );
     } else if (pageIndex == 2) {
       return InkWell(
         borderRadius: BorderRadius.circular(
           sizeConfig.getPropWidth(16),
         ),
-        onTap: () => onTap(0),
+        onTap: () => widget.onTap(0),
         child: OfferBriefInfoCard(
-          notifiedOffers: offersData.notifiedOffers!,
-          totalOffers: offersData.totalOffers,
-          activeOffers: offersData.activeOffers,
-          expiringSoonOffers: offersData.expiringSoonOffers,
+          notifiedOffers: widget.offersData.notifiedOffers!,
+          totalOffers: widget.offersData.totalOffers,
+          activeOffers: widget.offersData.activeOffers,
+          expiringSoonOffers: widget.offersData.expiringSoonOffers,
         ),
       );
     } else {
       return Container();
     }
+  }
+
+  @override
+  void initState() {
+    homeModel = widget.homeModel;
+    _controller = PageController(initialPage: widget.activePage);
+    _controller.addListener(() {
+      homeModel.overViewActiveCard = _controller.page!.round();
+    });
+    super.initState();
   }
 
   @override
@@ -92,8 +113,8 @@ class OffersInfoWidgets extends StatelessWidget {
           height: sizeConfig.getPropHeight(340),
           child: PageView.builder(
             controller: _controller,
-            itemCount: offersData.lovedBrand == null
-                ? offersData.sortedCategories?.isEmpty ?? true
+            itemCount: widget.offersData.lovedBrand == null
+                ? widget.offersData.sortedCategories?.isEmpty ?? true
                     ? 1
                     : 2
                 : 3,
@@ -118,8 +139,8 @@ class OffersInfoWidgets extends StatelessWidget {
         ),
         SmoothPageIndicator(
           controller: _controller,
-          count: offersData.lovedBrand == null
-              ? offersData.sortedCategories?.isEmpty ?? true
+          count: widget.offersData.lovedBrand == null
+              ? widget.offersData.sortedCategories?.isEmpty ?? true
                   ? 1
                   : 2
               : 3,

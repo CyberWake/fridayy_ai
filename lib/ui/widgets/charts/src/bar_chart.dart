@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
+import 'package:fridayy_one/business_logic/models/user_overview_model.dart';
 import 'package:fridayy_one/business_logic/utils/extensions.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 

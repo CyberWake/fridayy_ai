@@ -4,6 +4,7 @@ import 'package:hive/hive.dart';
 
 class LocalDatabaseServiceImpl extends LocalDatabaseService {
   late String userAuthKey;
+  String? lastRefreshedAt;
   late Map<String, String> bucketInfo;
 
   @override
@@ -13,8 +14,7 @@ class LocalDatabaseServiceImpl extends LocalDatabaseService {
 
   @override
   Future<String> fetchAuthKey() async {
-    final messagesBox = Hive.box<Message>('messages');
-    messagesBox.clear();
+    fetchLastRefreshed();
     final userBox = await Hive.openBox('userKey');
     userAuthKey = userBox.get('key').toString();
     return userAuthKey;
@@ -31,6 +31,8 @@ class LocalDatabaseServiceImpl extends LocalDatabaseService {
   logoutUser() async {
     final userBox = await Hive.openBox('userKey');
     userBox.delete('key');
+    userBox.clear();
+    print(userBox.containsKey('key'));
     final messagesBox = Hive.box<Message>('messages');
     messagesBox.clear();
   }
@@ -126,5 +128,24 @@ class LocalDatabaseServiceImpl extends LocalDatabaseService {
       () => bucketBox.get('x-amz-signature').toString(),
     );
     return bucketInfo;
+  }
+
+  @override
+  Future<void> saveLastRefresh() async {
+    final userBox = await Hive.openBox('userKey');
+    final refresh = DateTime.now();
+    userBox.put('lastRefreshed', refresh);
+    lastRefreshedAt = refresh.toString();
+  }
+
+  @override
+  Future<String> fetchLastRefreshed() async {
+    final userBox = await Hive.openBox('userKey');
+    if (lastRefreshedAt != null) {
+      return lastRefreshedAt!;
+    } else {
+      lastRefreshedAt = userBox.get('lastRefreshed').toString();
+      return lastRefreshedAt!;
+    }
   }
 }

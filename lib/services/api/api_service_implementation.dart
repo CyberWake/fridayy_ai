@@ -60,6 +60,51 @@ class ApiServiceImpl extends ApiService {
   }
 
   @override
+  Future<CallOutcome<Map<String, dynamic>>> putRequest(
+    String apiName,
+    Map<String, dynamic> postData, {
+    bool isAuth = false,
+  }) async {
+    try {
+      print('auth Token ${localDatabaseService.userAuthKey}');
+      final result = await http.put(
+        Uri.parse(ApiConstants.baseUrl + apiName),
+        body: jsonEncode(postData),
+        headers: isAuth
+            ? headerPreAuth
+            : {
+                'Content-Type': 'application/json',
+                'x-friday-key': localDatabaseService.userAuthKey,
+                //'3eb5488c-7cd0-43c9-9fb7-8b5434e5dba9' //
+              },
+      );
+      if (result.statusCode == 200) {
+        return CallOutcome<Map<String, dynamic>>(
+          data: jsonDecode(result.body) as Map<String, dynamic>,
+        );
+      } else {
+        print(result.body);
+        final String errorMessage =
+            jsonDecode(result.body)['detail'].toString();
+        if (errorMessage == "Unauthorized") {
+          localDatabaseService.logoutUser();
+          navigationService.removeAllAndPush(
+            Routes.authScreen,
+            Routes.splashScreen,
+          );
+        }
+        navigationService.showSnackBar(errorMessage);
+        return CallOutcome<Map<String, dynamic>>(
+          exception: Exception(errorMessage),
+        );
+      }
+    } on Exception catch (e) {
+      navigationService.showSnackBar('Something went wrong');
+      return CallOutcome<Map<String, dynamic>>(exception: e);
+    }
+  }
+
+  @override
   Future<CallOutcome<dynamic>> getRequest(String apiName) async {
     try {
       final Map<String, String> headerAuth = {
@@ -73,7 +118,7 @@ class ApiServiceImpl extends ApiService {
       );
       if (result.statusCode == 200) {
         return CallOutcome<dynamic>(
-          data: jsonDecode(result.body),
+          data: jsonDecode(result.body) ?? {'success': true},
         );
       } else {
         final String errorMessage =

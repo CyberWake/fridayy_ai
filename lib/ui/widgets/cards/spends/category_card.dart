@@ -41,7 +41,7 @@ class SpendsCategoryCard extends StatelessWidget {
                 ),
           ),
           subtitle: Text(
-            '₹ ${category.amount}',
+            '₹ ${category.amount.toStringAsFixed(1)}',
             style: Theme.of(context).textTheme.bodyText2!.copyWith(
                   fontSize: 14,
                   color: const Color(0xFF000000),

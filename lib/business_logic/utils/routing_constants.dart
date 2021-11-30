@@ -10,4 +10,6 @@ class Routes {
   static const String storyScreen = '/stories';
   static const String brandOffers = '/brandOffers';
   static const String brandTransactionsScreen = '/brandTransactions';
+  static const String spendScreen = '/spend';
+  static const String editSpendScreen = '/editSpend';
 }

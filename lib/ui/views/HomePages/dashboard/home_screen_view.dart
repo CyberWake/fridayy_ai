@@ -20,7 +20,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseView<HomeScreenViewModel>(
-      onModelReady: (model) => model.init(isAutoLogin: isAutoLogin),
+      onModelReady: (model) =>
+          model.init(isAutoLogin: isAutoLogin, model: homeModel),
       builder: (context, model, child) {
         return Scaffold(
           // backgroundColor: const Color(0xFFE5E5E5),
@@ -34,25 +35,28 @@ class HomeScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: sizeConfig.getPropHeight(15),
-                  child: Text(
-                    'Hello,',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline4!
-                        .copyWith(fontSize: 14, fontWeight: FontWeight.w400),
+                  height: sizeConfig.getPropHeight(18),
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 2.0),
+                    child: Text(
+                      'Hello,',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline4!
+                          .copyWith(fontSize: 14, fontWeight: FontWeight.w400),
+                    ),
                   ),
                 ),
                 SizedBox(
-                  height: sizeConfig.getPropHeight(32),
-                  child: model.isBusy
+                  height: sizeConfig.getPropHeight(25),
+                  child: model.isBusy && homeModel.userOverView == null
                       ? const ShimmerCard(
-                          size: Size(50, 32),
-                          borderRadius: 8,
+                          size: Size(60, 26),
+                          borderRadius: 4,
                           isCenter: false,
                         )
                       : Text(
-                          model.userOverView!.user.userName.split(' ')[0],
+                          homeModel.userOverView!.user.userName.split(' ')[0],
                           style: Theme.of(context)
                               .textTheme
                               .headline4!
@@ -77,13 +81,13 @@ class HomeScreen extends StatelessWidget {
                 padding: EdgeInsets.only(
                   right: sizeConfig.getPropWidth(16),
                 ),
-                child: model.isBusy
+                child: model.isBusy && homeModel.userOverView == null
                     ? Padding(
                         padding: EdgeInsets.symmetric(
                           vertical: sizeConfig.getPropHeight(10),
                         ),
                         child: const ShimmerCard(
-                          size: Size(40, 35),
+                          size: Size(40, 40),
                           borderRadius: 20,
                           isCenter: false,
                         ),
@@ -92,11 +96,9 @@ class HomeScreen extends StatelessWidget {
                         onTap: homeModel.gotoProfile,
                         child: CircleAvatar(
                           child: Text(
-                            model.isBusy
-                                ? "..."
-                                : model.userOverView!.user.userName
-                                    .substring(0, 1)
-                                    .toUpperCase(),
+                            homeModel.userOverView!.user.userName
+                                .substring(0, 1)
+                                .toUpperCase(),
                           ),
                         ),
                       ),
@@ -122,34 +124,38 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  model.isBusy
+                  model.isBusy && homeModel.userOverView == null
                       ? const ShimmerCard(
                           size: Size(379, 365),
                           borderRadius: 16,
                         )
                       : OffersInfoWidgets(
-                          offersData: model.userOverView!.offers,
+                          offersData: homeModel.userOverView!.offers,
                           onTap: homeModel.gotoOffers,
+                          activePage: homeModel.overViewActiveCard,
+                          homeModel: homeModel,
                         ),
                   Column(
                     children: [
                       StoryListOffers(
                         offers:
-                            model.userOverView?.offers.recommendedOffers ?? [],
-                        isLoading: model.isBusy,
+                            homeModel.userOverView?.offers.recommendedOffers! ??
+                                [],
+                        isLoading:
+                            model.isBusy && homeModel.userOverView == null,
                       ),
                       USPTile(
                         uspName: 'Spending Behaviour',
                         onTap: homeModel.gotoSpendingBehaviour,
                       ),
-                      model.isBusy
+                      model.isBusy && homeModel.userOverView == null
                           ? const ShimmerCard(
                               size: Size(379, 587),
                               borderRadius: 16,
                               marginTop: 22.5,
                             )
                           : SpendingBehaviourCard(
-                              spendingData: model.userOverView!.spending,
+                              spendingData: homeModel.userOverView!.spending,
                               onTap: homeModel.gotoSpendingBehaviour,
                             ),
                       SizedBox(

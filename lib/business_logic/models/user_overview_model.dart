@@ -1,12 +1,12 @@
-class NewUserOverView {
-  NewUserOverView({
+class UserOverView {
+  UserOverView({
     required this.user,
     required this.offers,
     required this.spending,
   });
 
-  factory NewUserOverView.fromJson(Map<String, dynamic> json) {
-    return NewUserOverView(
+  factory UserOverView.fromJson(Map<String, dynamic> json) {
+    return UserOverView(
       user: User.fromJson(json['user'] as Map<String, dynamic>),
       offers: Offers.fromJson(json['offers'] as Map<String, dynamic>),
       spending: Spending.fromJson(json['spending'] as Map<String, dynamic>),
@@ -238,7 +238,7 @@ class OfferInfo {
       termsAndConditionsApply: json['terms_and_conditions_apply'] as bool,
       link: json['link'] as String?,
       code: json['code'] as String?,
-      expiryDate: ((json['expiry_date'] as double) * 1000).toInt(),
+      expiryDate: (json['expiry_date'] as double).toInt(),
       rewardDescription: json['reward_description'] as String?,
     );
   }

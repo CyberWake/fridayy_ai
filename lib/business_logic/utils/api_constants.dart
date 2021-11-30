@@ -21,6 +21,9 @@ class ApiConstants {
   static const String spendingBrand = '/user/spends/brands';
   static const String spendingOnBrand = '/user/spends/brand';
   static const String spendingOnCategory = '/user/spends/category';
+  static const String spendInfo = '/user/spend';
+  static const String deleteSpend = '/user/spend/del';
+  static const String updateSpend = '/user/spend';
 
   //user details endpoint
   static const String userProfile = '/user/profile';

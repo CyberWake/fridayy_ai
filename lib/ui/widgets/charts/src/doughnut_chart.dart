@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
+import 'package:fridayy_one/business_logic/models/user_overview_model.dart';
 import 'package:fridayy_one/business_logic/utils/extensions.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -35,10 +35,10 @@ class DoughnutChart extends StatelessWidget {
             yValueMapper: (DistributionSpending data, _) => data.percentage,
             dataLabelMapper: (DistributionSpending data, _) => isSemiDonut
                 ? data.count.toString()
-                : data.percentage.toString(),
+                : data.percentage.toStringAsFixed(1),
             dataLabelSettings: DataLabelSettings(
-              isVisible: true,
-              labelIntersectAction: LabelIntersectAction.none,
+              isVisible: false,
+              labelIntersectAction: LabelIntersectAction.hide,
               labelAlignment: ChartDataLabelAlignment.top,
               labelPosition: isSemiDonut
                   ? ChartDataLabelPosition.inside

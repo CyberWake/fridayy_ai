@@ -10,7 +10,7 @@ class FilterTitleDropDown extends StatelessWidget {
     this.onDropDownUpdate,
   }) : super(key: key);
   final String title;
-  final String selectedDropDownValue;
+  final String? selectedDropDownValue;
   final List<String> dropDownOptions;
   final Function(String?)? onDropDownUpdate;
 

@@ -7,9 +7,10 @@ import 'package:fridayy_one/business_logic/view_models/home_view_models/dashboar
 import 'package:fridayy_one/business_logic/view_models/home_view_models/home_screen_holder_view_model.dart';
 import 'package:fridayy_one/business_logic/view_models/home_view_models/offers/brand_offers_view_model.dart';
 import 'package:fridayy_one/business_logic/view_models/home_view_models/offers/offer_screen_view_model.dart';
-import 'package:fridayy_one/business_logic/view_models/home_view_models/profile_screen_view_model.dart';
+import 'package:fridayy_one/business_logic/view_models/home_view_models/profile/profile_screen_view_model.dart';
 import 'package:fridayy_one/business_logic/view_models/home_view_models/spends/brand_transactions_view_model.dart';
 import 'package:fridayy_one/business_logic/view_models/home_view_models/spends/category_transactions_view_model.dart';
+import 'package:fridayy_one/business_logic/view_models/home_view_models/spends/spend_view_model.dart';
 import 'package:fridayy_one/business_logic/view_models/home_view_models/spends/spending_screen_view_model.dart';
 import 'package:fridayy_one/business_logic/view_models/splash_screen_view_model.dart';
 import 'package:fridayy_one/services/Api/api_service_implementation.dart';
@@ -46,5 +47,6 @@ void setupServiceLocator() {
   serviceLocator.registerFactory(() => SpendingScreenViewModel());
   serviceLocator.registerFactory(() => BrandTransactionsViewModel());
   serviceLocator.registerFactory(() => CategoryTransactionsViewModel());
+  serviceLocator.registerFactory(() => SpendViewModel());
   serviceLocator.registerFactory(() => ProfileScreenViewModel());
 }

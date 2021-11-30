@@ -159,14 +159,15 @@ class SpendingScreen extends StatelessWidget {
       strokeWidth: 0.0,
       triggerMode: RefreshIndicatorTriggerMode.anywhere,
       child: RenderList<SpendsModel>(
-        isBusy: model.isBusy,
-        items: model.spendsTransactionData.spends,
+        isBusy: model.loadingTransactions,
+        items: homeModel.spendsTransactionData?.spends ?? [],
         type: ListType.spendTrans,
       ),
     );
   }
 
   Widget buildCategory(BuildContext context, SpendingScreenViewModel model) {
+    // homeModel.categoryData.sort((a, b) => b.percentage.compareTo(a.percentage));
     return RefreshIndicator(
       onRefresh: model.getCategoryData,
       edgeOffset: 0.0,
@@ -176,7 +177,7 @@ class SpendingScreen extends StatelessWidget {
         height: sizeConfig.getPropHeight(600),
         child: Column(
           children: [
-            if (model.categoryData.isNotEmpty)
+            if (homeModel.categoryData.isNotEmpty)
               SizedBox(
                 height: sizeConfig.getPropHeight(161),
                 child: model.isBusy
@@ -190,7 +191,7 @@ class SpendingScreen extends StatelessWidget {
                           Expanded(
                             child: DoughnutChart(
                               size: 161,
-                              data: model.categoryData,
+                              data: homeModel.categoryData,
                               isSemiDonut: false,
                             ),
                           ),
@@ -198,8 +199,8 @@ class SpendingScreen extends StatelessWidget {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.end,
-                              children: List.generate(model.categoryData.length,
-                                  (index) {
+                              children: List.generate(
+                                  homeModel.categoryData.length, (index) {
                                 return Row(
                                   children: [
                                     Container(
@@ -207,20 +208,26 @@ class SpendingScreen extends StatelessWidget {
                                       width: sizeConfig.getPropHeight(13),
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
-                                        color: model
+                                        color: homeModel
                                             .categoryData[index].categoryId
                                             .getColor(),
                                       ),
                                     ),
-                                    Text(
-                                      '  ${model.categoryData[index].categoryId.getName()} ${model.categoryData[index].percentage}%',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText2!
-                                          .copyWith(
-                                            fontSize: 12,
-                                            color: Colors.black,
-                                          ),
+                                    Flexible(
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
+                                        child: Text(
+                                          '${homeModel.categoryData[index].categoryId.getName()} ${homeModel.categoryData[index].percentage.toStringAsFixed(1)}%',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText2!
+                                              .copyWith(
+                                                fontSize: 12,
+                                                color: Colors.black,
+                                              ),
+                                        ),
+                                      ),
                                     )
                                   ],
                                 );
@@ -232,12 +239,13 @@ class SpendingScreen extends StatelessWidget {
               ),
             Expanded(
               child: RenderList<Distribution>(
-                isBusy: model.isBusy,
-                items: model.spendCategoryData.distribution,
+                isBusy: model.loadingCategories,
+                items: homeModel.spendCategoryData?.distribution ?? [],
                 type: ListType.spendCategory,
                 listItemAdditionalParams: {
-                  'month': months[int.parse(model.dateFilter.substring(2)) - 1],
-                  'filter': model.dateFilter,
+                  'month':
+                      months[int.parse(homeModel.dateFilter!.substring(2)) - 1],
+                  'filter': homeModel.dateFilter,
                 },
               ),
             ),
@@ -254,12 +262,12 @@ class SpendingScreen extends StatelessWidget {
       strokeWidth: 0.0,
       triggerMode: RefreshIndicatorTriggerMode.anywhere,
       child: RenderList<SpendsModel>(
-        isBusy: model.isBusy,
-        items: model.spendBrandData.brands,
+        isBusy: model.loadingBrands,
+        items: homeModel.spendBrandData?.brands ?? [],
         type: ListType.spendBrand,
         listItemAdditionalParams: {
-          'month': months[int.parse(model.dateFilter.substring(2)) - 1],
-          'filter': model.dateFilter,
+          'month': months[int.parse(homeModel.dateFilter!.substring(2)) - 1],
+          'filter': homeModel.dateFilter,
         },
       ),
     );
@@ -268,7 +276,7 @@ class SpendingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseView<SpendingScreenViewModel>(
-      onModelReady: (model) => model.init(),
+      onModelReady: (model) => model.init(homeModel),
       builder: (context, model, child) {
         return DefaultTabController(
           length: 3,
@@ -316,9 +324,10 @@ class SpendingScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                months[
-                                    int.parse(model.dateFilter.substring(2)) -
-                                        1],
+                                months[int.parse(
+                                      homeModel.dateFilter!.substring(2),
+                                    ) -
+                                    1],
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText2!
@@ -328,7 +337,7 @@ class SpendingScreen extends StatelessWidget {
                                     ),
                               ),
                               Text(
-                                model.totalSpendAmount,
+                                model.isBusy ? "" : model.totalSpendAmount,
                                 style: Theme.of(context)
                                     .textTheme
                                     .caption!
@@ -368,9 +377,10 @@ class SpendingScreen extends StatelessWidget {
                                     border: Border(
                                       bottom: BorderSide(
                                         width: 2,
-                                        color: model.pageIndex != index
-                                            ? Colors.white
-                                            : const Color(0xFF2128BD),
+                                        color:
+                                            homeModel.spendingPageIndex != index
+                                                ? Colors.white
+                                                : const Color(0xFF2128BD),
                                       ),
                                     ),
                                   ),

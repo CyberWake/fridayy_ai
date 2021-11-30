@@ -4,69 +4,26 @@ import 'package:flutter/material.dart';
 import 'package:fridayy_one/business_logic/models/offer_category_brands_model.dart';
 import 'package:fridayy_one/business_logic/models/pass_call_outcome.dart';
 import 'package:fridayy_one/business_logic/utils/api_constants.dart';
-import 'package:fridayy_one/business_logic/utils/dummy_data.dart';
 import 'package:fridayy_one/business_logic/utils/enums.dart';
-import 'package:fridayy_one/business_logic/utils/fridayy_svg.dart';
 import 'package:fridayy_one/business_logic/utils/routing_constants.dart';
 import 'package:fridayy_one/business_logic/view_models/base_view_model.dart';
+import 'package:fridayy_one/business_logic/view_models/home_view_models/home_screen_holder_view_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/widgets/popups/offers/category_page_filter.dart';
 
 class OfferScreenViewModel extends BaseModel {
   late PageController offerPageController;
   String currentOfferType = 'Cashback';
-  final List<OfferCategoryBrands> offersOfCategory = [
-    OfferCategoryBrands(brands: []),
-    OfferCategoryBrands(brands: []),
-    OfferCategoryBrands(brands: []),
-    OfferCategoryBrands(brands: []),
-    OfferCategoryBrands(brands: []),
-    OfferCategoryBrands(brands: []),
-    OfferCategoryBrands(brands: []),
-    OfferCategoryBrands(brands: []),
-  ];
 
-  final List<Map<String, String>> types = [
-    {
-      'id': 'FAD',
-      'title': 'Food & Drink',
-      'image': FridayySvg.foodIcon,
-    },
-    {
-      'id': 'LUX',
-      'title': 'Shopping',
-      'image': FridayySvg.shoppingIcon,
-    },
-    {
-      'id': 'TRVL',
-      'title': 'Travel',
-      'image': FridayySvg.travelIcon,
-    },
-    {
-      'id': 'FIN',
-      'title': 'Finance',
-      'image': FridayySvg.financeIcon,
-    },
-    {
-      'id': 'MDCL',
-      'title': 'Medical',
-      'image': FridayySvg.medicineIcon,
-    },
-    {
-      'id': 'UTL',
-      'title': 'Utilities',
-      'image': FridayySvg.utilitiesIcon,
-    },
-    {
-      'id': 'EAD',
-      'title': 'Edu & Dev',
-      'image': FridayySvg.educationIcon,
-    },
-    {
-      'id': 'OTH',
-      'title': 'Others',
-      'image': FridayySvg.othersIcon,
-    },
+  final List<String> types = [
+    'FAD',
+    'LUX',
+    'TRVL',
+    'FIN',
+    'MDCL',
+    'UTL',
+    'EAD',
+    'OTH'
   ];
 
   final List<String> expiringTypes = ['This Week', 'This Month', 'Any'];
@@ -81,34 +38,41 @@ class OfferScreenViewModel extends BaseModel {
   late String dateFilter;
   late int month;
   late String year;
+  late HomeScreenHolderViewModel homeModel;
 
-  init(int index) async {
-    currentTabIndex = index;
+  init(HomeScreenHolderViewModel model) async {
+    homeModel = model;
+    currentTabIndex = homeModel.offerCategoryIndex;
     offerPageController = PageController(initialPage: currentTabIndex);
     final date = DateTime.now();
     month = date.month;
     year = date.year.toString().substring(2);
     dateFilter = year + (month > 9 ? month.toString() : '0${month.toString()}');
-    setState(ViewState.busy);
-    final result = await apiService.getRequest(
-      "${ApiConstants.offerOnCategory}/${types[currentTabIndex]["id"]}?date=$dateFilter}",
-    );
-    if (result.data != null) {
-      offersOfCategory[currentTabIndex] =
-          OfferCategoryBrands.fromJson(result.data as Map<String, dynamic>);
-      setState(ViewState.idle);
-    } else if (result.exception != null) {
-      offersOfCategory[currentTabIndex] =
-          OfferCategoryBrands.fromJson(offersPage[currentTabIndex]);
-      setState(ViewState.idle);
-    }
     offerPageController.addListener(() async {
       currentTabIndex = offerPageController.page!.round();
+      homeModel.offerCategoryIndex = currentTabIndex;
       filterDiscountType = "High to Low";
       filterExpiryType = "Any";
       filterRecommended = true;
       notifyListeners();
     });
+    if (homeModel.offersOfCategory[currentTabIndex].brands.isEmpty) {
+      fetchCategoryOffer(currentTabIndex);
+    }
+  }
+
+  fetchCategoryOffer(int index) async {
+    setState(ViewState.busy);
+    final CallOutcome result = await apiService.getRequest(
+      "${ApiConstants.offerOnCategory}/${types[index]}?date=$dateFilter",
+    );
+    if (result.data != null) {
+      homeModel.offersOfCategory[index] =
+          OfferCategoryBrands.fromJson(result.data as Map<String, dynamic>);
+    } else if (result.exception != null) {}
+    if (homeModel.currentTabIndex == 1) {
+      setState(ViewState.idle);
+    }
   }
 
   void tabChanged(int newTabIndex) {
@@ -120,21 +84,8 @@ class OfferScreenViewModel extends BaseModel {
       curve: Curves.easeIn,
     )
         .whenComplete(() async {
-      if (offersOfCategory[newTabIndex].brands.isEmpty) {
-        setState(ViewState.busy);
-        final CallOutcome result = await apiService.getRequest(
-          "${ApiConstants.offerOnCategory}/${types[newTabIndex]["id"]}?date=$dateFilter",
-        );
-        if (result.data != null) {
-          offersOfCategory[newTabIndex] =
-              OfferCategoryBrands.fromJson(result.data as Map<String, dynamic>);
-          setState(ViewState.idle);
-        } else if (result.exception != null) {
-          offersOfCategory[newTabIndex] = OfferCategoryBrands.fromJson(
-            offersPage[newTabIndex],
-          );
-          setState(ViewState.idle);
-        }
+      if (homeModel.offersOfCategory[newTabIndex].brands.isEmpty) {
+        fetchCategoryOffer(newTabIndex);
       }
     });
   }
@@ -177,10 +128,7 @@ class OfferScreenViewModel extends BaseModel {
   }
 
   Future refreshData() async {
-    offersOfCategory.forEach((element) {
-      element.brands.clear();
-    });
-    tabChanged(currentTabIndex);
+    fetchCategoryOffer(currentTabIndex);
   }
 
   void updateFilter() {

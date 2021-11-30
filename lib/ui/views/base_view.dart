@@ -41,5 +41,5 @@ class _BaseViewState<T extends ChangeNotifier> extends State<BaseView<T>>
 
   @override
   // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => false;
 }

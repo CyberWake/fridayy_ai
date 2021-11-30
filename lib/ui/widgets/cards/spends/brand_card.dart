@@ -78,7 +78,7 @@ class SpendsBrandCard extends StatelessWidget {
                     ),
               ),
               Text(
-                "${brand.amount}",
+                "₹ ${brand.amount.toStringAsFixed(1)}",
                 style: Theme.of(context).textTheme.caption!.copyWith(
                       fontSize: 16,
                       color: const Color(0xFF000000),

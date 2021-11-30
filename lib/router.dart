@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
+import 'package:fridayy_one/business_logic/models/spends_model.dart';
+import 'package:fridayy_one/business_logic/models/user_overview_model.dart';
 import 'package:fridayy_one/business_logic/utils/routing_constants.dart';
 import 'package:fridayy_one/main.dart';
 import 'package:fridayy_one/ui/views/AuthPages/auth_view.dart';
@@ -11,6 +12,8 @@ import 'package:fridayy_one/ui/views/HomePages/Offer/brand_offers_screen_view.da
 import 'package:fridayy_one/ui/views/HomePages/dashboard/story_screen_view.dart';
 import 'package:fridayy_one/ui/views/HomePages/home_screen_holder_view.dart';
 import 'package:fridayy_one/ui/views/HomePages/spend/brand_transactions.dart';
+import 'package:fridayy_one/ui/views/HomePages/spend/edit_spend_view.dart';
+import 'package:fridayy_one/ui/views/HomePages/spend/spend_view.dart';
 import 'package:fridayy_one/ui/views/onboarding_view.dart';
 import 'package:fridayy_one/ui/views/splash_screen_view.dart';
 
@@ -84,6 +87,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         builder: (context) => HomeScreenHolder(
           key: const Key('HomeScreenView'),
           autoLogin: inputData['autoLogin'] as bool,
+          activePage: inputData['activePage'] == null
+              ? 0
+              : inputData['activePage'] as int,
         ),
       );
     case Routes.brandOffers:
@@ -114,9 +120,27 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           settings.arguments! as Map<String, dynamic>;
       return MaterialPageRoute(
         builder: (context) => StoryScreenView(
-          key: const Key('StoryScreen'),
+          key: const Key('StoryScreenView'),
           offers: inputData["offers"] as List<OffersByBrand>,
           startIndex: inputData["startIndex"] as int,
+        ),
+      );
+    case Routes.spendScreen:
+      final Map<String, dynamic> inputData =
+          settings.arguments! as Map<String, dynamic>;
+      return MaterialPageRoute(
+        builder: (context) => SpendView(
+          key: const Key('SpendView'),
+          spendId: inputData['spendId'] as String,
+        ),
+      );
+    case Routes.editSpendScreen:
+      final Map<String, dynamic> inputData =
+          settings.arguments! as Map<String, dynamic>;
+      return MaterialPageRoute(
+        builder: (context) => EditSpendView(
+          key: const Key('EditSpendView'),
+          spendInfo: inputData['spendInfo'] as SpendsModel,
         ),
       );
     case Routes.toBeMade:

@@ -1,4 +1,4 @@
-import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
+import 'package:fridayy_one/business_logic/models/user_overview_model.dart';
 
 class BrandOffer {
   BrandOffer({required this.offers});
@@ -14,4 +14,9 @@ class BrandOffer {
   }
 
   final List<OfferInfo> offers;
+
+  set offers(List<OfferInfo> newOffers) {
+    offers.clear();
+    offers.addAll(newOffers);
+  }
 }

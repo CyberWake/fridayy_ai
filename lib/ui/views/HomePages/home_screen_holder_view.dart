@@ -4,17 +4,20 @@ import 'package:fridayy_one/business_logic/view_models/home_view_models/home_scr
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/views/HomePages/Offer/offer_screen_view.dart';
 import 'package:fridayy_one/ui/views/HomePages/dashboard/home_screen_view.dart';
-import 'package:fridayy_one/ui/views/HomePages/profile_screen_view.dart';
+import 'package:fridayy_one/ui/views/HomePages/profile/profile_screen_view.dart';
 import 'package:fridayy_one/ui/views/HomePages/spend/spending_screen_view.dart';
 import 'package:fridayy_one/ui/views/base_view.dart';
 
 class HomeScreenHolder extends StatelessWidget {
-  const HomeScreenHolder({Key? key, this.autoLogin = true}) : super(key: key);
+  const HomeScreenHolder({Key? key, this.autoLogin = true, this.activePage = 0})
+      : super(key: key);
   final bool autoLogin;
+  final int? activePage;
 
   @override
   Widget build(BuildContext context) {
     return BaseView<HomeScreenHolderViewModel>(
+      onModelReady: (model) => model.init(activePage!),
       builder: (context, model, child) {
         return Scaffold(
           body: PageView(

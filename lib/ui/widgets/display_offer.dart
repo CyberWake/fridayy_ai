@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
+import 'package:fridayy_one/business_logic/models/user_overview_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/widgets/offer_info_tile.dart';
 import 'package:fridayy_one/ui/widgets/rounded_rectangular_button.dart';
@@ -21,8 +21,9 @@ class DisplayOffer extends StatelessWidget {
 
   String getDate() {
     final DateFormat formatter = DateFormat('dd MMM, yyyy');
-    return formatter
-        .format(DateTime.fromMillisecondsSinceEpoch(offerInfo.expiryDate!));
+    return formatter.format(
+      DateTime.fromMillisecondsSinceEpoch(offerInfo.expiryDate! * 1000),
+    );
   }
 
   @override

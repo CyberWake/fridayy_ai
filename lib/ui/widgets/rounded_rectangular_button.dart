@@ -25,8 +25,8 @@ class CustomRoundRectButton extends StatelessWidget {
         onTap: onTap ?? () {},
         borderRadius: BorderRadius.circular(sizeConfig.getPropWidth(8)),
         child: Container(
-          width: sizeConfig.getPropWidth(size?.width??343),
-          height: sizeConfig.getPropHeight(size?.height??50),
+          width: sizeConfig.getPropWidth(size?.width ?? 343),
+          height: sizeConfig.getPropHeight(size?.height ?? 50),
           alignment: Alignment.center,
           decoration: BoxDecoration(
             border: Border.all(color: borderColor),

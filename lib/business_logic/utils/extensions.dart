@@ -15,7 +15,12 @@ extension GenderExtension on Gender {
 extension DateFormatter on int {
   String toDateddMMMyyyy() {
     final DateFormat formatter = DateFormat('dd MMM yyyy');
-    return formatter.format(DateTime.fromMillisecondsSinceEpoch(this));
+    return formatter.format(DateTime.fromMillisecondsSinceEpoch(this * 1000));
+  }
+
+  String toDate() {
+    final DateFormat formatter = DateFormat('E, dd MMM yyyy, hh:mm a');
+    return formatter.format(DateTime.fromMillisecondsSinceEpoch(this * 1000));
   }
 }
 
@@ -44,6 +49,14 @@ extension Category on String {
         return 'Active';
       case 'EXS':
         return 'Expiring Soon';
+      case 'UPI':
+        return 'UPI';
+      case 'NETBANKING':
+        return 'Net banking';
+      case 'CREDIT CARD':
+        return 'Credit Card';
+      case 'DEBIT CARD':
+        return 'Debit Card';
       default:
         return "";
     }
@@ -72,35 +85,6 @@ extension Category on String {
     }
   }
 
-  Color barChartColor() {
-    switch (this) {
-      case 'FAD':
-        return const Color(0xFFF86F34);
-      case 'MDCL':
-        return const Color(0xFF2128BD);
-      case 'UTL':
-        return const Color(0xFF75CDD3);
-      case 'TRVL':
-        return const Color(0xFFFFB731);
-      case 'LUX':
-        return const Color(0xFF16331C);
-      case 'FIN':
-        return const Color(0xFF0A8677);
-      case 'OTH':
-        return const Color(0xFFC61C1C);
-      case 'EAD':
-        return const Color(0xFF14EDAA);
-      case 'EXP':
-        return const Color(0xFFF14A25);
-      case 'ACT':
-        return const Color(0xFFB160B7);
-      case 'EXS':
-        return const Color(0xFFFFE500);
-      default:
-        return const Color(0xFFFFFFFF);
-    }
-  }
-
   Color getColor() {
     switch (this) {
       case 'FAD':
@@ -110,15 +94,15 @@ extension Category on String {
       case 'UTL':
         return const Color(0xFF75CDD3);
       case 'TRVL':
-        return const Color(0xFFFFB731);
+        return const Color(0xFFFFE500);
       case 'LUX':
-        return const Color(0xFF16331C);
+        return const Color(0xDCFFAD58);
       case 'FIN':
-        return const Color(0xFF0A8677);
+        return const Color(0xFFB160B7);
       case 'OTH':
         return const Color(0xFFC61C1C);
       case 'EAD':
-        return const Color(0xFF14EDAA);
+        return const Color(0xFFF14A25);
       case 'EXP':
         return const Color(0xFFF14A25);
       case 'ACT':
@@ -150,6 +134,37 @@ extension Category on String {
         return SvgPicture.string(FridayySvg.educationIcon);
       default:
         return Container();
+    }
+  }
+
+  String getSvg() {
+    switch (this) {
+      case 'FAD':
+        return FridayySvg.foodIcon;
+      case 'MDCL':
+        return FridayySvg.medicineIcon;
+      case 'UTL':
+        return FridayySvg.utilitiesIcon;
+      case 'TRVL':
+        return FridayySvg.travelIcon;
+      case 'LUX':
+        return FridayySvg.shoppingIcon;
+      case 'FIN':
+        return FridayySvg.financeIcon;
+      case 'OTH':
+        return FridayySvg.othersIcon;
+      case 'EAD':
+        return FridayySvg.educationIcon;
+      case 'UPI':
+        return FridayySvg.upiIcon;
+      case 'NETBANKING':
+        return FridayySvg.netBankingIcon;
+      case 'CREDIT CARD':
+        return FridayySvg.cardPaymentIcon;
+      case 'DEBIT CARD':
+        return FridayySvg.cardPaymentIcon;
+      default:
+        return '';
     }
   }
 }

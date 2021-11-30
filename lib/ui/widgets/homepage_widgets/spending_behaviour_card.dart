@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
+import 'package:fridayy_one/business_logic/models/user_overview_model.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/widgets/charts/charts.dart';
 import 'package:fridayy_one/ui/widgets/expense_chips.dart';
@@ -17,7 +17,7 @@ class SpendingBehaviourCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: sizeConfig
-          .getPropHeight(spendingData.distribution != null ? 107 : 587),
+          .getPropHeight(spendingData.distribution == null ? 107 : 587),
       width: sizeConfig.getPropWidth(379),
       margin: EdgeInsets.only(
         top: sizeConfig.getPropHeight(22.5),
@@ -42,25 +42,20 @@ class SpendingBehaviourCard extends StatelessWidget {
               ),
             if (spendingData.distribution != null)
               Positioned(
-                top: sizeConfig.getPropHeight(315),
-                child: ExpenseChips(
-                  data: spendingData.distribution ?? [],
-                ),
-              ),
-            if (spendingData.distribution != null)
-              Positioned(
                 top: sizeConfig.getPropHeight(300),
-                width: sizeConfig.getPropWidth(359),
-                child: const Divider(
-                  thickness: 1,
-                ),
-              ),
-            if (spendingData.distribution != null)
-              Positioned(
-                bottom: sizeConfig.getPropHeight(107),
-                width: sizeConfig.getPropWidth(359),
-                child: const Divider(
-                  thickness: 1,
+                width: sizeConfig.getPropWidth(335),
+                child: Column(
+                  children: [
+                    const Divider(
+                      thickness: 1,
+                    ),
+                    ExpenseChips(
+                      data: spendingData.distribution?.reversed.toList() ?? [],
+                    ),
+                    const Divider(
+                      thickness: 1,
+                    ),
+                  ],
                 ),
               ),
             Positioned(

@@ -1,8 +1,9 @@
 import 'dart:ui';
 
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
+import 'package:fridayy_one/business_logic/models/user_overview_model.dart';
 import 'package:fridayy_one/business_logic/utils/enums.dart';
 import 'package:fridayy_one/business_logic/utils/fridayy_svg.dart';
 import 'package:fridayy_one/business_logic/view_models/home_view_models/offers/brand_offers_view_model.dart';
@@ -43,22 +44,27 @@ class BrandOffersView extends StatelessWidget {
   }
 
   showFilterPopUp(BrandOffersViewModel model) async {
-    showModalBottomSheet(
+    showModal(
       context: navigationService.navigatorKey.currentContext!,
-      constraints: BoxConstraints(
-        maxWidth: sizeConfig.getPropWidth(379),
-        minHeight: sizeConfig.getPropHeight(351),
-      ),
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
+      configuration: const FadeScaleTransitionConfiguration(
+          transitionDuration: Duration(milliseconds: 300),
+          reverseTransitionDuration: Duration(milliseconds: 150)),
+      // constraints: BoxConstraints(
+      //   maxWidth: sizeConfig.getPropWidth(379),
+      //   minHeight: sizeConfig.getPropHeight(351),
+      // ),
+      //isScrollControlled: true,
+      //backgroundColor: Colors.transparent,
       builder: (context) => BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
-        child: Center(
-          child: BrandsPageFilter(
-            offerType: model.currentOfferType,
-            availThrough: model.currentDiscountType,
-            expiring: model.currentExpiringType,
-            onSaveFilter: model.updatefilter,
+        child: Material(
+          color: Colors.transparent,
+          child: Center(
+            child: BrandsPageFilter(
+              offerType: model.currentOfferType,
+              expiring: model.currentExpiringType,
+              onSaveFilter: model.updatefilter,
+            ),
           ),
         ),
       ),
@@ -151,7 +157,7 @@ class BrandOffersView extends StatelessWidget {
               Expanded(
                 child: RenderList<OfferInfo>(
                   isBusy: model.isBusy,
-                  items: model.brandOffers.offers,
+                  items: model.visibleBrandOffers.offers,
                   type: ListType.offerBrand,
                   showBorderAndSeparator: false,
                   listItemAdditionalParams: {

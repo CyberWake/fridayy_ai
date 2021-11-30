@@ -6,7 +6,9 @@ class SpendsModel {
     required this.brandId,
     required this.brandName,
     required this.categoryId,
+    required this.address,
     required this.count,
+    required this.body,
     required this.paymentType,
   });
 
@@ -22,6 +24,8 @@ class SpendsModel {
       brandName: json['brand_name'] as String?,
       categoryId: json['category_id'] as String?,
       count: json['count'] as int?,
+      address: json['address'] as String?,
+      body: json['body'] as String?,
     );
   }
 
@@ -29,6 +33,8 @@ class SpendsModel {
   String? spendId;
   int? date;
   int? count;
+  String? body;
+  String? address;
   String? paymentType;
   String? brandId;
   String? brandName;

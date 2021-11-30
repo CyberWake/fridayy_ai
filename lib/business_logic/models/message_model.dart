@@ -12,6 +12,16 @@ class Message {
     required this.date,
     required this.dateSent,
   });
+  factory Message.fromMap(Map<String, dynamic> map) {
+    return Message(
+      id: map['id'] as int?,
+      address: map['address'] as String?,
+      body: map['body'] as String?,
+      threadId: map['thread_id'] as String?,
+      date: map['date'] as int?,
+      dateSent: map['date_sent'] as int?,
+    );
+  }
   @HiveField(0)
   int? id;
   @HiveField(1)

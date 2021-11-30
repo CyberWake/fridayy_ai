@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
 import 'package:fridayy_one/business_logic/models/spend_category_model.dart';
 import 'package:fridayy_one/business_logic/models/spends_model.dart';
+import 'package:fridayy_one/business_logic/models/user_overview_model.dart';
 import 'package:fridayy_one/business_logic/utils/enums.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/widgets/cards/card_separator.dart';
@@ -47,6 +47,7 @@ class RenderList<T> extends StatelessWidget {
       ),
       alignment: items.isEmpty ? Alignment.center : Alignment.topCenter,
       child: ListView.separated(
+        shrinkWrap: true,
         itemCount: isBusy
             ? 7
             : items.isEmpty

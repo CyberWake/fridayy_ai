@@ -5,7 +5,7 @@ import 'package:clipboard/clipboard.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fridayy_one/business_logic/models/new_user_overview_model.dart';
+import 'package:fridayy_one/business_logic/models/user_overview_model.dart';
 import 'package:fridayy_one/business_logic/utils/fridayy_svg.dart';
 import 'package:fridayy_one/services/service_locator.dart';
 import 'package:fridayy_one/ui/widgets/display_offer.dart';
@@ -143,7 +143,7 @@ class OfferBrandCard extends StatelessWidget {
                             ),
                             TextSpan(
                               text:
-                                  "  ${DateTime.fromMillisecondsSinceEpoch(offerInfo.expiryDate!).difference(DateTime.now()).inDays} Days",
+                                  "  ${DateTime.fromMillisecondsSinceEpoch(offerInfo.expiryDate! * 1000).difference(DateTime.now()).inDays} Days",
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyText1!
@@ -157,7 +157,7 @@ class OfferBrandCard extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Expanded(
+                      Flexible(
                         child: Text(
                           offerInfo.body,
                           style:
@@ -165,7 +165,7 @@ class OfferBrandCard extends StatelessWidget {
                                     fontSize: 12,
                                     color: const Color(0xFF9399A3),
                                   ),
-                          overflow: TextOverflow.clip,
+                          overflow: TextOverflow.fade,
                         ),
                       ),
                     ],

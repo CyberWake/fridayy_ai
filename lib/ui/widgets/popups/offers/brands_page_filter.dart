@@ -9,26 +9,22 @@ class BrandsPageFilter extends StatefulWidget {
   const BrandsPageFilter({
     Key? key,
     required this.offerType,
-    required this.availThrough,
     required this.expiring,
     this.onSaveFilter,
   }) : super(key: key);
-  final String offerType;
-  final String availThrough;
-  final bool expiring;
-  final Function(String, String, bool)? onSaveFilter;
+  final String? offerType;
+  final bool? expiring;
+  final Function(String?, bool?)? onSaveFilter;
   @override
   _BrandsPageFilterState createState() => _BrandsPageFilterState();
 }
 
 class _BrandsPageFilterState extends State<BrandsPageFilter> {
-  late String offerType;
-  late String availThrough;
-  late bool expiring;
+  late String? offerType;
+  late bool? expiring;
   @override
   void initState() {
     offerType = widget.offerType;
-    availThrough = widget.availThrough;
     expiring = widget.expiring;
     super.initState();
   }
@@ -36,7 +32,7 @@ class _BrandsPageFilterState extends State<BrandsPageFilter> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: sizeConfig.getPropHeight(297),
+      height: sizeConfig.getPropHeight(257),
       width: sizeConfig.getPropWidth(379),
       padding: EdgeInsets.symmetric(
         horizontal: sizeConfig.getPropWidth(20),
@@ -53,9 +49,8 @@ class _BrandsPageFilterState extends State<BrandsPageFilter> {
           FilterHeadingAndReset(
             onResetTap: () {
               setState(() {
-                offerType = 'Cashback';
-                availThrough = 'Card';
-                expiring = false;
+                offerType = null;
+                expiring = null;
               });
             },
           ),
@@ -64,30 +59,30 @@ class _BrandsPageFilterState extends State<BrandsPageFilter> {
           ),
           FilterTitleDropDown(
             title: 'Offer Type',
-            dropDownOptions: ['Cashback', 'Discount'],
+            dropDownOptions: ['Cashback', 'Discount', 'Reward'],
             selectedDropDownValue: offerType,
             onDropDownUpdate: (value) {
               setState(() {
-                offerType = value ?? 'Cashback';
+                offerType = value;
               });
             },
           ),
-          FilterTitleDropDown(
-            title: 'Discount',
-            dropDownOptions: [
-              'Card',
-              'Link',
-              'UPI',
-              'Cash Discount',
-              'Wallet',
-            ],
-            selectedDropDownValue: availThrough,
-            onDropDownUpdate: (value) {
-              setState(() {
-                availThrough = value ?? 'Card';
-              });
-            },
-          ),
+          // FilterTitleDropDown(
+          //   title: 'Discount',
+          //   dropDownOptions: [
+          //     'Card',
+          //     'Link',
+          //     'UPI',
+          //     'Cash Discount',
+          //     'Wallet',
+          //   ],
+          //   selectedDropDownValue: availThrough,
+          //   onDropDownUpdate: (value) {
+          //     setState(() {
+          //       availThrough = value;
+          //     });
+          //   },
+          // ),
           ToggleSwitchWithTitle(
             title: 'Expiring',
             onToggleChange: (value) {
@@ -95,7 +90,7 @@ class _BrandsPageFilterState extends State<BrandsPageFilter> {
                 expiring = value ?? false;
               });
             },
-            toggleValue: expiring,
+            toggleValue: expiring ?? false,
           ),
           SizedBox(
             height: sizeConfig.getPropHeight(8),
@@ -104,7 +99,6 @@ class _BrandsPageFilterState extends State<BrandsPageFilter> {
             onTap: () {
               widget.onSaveFilter!(
                 offerType,
-                availThrough,
                 expiring,
               );
               navigationService.pop();

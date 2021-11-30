@@ -10,4 +10,6 @@ abstract class LocalDatabaseService {
   void saveMessage(Message message);
   Future<bool> messagesExist();
   bool messageAlreadySaved(Message messageId);
+  void saveLastRefresh();
+  Future<String> fetchLastRefreshed();
 }
